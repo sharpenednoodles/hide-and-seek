@@ -15,20 +15,19 @@ using UnityEngine.EventSystems;
 
 public class PickupController : MonoBehaviour
 {
-	private bool isLookingAtObj;
-	private bool hasAcquiredObj;
 	private GameObject aimedAt;
-	private string aimedObj_name;
-	private string acquiredObj_name;
+	private bool isLookingAtObj, hasAcquiredObj;
+	private string aimedObj_name, acquiredObj_name;
 	private float startTime = 0;
 	//Runs on script load
 	public void Start()
 	{
 		Cursor.visible = true;
 		Cursor.lockState = CursorLockMode.None;
+		InvokeRepeating ("Raycast", 0.2f, 0.2f);
 	}
 
-	public void Update()
+	public void Raycast()
 	{
 		RaycastHit hit;
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
@@ -52,14 +51,11 @@ public class PickupController : MonoBehaviour
 
 	public void OnGUI()
 	{
-		if (isLookingAtObj) {
-			GUI.Box(new Rect (140, Screen.height - 50, Screen.width - 300, 120), "Press E to acquire " + aimedAt.name);
-		}
+		if (isLookingAtObj) GUI.Box(new Rect (140, Screen.height - 50, Screen.width - 300, 120), "Press E to acquire " + aimedAt.name);
 		if (hasAcquiredObj) {
 			GUI.Box(new Rect (140, Screen.height - 50, Screen.width - 300, 120), "Acquired " + acquiredObj_name);
-			if (startTime < 5) {
-				startTime += Time.deltaTime;
-			} else {
+			if (startTime < 5) startTime += Time.deltaTime;
+			else {
 				hasAcquiredObj = false;
 				startTime = 0;
 			}
