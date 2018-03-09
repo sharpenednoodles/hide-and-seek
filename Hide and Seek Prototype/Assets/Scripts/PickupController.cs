@@ -2,7 +2,7 @@
  * PickupController.cs
  * Version 1.1
  * Created by Dion Drake
- * Last Edited: 03/03/2018
+ * Last Edited: 08/03/2018
 */
 
 //To use - place "Pickup" tag/add collider on obj intended to pickup. obj should have collider/rigidbody. Place on MainCamera object.
@@ -10,8 +10,6 @@
 //Importing namespaces - collections of items
 using UnityEngine; 
 using System.Collections; 
-using UnityEngine.UI; 
-using UnityEngine.EventSystems; 
 
 public class PickupController : MonoBehaviour
 {
@@ -22,9 +20,21 @@ public class PickupController : MonoBehaviour
 	//Runs on script load
 	public void Start()
 	{
-		Cursor.visible = true;
+		Cursor.visible = false;
 		Cursor.lockState = CursorLockMode.None;
-		InvokeRepeating ("Raycast", 0.2f, 0.2f);
+		InvokeRepeating ("Raycast", 0.1f, 0.1f);
+	}
+
+	public void Update()
+	{
+		if(isLookingAtObj) {
+			if (Input.GetKeyDown ("e")) {
+				acquiredObj_name = aimedAt.name;
+				Destroy (aimedAt);
+				hasAcquiredObj = true;
+				isLookingAtObj = false;
+			}
+		}
 	}
 
 	public void Raycast()
@@ -35,12 +45,6 @@ public class PickupController : MonoBehaviour
 			aimedAt = hit.collider.gameObject;
 			if (hit.collider.tag == "Pickup" && hit.distance <= 2 && aimedAt.name != "Terrain") {
 					isLookingAtObj = true;
-				if (Input.GetKeyDown ("e")) {
-					acquiredObj_name = aimedAt.name;
-					Destroy (aimedAt);
-					hasAcquiredObj = true;
-					isLookingAtObj = false;
-				}
 			}
 			else
 			{
