@@ -34,7 +34,8 @@ public class FirstPersonController : MonoBehaviour
         smoothV.x = Mathf.Lerp(smoothV.x, mouseDirection.x, 1f / smoothing);
         smoothV.y = Mathf.Lerp(smoothV.y, mouseDirection.y, 1f / smoothing);
         mouseLook += smoothV;
-        mouseLook.y = Mathf.Clamp(mouseLook.y, -90f, 90f);
+        mouseLook.y = Mathf.Clamp(mouseLook.y, -65f, 65f);
+        
 
         FPcam.transform.localRotation = Quaternion.AngleAxis(-mouseLook.y, Vector3.right);
         transform.localRotation = Quaternion.AngleAxis(mouseLook.x, transform.up);
