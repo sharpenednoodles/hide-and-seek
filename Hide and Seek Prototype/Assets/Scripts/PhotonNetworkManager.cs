@@ -28,9 +28,13 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     public virtual void OnJoinedRoom()
     {
         Debug.Log("Connected to room");
-        PhotonNetwork.Instantiate(player.name, spawnPoint.position, spawnPoint.rotation, 0);
+        int randX = Random.Range(-25, 25);
+        int randZ = Random.Range(-25, 25);
+   
+        PhotonNetwork.Instantiate(player.name, new Vector3(randX, 5, randZ), spawnPoint.rotation, 0);
         //Switch from Server Cam to Player Cam
         joinCam.SetActive(false);
+        Debug.Log("Spawned at "+ randX + ",5," + randZ);
     }
 
 
