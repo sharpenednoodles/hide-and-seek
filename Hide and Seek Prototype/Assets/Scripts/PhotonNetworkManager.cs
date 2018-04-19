@@ -9,6 +9,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     [SerializeField] GameObject player;
     [SerializeField] Transform spawnPoint;
     [SerializeField] GameObject joinCam;
+    //Enter Game version here, this is to prvent different versions from connecting to the same servers
+    static public string gameVersion = "Network Test 0.1";
 
 
 
@@ -16,7 +18,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     void Start ()
     {
         //Specify game build verison
-        PhotonNetwork.ConnectUsingSettings("NetworkTest 0.1");
+        PhotonNetwork.ConnectUsingSettings(gameVersion);
 	}
 	
     public virtual void OnConnectedToMaster()

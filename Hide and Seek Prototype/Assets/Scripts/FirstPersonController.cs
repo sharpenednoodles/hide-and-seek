@@ -12,7 +12,8 @@ public class FirstPersonController : MonoBehaviour
     public float sensitivity = 5.0f;
     public float smoothing = 2.0f;
 
-    public GameObject FPcam;
+    [SerializeField] private GameObject FPcam;
+    //[SerializeField] private GameObject EscapeMenu; 
 
     void Start()
     {
@@ -41,6 +42,11 @@ public class FirstPersonController : MonoBehaviour
         transform.localRotation = Quaternion.AngleAxis(mouseLook.x, transform.up);
 
         if (Input.GetKeyDown("escape"))
+        {
+            //int toggle = +1;
             Cursor.lockState = CursorLockMode.None;
+            //EscapeMenu.SetActive(true);
+        }
+
     }
 }
