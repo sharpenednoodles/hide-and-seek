@@ -4,18 +4,35 @@ using UnityEngine;
 
 //todo add jumping
 
+/// <summary>
+/// This is a basic firstperson controller that handles firstperson control
+/// Hopefully this will be easier to use than the standard asset
+/// </summary>
+
 public class FirstPersonController : MonoBehaviour
 {
     Vector2 mouseLook;
     Vector2 smoothV;
+    [Header("Controller Settings")]
+    //Player Speed
     public float speed = 10.0f;
+    //Mouse sensitivity
     public float sensitivity = 5.0f;
+    //Mouse smoothing
     public float smoothing = 2.0f;
 
-    public GameObject FPcam;
+    //Bool hooks here
+    bool isUnlocked = false;
+    [Header("GameObjects")]
+    //First Person Camera
+    [SerializeField] private GameObject FPcam;
+    //GUI Overlay for escape menu
+    public GameObject escapeMenu;
 
     void Start()
     {
+        GameObject escapeOverlay = (GameObject)Instantiate(escapeMenu);
+        escapeOverlay.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -41,6 +58,28 @@ public class FirstPersonController : MonoBehaviour
         transform.localRotation = Quaternion.AngleAxis(mouseLook.x, transform.up);
 
         if (Input.GetKeyDown("escape"))
-            Cursor.lockState = CursorLockMode.None;
+        {
+            //GameObject escapeOverlay = gameObject.GetGameObject("escapeOverlay");
+            if (isUnlocked == true)
+            {
+                
+                Cursor.lockState = CursorLockMode.Locked;
+                //escapeOverlay.SetActive(false);
+                sensitivity = 5.0f;
+                speed = 10f;
+                isUnlocked = false;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.None;
+                //escapeOverlay.SetActive(true);
+                sensitivity = 0f;
+                speed = 0f;
+                isUnlocked = true;
+            }
+            
+           
+        }
+
     }
 }

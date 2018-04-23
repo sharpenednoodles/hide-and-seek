@@ -13,7 +13,8 @@ using System.Collections;
 
 public class PickupControllerPrototype : MonoBehaviour
 {
-	private GameObject aimedAt;
+    public KeyCode pickUpKey;
+    private GameObject aimedAt;
 	private bool isLookingAtObj, hasAcquiredObj;
 	private string aimedObj_name, acquiredObj_name;
 	private float startTime = 0;
@@ -26,7 +27,7 @@ public class PickupControllerPrototype : MonoBehaviour
 	public void Update()
 	{
 		if(isLookingAtObj) {
-			if (Input.GetKeyDown ("e")) {
+			if (Input.GetKeyDown (pickUpKey)) {
 				acquiredObj_name = aimedAt.name;
 				Destroy (aimedAt);
 				hasAcquiredObj = true;
