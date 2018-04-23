@@ -2,7 +2,7 @@
 A place to call home. Well not really, but we will be storing our Unity project here
 
 Targeting *Unity3D version 2017.3.1*
-**Please ensure that you are running 2017.3 before opening the project**
+**Please ensure that you are running 2017.3.1 before opening the project**
 
 If you haven't used GIT before I strongly recommend checking out GitKraken which can be found [here](https://www.gitkraken.com/download "GitKraken's Download Page")
 
@@ -22,9 +22,11 @@ Hugh Mohr
 Junchen Wang
 
 ## External Tools and Libraries
-This is a list of the floowing third party tools included within the Unity Project
-- [Post Processing Stack](https://assetstore.unity.com/packages/essentials/post-processing-stack-83912 "Mmm pretty...")
+This is a list of the third party tools included within the Unity Project
 - [Photon Unity Networking](https://assetstore.unity.com/packages/tools/network/photon-unity-networking-free-1786 "Free version with 20 concurrent users") (PUN)
+- [Post Processing Stack](https://assetstore.unity.com/packages/essentials/post-processing-stack-83912 "Mmm pretty...")
+- [ProBuilder](https://assetstore.unity.com/packages/tools/modeling/probuilder-111418 "For creating meshes inside Unity")
+- [ProGrids](https://assetstore.unity.com/packages/3d/progrids-111425 "Proper Grid Snapping")
 - [Unity Standard Assets](https://assetstore.unity.com/packages/essentials/asset-packs/standard-assets-32351)
 
 ## Asset Credits

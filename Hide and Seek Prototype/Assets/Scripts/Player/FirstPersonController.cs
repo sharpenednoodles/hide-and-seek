@@ -13,31 +13,46 @@ public class FirstPersonController : MonoBehaviour
 {
     Vector2 mouseLook;
     Vector2 smoothV;
+    private Rigidbody rb;
     [Header("Controller Settings")]
     //Player Speed
-    public float speed = 10.0f;
+    public float walkSpeed = 10.0f;
     //Mouse sensitivity
     public float sensitivity = 5.0f;
     //Mouse smoothing
     public float smoothing = 2.0f;
+    public float jumpForce = 5f;
+    public float sprintSpeed= 20f;
 
-    //Bool hooks here
-    bool isUnlocked = false;
     [Header("GameObjects")]
     //First Person Camera
     [SerializeField] private GameObject FPcam;
     //GUI Overlay for escape menu
     public GameObject escapeMenu;
+    //Layer Mask To Define Ground Layer
+    public LayerMask groundLayer;
+
+    [Header("Additional Controls")]
+
+    public KeyCode sprint;
+
+    //Bool hooks here
+    bool isUnlocked = false;
+
 
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
+  
         GameObject escapeOverlay = (GameObject)Instantiate(escapeMenu);
         escapeOverlay.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     void Update()
     {
+        float speed = walkSpeed;
         float translation = Input.GetAxis("Vertical") * speed;
         float strafe = Input.GetAxis("Horizontal") * speed;
         translation *= Time.deltaTime;
@@ -57,14 +72,14 @@ public class FirstPersonController : MonoBehaviour
         FPcam.transform.localRotation = Quaternion.AngleAxis(-mouseLook.y, Vector3.right);
         transform.localRotation = Quaternion.AngleAxis(mouseLook.x, transform.up);
 
+        //Handle Pause Menu
         if (Input.GetKeyDown("escape"))
         {
-            //GameObject escapeOverlay = gameObject.GetGameObject("escapeOverlay");
             if (isUnlocked == true)
             {
-                
                 Cursor.lockState = CursorLockMode.Locked;
-                //escapeOverlay.SetActive(false);
+                Cursor.visible = false;
+                escapeMenu.SetActive(false);
                 sensitivity = 5.0f;
                 speed = 10f;
                 isUnlocked = false;
@@ -72,14 +87,34 @@ public class FirstPersonController : MonoBehaviour
             else
             {
                 Cursor.lockState = CursorLockMode.None;
-                //escapeOverlay.SetActive(true);
+                Cursor.visible = true;
+                escapeMenu.SetActive(true);
                 sensitivity = 0f;
                 speed = 0f;
                 isUnlocked = true;
             }
-            
-           
         }
 
+        if  (Input.GetButtonDown("Jump") && IsGrounded())
+        {
+            rb.AddForce(Vector3.up * jumpForce * 100, ForceMode.Impulse);
+        }
+
+        //not working
+        if (Input.GetKey(sprint))
+        {
+            speed = sprintSpeed;
+        }
+
+    }
+
+    //Function to check if character is grounded
+    private bool IsGrounded()
+    {
+        Ray ray = new Ray(transform.position, -transform.up);
+        RaycastHit check;
+
+        return (Physics.Raycast(ray, out check, 1 + 0.1f, groundLayer));
+        
     }
 }
