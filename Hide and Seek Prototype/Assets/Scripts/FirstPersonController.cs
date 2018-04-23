@@ -4,19 +4,29 @@ using UnityEngine;
 
 //todo add jumping
 
+/// <summary>
+/// This is a basic firstperson controller that handles firstperson control
+/// Hopefully this will be easier to use than the standard asset
+/// </summary>
+
 public class FirstPersonController : MonoBehaviour
 {
     Vector2 mouseLook;
     Vector2 smoothV;
+    [Header("Controller Settings")]
+    //Player Speed
     public float speed = 10.0f;
+    //Mouse sensitivity
     public float sensitivity = 5.0f;
+    //Mouse smoothing
     public float smoothing = 2.0f;
 
     //Bool hooks here
-
     bool isUnlocked = false;
-
+    [Header("GameObjects")]
+    //First Person Camera
     [SerializeField] private GameObject FPcam;
+    //GUI Overlay for escape menu
     public GameObject escapeMenu;
 
     void Start()
