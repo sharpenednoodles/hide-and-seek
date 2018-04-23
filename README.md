@@ -10,10 +10,15 @@ If you haven't already joined, you can contact us via our [Discord](https://disc
 
 ## Current Development Team
 Bryce Andrews
+
 Lyhuy Chhin
+
 Dion Drake
+
 Caitlin Eiszele
+
 Hugh Mohr
+
 Junchen Wang
 
 ## External Tools and Libraries
