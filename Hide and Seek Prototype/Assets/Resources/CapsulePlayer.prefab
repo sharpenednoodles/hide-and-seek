@@ -389,7 +389,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4029496883108242}
   - component: {fileID: 20654988994058160}
-  - component: {fileID: 124809772809291282}
   m_Layer: 0
   m_Name: MinimapCamera
   m_TagString: Untagged
@@ -680,7 +679,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1552791530932758}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 7, z: 0}
+  m_LocalPosition: {x: 0, y: 5.89, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4724379973457426}
@@ -1104,7 +1103,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1620043622634410}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.03, y: 1, z: -6.5}
+  m_LocalPosition: {x: 0.03, y: 15.63, z: -6.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224325689223421492}
@@ -1285,8 +1284,8 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
-  orthographic size: 5
+  orthographic: 1
+  orthographic size: 8
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -1404,7 +1403,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 2, z: 1}
+  m_Size: {x: 1, y: 2, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!81 &81393043273329008
 AudioListener:
@@ -1489,7 +1488,7 @@ MonoBehaviour:
     SynchronizeEnabled: 1
     InterpolateOption: 1
     InterpolateRotateTowardsSpeed: 180
-    InterpolateLerpSpeed: 5
+    InterpolateLerpSpeed: 10
   m_ScaleModel:
     SynchronizeEnabled: 0
     InterpolateOption: 0
@@ -1510,6 +1509,7 @@ MonoBehaviour:
   sensitivity: 5
   smoothing: 2
   FPcam: {fileID: 1137309204524928}
+  escapeMenu: {fileID: 1470800284818788, guid: 7a52d42587b9c4e4683496f78de512da, type: 2}
 --- !u!114 &114640562518222742
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1569,18 +1569,11 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1137309204524928}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b678c4407b6fc424cb27368ee463994b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!124 &124809772809291282
-Behaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1552791530932758}
-  m_Enabled: 1
 --- !u!124 &124975693402624802
 Behaviour:
   m_ObjectHideFlags: 1

@@ -9,7 +9,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     [SerializeField] GameObject player;
     [SerializeField] Transform spawnPoint;
     [SerializeField] GameObject joinCam;
-    //Enter Game version here, this is to prvent different versions from connecting to the same servers
+    //Enter Game version here, this is to prevent different versions from connecting to the same servers
     static public string gameVersion = "Network Test 0.1";
 
 
@@ -32,11 +32,12 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         Debug.Log("Connected to room");
         int randX = Random.Range(-25, 25);
         int randZ = Random.Range(-25, 25);
+        int randYRot = Random.Range(0, 360);
    
-        PhotonNetwork.Instantiate(player.name, new Vector3(randX, 5, randZ), spawnPoint.rotation, 0);
+        PhotonNetwork.Instantiate(player.name, new Vector3(randX, 2, randZ), Quaternion.Euler(0, randYRot, 0), 0);
         //Switch from Server Cam to Player Cam
         joinCam.SetActive(false);
-        Debug.Log("Spawned at "+ randX + ",5," + randZ);
+        Debug.Log("Spawned at "+ randX + ",5," + randZ +" with rotation " +randYRot);
     }
 
 

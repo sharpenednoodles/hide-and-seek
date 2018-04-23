@@ -12,11 +12,17 @@ public class FirstPersonController : MonoBehaviour
     public float sensitivity = 5.0f;
     public float smoothing = 2.0f;
 
+    //Bool hooks here
+
+    bool isUnlocked = false;
+
     [SerializeField] private GameObject FPcam;
-    //[SerializeField] private GameObject EscapeMenu; 
+    public GameObject escapeMenu;
 
     void Start()
     {
+        GameObject escapeOverlay = (GameObject)Instantiate(escapeMenu);
+        escapeOverlay.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -43,9 +49,26 @@ public class FirstPersonController : MonoBehaviour
 
         if (Input.GetKeyDown("escape"))
         {
-            //int toggle = +1;
-            Cursor.lockState = CursorLockMode.None;
-            //EscapeMenu.SetActive(true);
+            //GameObject escapeOverlay = gameObject.GetGameObject("escapeOverlay");
+            if (isUnlocked == true)
+            {
+                
+                Cursor.lockState = CursorLockMode.Locked;
+                //escapeOverlay.SetActive(false);
+                sensitivity = 5.0f;
+                speed = 10f;
+                isUnlocked = false;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.None;
+                //escapeOverlay.SetActive(true);
+                sensitivity = 0f;
+                speed = 0f;
+                isUnlocked = true;
+            }
+            
+           
         }
 
     }
