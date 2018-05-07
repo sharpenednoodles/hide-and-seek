@@ -11,7 +11,7 @@ using UnityEngine;
 
 public class FlyCam : MonoBehaviour {
 	public float mainSpeed = 100.0f, shiftAdd = 250.0f, maxShift = 1000.0f, camSens = 0.25f, totalRun= 1.0f, speedMultiplier, rotationY = 0.0f, mouseSensitivity = 5.0f; 
-	private Vector3 lastMouse = new Vector3(255, 255, 255); //kind of in the middle of the screen, rather than at the top (play)
+	//private Vector3 lastMouse = new Vector3(255, 255, 255); //kind of in the middle of the screen, rather than at the top (play)
 
 	private bool isRotating = false, isColliding = true; // Angryboy: Can be called by other things (e.g. UI) to see if camera is rotating
 
@@ -53,7 +53,7 @@ public class FlyCam : MonoBehaviour {
 		}
 
 		//Keyboard commands
-		float f = 0.0f;
+		//float f = 0.0f;
 		Vector3 p = GetBaseInput();
 		if (Input.GetKey (KeyCode.LeftShift)){
 			totalRun += Time.deltaTime;

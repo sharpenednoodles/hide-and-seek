@@ -311,6 +311,7 @@ GameObject:
   - component: {fileID: 124174730472901608}
   - component: {fileID: 114861819377683830}
   - component: {fileID: 114203027999465798}
+  - component: {fileID: 114167925549156184}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -1510,6 +1511,18 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114167925549156184
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1489794405599428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddd0d2fd7df9f924995342a9d1eca2fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickUpKey: 324
 --- !u!114 &114203027999465798
 MonoBehaviour:
   m_ObjectHideFlags: 1
