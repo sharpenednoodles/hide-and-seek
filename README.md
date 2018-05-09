@@ -27,6 +27,7 @@ This is a list of the third party tools included within the Unity Project
 - [Post Processing Stack](https://assetstore.unity.com/packages/essentials/post-processing-stack-83912 "Mmm pretty...")
 - [ProBuilder](https://assetstore.unity.com/packages/tools/modeling/probuilder-111418 "For creating meshes inside Unity")
 - [ProGrids](https://assetstore.unity.com/packages/3d/progrids-111425 "Proper Grid Snapping")
+- [TextMesh Pro](https://assetstore.unity.com/packages/essentials/beta-projects/textmesh-pro-84126 "Vector Text, hell yeah")
 - [Unity Standard Assets](https://assetstore.unity.com/packages/essentials/asset-packs/standard-assets-32351)
 
 ## Asset Credits
