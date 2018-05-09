@@ -7,7 +7,7 @@ public class MainMenu : MonoBehaviour {
 
 	public void CreateGame()
 	{
-		//SceneManager.LoadScene ("scene name");
+		SceneManager.LoadScene (SceneManager.GetActiveScene().buildIndex + 1);
 		Debug.Log("Create Game Click");
 
 	}
