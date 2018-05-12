@@ -18,6 +18,7 @@ public class PropSwitching : MonoBehaviour
 	private bool isLookingAtObj, hasAcquiredObj;
 	private string aimedObj_name, acquiredObj_name;
 	private float startTime = 0, holdTime = 0;
+	public Camera propCam;
 	//Runs on script load
 	public void Start()
 	{
@@ -34,7 +35,12 @@ public class PropSwitching : MonoBehaviour
 				holdTime = 0;
 				aimedObj_name = aimedAt.name;
 				newItem = Instantiate (aimedAt, transform.position + (transform.forward * 2), transform.rotation); 
+				Rigidbody rb = newItem.GetComponent< Rigidbody >();
+				rb.detectCollisions = false;
+				rb.isKinematic = true; 
 				newItem.name = aimedObj_name; //To remove "(Clone)" from the end of new obj
+				transform.parent = newItem.transform;
+
 			}
 		}
 	}
