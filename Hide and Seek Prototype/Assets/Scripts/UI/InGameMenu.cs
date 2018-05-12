@@ -13,9 +13,9 @@ public class InGameMenu : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		menuGroup.alpha = 0f;
+		menuGroup.alpha = 1f;
 		menuGroup.blocksRaycasts = true;
-		Menu.gameObject.SetActive (false);
+		//Menu.gameObject.SetActive (false);
 		//Menu.SetActive(false);
 		MenuState = false;
 	}
@@ -43,37 +43,38 @@ public class InGameMenu : MonoBehaviour {
 
 	void showMenu()
 	{
+		//Menu.SetActive(true);
 		menuGroup.alpha = 1f;
 		menuGroup.blocksRaycasts = true;
-		//Menu.SetActive(true);
 		Debug.Log ("Set Active");
 		MenuState = true;
 	}
 
 	void hideMenu()
 	{
-		menuGroup.alpha = 1f;
-		menuGroup.blocksRaycasts = true;
 		//Menu.gameObject.SetActive (false);
 		//Menu.SetActive(false);
+		menuGroup.alpha = 0f;
+		menuGroup.blocksRaycasts = true;
 		MenuState = false;
 		Debug.Log ("Set Disable");
 	}
 
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		Debug.Log ("refresh key");
-		if (Input.GetKey(KeyCode.Escape))
+		if (Input.GetKey(KeyCode.M))
+			if (MenuState)
 			{
-			if (MenuState) 
-				{
+				menuGroup.alpha = 0f;
 				hideMenu();
 				Debug.Log ("Call From hide");
-			} else 
+			} 
+			else 
 			{ 
+				menuGroup.alpha = 1f;
 				showMenu ();
 				Debug.Log ("Call From show");
 			}
+		}
 	}
-	}
-			}
