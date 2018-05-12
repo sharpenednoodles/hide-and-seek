@@ -7,7 +7,7 @@ public class InGameMenu : MonoBehaviour {
 
 	public CanvasGroup menuGroup;
 	public Transform Menu;
-	public static bool MenuState = false;
+	public bool MenuState = false;
 
 	//public GameObject Menu;
 
@@ -61,18 +61,16 @@ public class InGameMenu : MonoBehaviour {
 	}
 
 	// Update is called once per frame
-	void FixedUpdate () {
+	void Update () {
 		Debug.Log ("refresh key");
-		if (Input.GetKey(KeyCode.M))
+		if (Input.GetKeyDown(KeyCode.Escape))
 			if (MenuState)
 			{
-				menuGroup.alpha = 0f;
 				hideMenu();
 				Debug.Log ("Call From hide");
 			} 
 			else 
 			{ 
-				menuGroup.alpha = 1f;
 				showMenu ();
 				Debug.Log ("Call From show");
 			}
