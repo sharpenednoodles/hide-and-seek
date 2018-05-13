@@ -74,5 +74,6 @@ public class InGameMenu : MonoBehaviour {
 				showMenu ();
 				Debug.Log ("Call From show");
 			}
+			
 		}
 	}

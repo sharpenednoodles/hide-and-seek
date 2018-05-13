@@ -1523,6 +1523,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickUpKey: 324
+  propCam: {fileID: 0}
 --- !u!114 &114203027999465798
 MonoBehaviour:
   m_ObjectHideFlags: 1

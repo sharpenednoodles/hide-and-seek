@@ -2,7 +2,7 @@
  * PropSwitching.cs
  * Version 1.0
  * Created by Dion Drake
- * Last Edited: 07/05/2018
+ * Last Edited: 13/05/2018
 */
 
 //To use - place "Prop" tag/add collider on obj intended to pickup. obj should have collider/rigidbody. Place on MainCamera object.
@@ -14,7 +14,7 @@ using System.Collections;
 public class PropSwitching : MonoBehaviour
 {
 	public KeyCode pickUpKey;
-	private GameObject aimedAt, newItem;
+	private GameObject aimedAt, newItem, self;
 	private bool isLookingAtObj, hasAcquiredObj;
 	private string aimedObj_name, acquiredObj_name;
 	private float startTime = 0, holdTime = 0;
@@ -23,6 +23,8 @@ public class PropSwitching : MonoBehaviour
 	public void Start()
 	{
 		InvokeRepeating ("Raycast", 0.1f, 0.1f);
+		self = GameObject.Find ("CapsulePlayer");
+
 	}
 
 	public void Update()
@@ -38,9 +40,12 @@ public class PropSwitching : MonoBehaviour
 				Rigidbody rb = newItem.GetComponent< Rigidbody >();
 				rb.detectCollisions = false;
 				rb.isKinematic = true; 
-				newItem.name = aimedObj_name; //To remove "(Clone)" from the end of new obj
+				newItem.name = aimedObj_name; //To remove "(Clone)" from the end of new obj name
+				Destroy (aimedAt); //Destroys original prop so I don't need to deal with the problem of the old and new objects colliding
+				newItem.GetComponent<Camera> ().enabled = true; //GetComponent is an intensive method that iterates through all gameObjects. This version should just iterate through children.
+				newItem.GetComponentInChildren<ThirdPersonController>().enabled = true;
+				self.GetComponentInChildren<FirstPersonController> ().enabled = false;
 				transform.parent = newItem.transform;
-
 			}
 		}
 	}
