@@ -31,6 +31,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private Camera m_Camera;
         private bool m_Jump;
         private float m_YRotation;
+        private float m_PauseMult;
         private Vector2 m_Input;
         private Vector3 m_MoveDir = Vector3.zero;
         private CharacterController m_CharacterController;
@@ -51,6 +52,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_FovKick.Setup(m_Camera);
             m_HeadBob.Setup(m_Camera, m_StepInterval);
             m_StepCycle = 0f;
+            m_PauseMult = 1.0f; 
             m_NextStep = m_StepCycle/2f;
             m_Jumping = false;
             m_AudioSource = GetComponent<AudioSource>();
@@ -79,6 +81,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 m_MoveDir.y = 0f;
             }
+            if (GameMenuController.MenuState == true)
+            {
+                m_PauseMult = 0f;
+            }
+            else m_PauseMult = 1.0f;
 
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
         }
@@ -105,11 +112,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
                                m_CharacterController.height/2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
             desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
 
-            m_MoveDir.x = desiredMove.x*speed;
-            m_MoveDir.z = desiredMove.z*speed;
+            m_MoveDir.x = desiredMove.x*speed * m_PauseMult;
+            m_MoveDir.z = desiredMove.z*speed * m_PauseMult;
 
 
-            if (m_CharacterController.isGrounded)
+            if (m_CharacterController.isGrounded && GameMenuController.MenuState == false)
             {
                 m_MoveDir.y = -m_StickToGroundForce;
 
@@ -236,6 +243,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void RotateView()
         {
+            if (GameMenuController.MenuState == false)
             m_MouseLook.LookRotation (transform, m_Camera.transform);
         }
 
