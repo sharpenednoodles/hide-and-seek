@@ -14,6 +14,9 @@ namespace UnityStandardAssets.Utility
 		// the height we want the camera to be above the target
 		[SerializeField]
 		private float height = 5.0f;
+        //camera transform
+        [SerializeField]
+        private GameObject cameraTransform;
 
 		[SerializeField]
 		private float rotationDamping;
@@ -46,16 +49,17 @@ namespace UnityStandardAssets.Utility
 			// Convert the angle into a rotation
 			var currentRotation = Quaternion.Euler(0, currentRotationAngle, 0);
 
-			// Set the position of the camera on the x-z plane to:
-			// distance meters behind the target
-			transform.position = target.position;
-			transform.position -= currentRotation * Vector3.forward * distance;
+            // Set the position of the camera on the x-z plane to:
+            // distance meters behind the target
+            cameraTransform.transform.position = target.position;
+            cameraTransform.transform.position -= currentRotation * Vector3.forward * distance;
+            cameraTransform.transform.eulerAngles = new Vector3(90, target.transform.eulerAngles.y, 0);
 
-			// Set the height of the camera
-			transform.position = new Vector3(transform.position.x ,currentHeight , transform.position.z);
+            // Set the height of the camera
+            cameraTransform.transform.position = new Vector3(cameraTransform.transform.position.x ,currentHeight , cameraTransform.transform.position.z);
 
-			// Always look at the target
-			transform.LookAt(target);
+            // Always look at the target
+            cameraTransform.transform.LookAt(target);
 		}
 	}
 }
