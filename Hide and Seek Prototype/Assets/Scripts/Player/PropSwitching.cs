@@ -63,6 +63,7 @@ public class PropSwitching : MonoBehaviour
         if (!isProp)
         {
             playerModel.SetActive(false);
+            playerCollider.enabled = false;
             newItem = Instantiate(aimedAt, playerModel.transform.position, aimedAt.transform.rotation);
             newItem.transform.parent = transform;
             followCam.enabled = true;
