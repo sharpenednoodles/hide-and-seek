@@ -70,7 +70,7 @@ public class PropSwitching : MonoBehaviour
             playerModel.SetActive(false);
             Rigidbody rb = newItem.GetComponent<Rigidbody>();
             rb.detectCollisions = true;
-            rb.isKinematic = true;
+            //rb.isKinematic = true;
 
             firstPersonController.enabled = false;
             thirdPersonController.enabled = true;
