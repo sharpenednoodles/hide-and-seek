@@ -5682,6 +5682,7 @@ GameObject:
   - component: {fileID: 1693473133}
   - component: {fileID: 1693473135}
   - component: {fileID: 1693473134}
+  - component: {fileID: 1693473136}
   m_Layer: 0
   m_Name: Box013
   m_TagString: Untagged
@@ -5745,6 +5746,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1693473132}
   m_Mesh: {fileID: 4300020, guid: d1621ddc86a37be4b920f825256413ab, type: 3}
+--- !u!65 &1693473136
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1693473132}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.5309193, y: 2.5077398, z: 1.9408566}
+  m_Center: {x: 0, y: 0, z: 0.9704283}
 --- !u!1 &1697198287 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100000, guid: e5fa0a978ab424b46b37c0be35fada7b, type: 3}
