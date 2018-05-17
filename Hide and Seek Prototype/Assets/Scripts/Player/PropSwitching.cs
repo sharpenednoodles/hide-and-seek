@@ -38,8 +38,15 @@ public class PropSwitching : MonoBehaviour
 
 	public void Update()
 	{
-		if (isLookingAtObj) {
-			if (Input.GetMouseButtonDown (1)) {
+
+        if (Input.GetMouseButtonDown(1) && isProp)
+        {
+            RevertToPlayer();
+        }
+
+        if (isLookingAtObj) {
+			if (Input.GetMouseButtonDown (1))
+            {
                 //holdTime += Time.deltaTime;
                 PropSwitch();
 			}
@@ -48,6 +55,8 @@ public class PropSwitching : MonoBehaviour
                 PropSwitch();
 			}*/
 		}
+
+       
 	}
 
     public void PropSwitch()
@@ -67,7 +76,6 @@ public class PropSwitching : MonoBehaviour
             newItem = Instantiate(aimedAt, playerModel.transform.position, aimedAt.transform.rotation);
             newItem.transform.parent = transform;
             followCam.enabled = true;
-            playerModel.SetActive(false);
             Rigidbody rb = newItem.GetComponent<Rigidbody>();
             rb.detectCollisions = true;
             //rb.isKinematic = true;
@@ -95,6 +103,23 @@ public class PropSwitching : MonoBehaviour
             //transform.parent = newItem.transform;
 
         }
+
+
+    private void RevertToPlayer()
+    {
+        Debug.Log("RevertPlayerCalled");
+        playerModel.SetActive(true);
+
+        GameObject prop;
+        prop = GameObject.Find("PropModel");
+        followCam.enabled = false;
+        Destroy(prop);
+        thirdPersonController.enabled = false;
+        playerCollider.enabled = true;
+        firstPersonController.enabled = true;
+ 
+        isProp = false;
+    }
 
     public void Raycast()
 	{

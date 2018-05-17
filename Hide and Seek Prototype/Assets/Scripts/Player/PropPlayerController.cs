@@ -2,7 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+/// <summary>
+/// A rewrite of the original first person controller
+/// This controller will handle the movement of prop players
+/// 
+/// etc
+/// </summary>
 public class PropPlayerController : MonoBehaviour
 {
     Vector2 mouseLook;
@@ -30,19 +35,9 @@ public class PropPlayerController : MonoBehaviour
 
     public KeyCode sprint;
 
-    //Bool hooks here
-    bool isUnlocked = false;
-
-
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-
-        /*
-        GameObject escapeOverlay = (GameObject)Instantiate(escapeMenu);
-        escapeOverlay.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;*/
     }
 
     void Update()
@@ -62,8 +57,6 @@ public class PropPlayerController : MonoBehaviour
         smoothV.y = Mathf.Lerp(smoothV.y, mouseDirection.y, 1f / smoothing);
         mouseLook += smoothV;
         mouseLook.y = Mathf.Clamp(mouseLook.y, -65f, 65f);
-        
-
         
         //transform.localRotation = Quaternion.AngleAxis(mouseLook.x, transform.up);
 

@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿//Based upon the SmoothFollow script included in the Unity Standard Assets package
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,7 +9,7 @@ public class CameraControl : MonoBehaviour
     private const float Y_ANGLE_MIN = 0.0f;
     private const float Y_ANGLE_MAX = 50.0f;
 
-    public Transform lookAt;
+    private Transform lookAt;
     public GameObject camTransform;
     public Transform camPos;
     public float distance = 10.0f;
@@ -19,7 +21,16 @@ public class CameraControl : MonoBehaviour
 
     private void Start()
     {
-        //camTransform = transform;
+        //Set 
+        Debug.Log("start method called");
+        GameObject target;
+        target = GameObject.Find("PropModel");
+        lookAt = target.transform;
+    }
+
+    public void InitialiseTarget(GameObject targetToLookAt)
+    {
+        lookAt = targetToLookAt.transform;
     }
 
     private void Update()
