@@ -18,10 +18,17 @@ public class CanvasSwitch : MonoBehaviour {
         canvasToSwich.SetActive(true);
 	}
 
+//	public void BackPress()
+//	{
+//		priorCanvas.SetActive(true);
+//		canvasToSwich.SetActive(false);
+//	}
+//
+
     public void ContinuePress()
     {
 
-		Debug.Log ("Call From Contine");
+		Debug.Log ("Call From Continue");
 		//menuC.HideMenu();
 
 
