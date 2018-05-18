@@ -1557,6 +1557,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   priorCanvas: {fileID: 1281364132}
   canvasToSwich: {fileID: 2034101266}
+  audioMixer: {fileID: 24100000, guid: 37bdf972f3d4b42d0916fc755dd2d90c, type: 2}
 --- !u!1 &410895170
 GameObject:
   m_ObjectHideFlags: 0
@@ -3713,13 +3714,24 @@ MonoBehaviour:
   m_FillRect: {fileID: 412082061}
   m_HandleRect: {fileID: 2020248102}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 1
+  m_MinValue: -80
+  m_MaxValue: 0
   m_WholeNumbers: 0
-  m_Value: 0.502
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 400379368}
+        m_MethodName: SetVolume
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!1 &924317972
@@ -5946,6 +5958,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   priorCanvas: {fileID: 2034101266}
   canvasToSwich: {fileID: 1281364132}
+  audioMixer: {fileID: 0}
 --- !u!1 &1514396146
 GameObject:
   m_ObjectHideFlags: 0
@@ -7279,7 +7292,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1979699083}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 400379368}
+        m_MethodName: InGameQuit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1979699083

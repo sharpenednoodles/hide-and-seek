@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 
 public class CanvasSwitch : MonoBehaviour {
 
     public GameObject priorCanvas;
     public GameObject canvasToSwich;
+
+	public AudioMixer audioMixer;
 //	public static bool MenuState = false;
 	// GameObject menuCanvas;
 
@@ -26,6 +29,24 @@ public class CanvasSwitch : MonoBehaviour {
         priorCanvas.SetActive(false);
         canvasToSwich.SetActive(true);
 	}
+
+
+	public void InGameQuit()
+	{
+		Debug.Log ("In Game Quite");
+		Application.Quit ();
+	}
+
+
+	public void SetVolume(float volume){
+
+		Debug.Log (volume);
+		audioMixer.SetFloat ("InGameVolume", volume);
+
+
+	}
+
+
 
 	public void BackPress()
 	{
