@@ -22,7 +22,7 @@ public class GameMenuController : MonoBehaviour {
 		menuCanvas.SetActive(false);
 	}
 
-	void ShowMenu()
+	public void ShowMenu()
 	{
 		menuCanvas.SetActive(true);
         //menuGroup.alpha = 1f;

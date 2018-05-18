@@ -12,24 +12,39 @@ public class CanvasSwitch : MonoBehaviour {
 
 
 
+
+	void Start(){
+
+		Debug.Log ("This code is running");
+
+	}
+
+
     public void ButtonPress()
     {
+		Debug.Log ("Call From Button Press");
         priorCanvas.SetActive(false);
         canvasToSwich.SetActive(true);
 	}
 
-//	public void BackPress()
-//	{
-//		priorCanvas.SetActive(true);
-//		canvasToSwich.SetActive(false);
-//	}
-//
+	public void BackPress()
+	{
+		Debug.Log ("Call From Back");
+		priorCanvas.SetActive(true);
+		canvasToSwich.SetActive(false);
+	}
+
 
     public void ContinuePress()
     {
 
 		Debug.Log ("Call From Continue");
 		//menuC.HideMenu();
+
+
+
+
+
 
 
 
