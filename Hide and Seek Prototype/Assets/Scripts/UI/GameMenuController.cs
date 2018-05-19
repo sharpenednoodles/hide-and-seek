@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
 public class GameMenuController : MonoBehaviour {
 
 	public GameObject menuCanvas;
+
+	public Inventory Inventory;
 	//public Transform Menu;
     //we make this static so we can access from controller(s)
 	public static bool MenuState = false;
@@ -20,7 +23,30 @@ public class GameMenuController : MonoBehaviour {
 		//menuGroup.blocksRaycasts = true;
 		//Menu.gameObject.SetActive (false);
 		menuCanvas.SetActive(false);
+		Inventory.ItemAdded += InventoryScript_ItemAdded;
 	}
+
+	// Inventory system related code
+	private void InventoryScript_ItemAdded(object sender, InventoryEventArgs e)
+
+	{
+		Transform InventoryPanel = transform.Find("InventoryPanel");
+		foreach (Transform slot in InventoryPanel) {
+			Image image = slot.GetChild (0).GetChild (0).GetComponent<Image> ();
+		
+
+			if (!image.enabled) {
+				image.enabled = true;
+				image.sprite = e.Item.Image;
+
+				//to do store a reference to the item
+
+				break;
+			}
+		}
+	}
+
+
 
 	public void ShowMenu()
 	{
