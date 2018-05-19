@@ -24,6 +24,10 @@ public class FirstPersonController : MonoBehaviour
     public float jumpForce = 5f;
     public float sprintSpeed= 20f;
 
+	// Inventory pick up system code
+	public Inventory inventory;
+
+
     [Header("GameObjects")]
     //First Person Camera
     [SerializeField] private GameObject FPcam;
@@ -44,10 +48,10 @@ public class FirstPersonController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
   
-        GameObject escapeOverlay = (GameObject)Instantiate(escapeMenu);
-        escapeOverlay.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+//        GameObject escapeOverlay = (GameObject)Instantiate(escapeMenu);
+//        escapeOverlay.SetActive(false);
+//        Cursor.lockState = CursorLockMode.Locked;
+//        Cursor.visible = false;
     }
 
     void Update()
@@ -72,8 +76,8 @@ public class FirstPersonController : MonoBehaviour
         FPcam.transform.localRotation = Quaternion.AngleAxis(-mouseLook.y, Vector3.right);
         transform.localRotation = Quaternion.AngleAxis(mouseLook.x, transform.up);
 
-        //Handle Pause Menu
-        if (Input.GetKeyDown("escape"))
+		//Handle Pause Menu (Duplicate with Game Menu Controller)
+        /*if (Input.GetKeyDown("escape"))
         {
             if (isUnlocked == true)
             {
@@ -93,7 +97,7 @@ public class FirstPersonController : MonoBehaviour
                 speed = 0f;
                 isUnlocked = true;
             }
-        }
+        }*/
 
         if  (Input.GetButtonDown("Jump") && IsGrounded())
         {
@@ -107,6 +111,21 @@ public class FirstPersonController : MonoBehaviour
         }
 
     }
+
+
+	// Pick up weapon (if the player hit weapon it store in the list)
+	private void OnControllColliderHit(ControllerColliderHit hit)
+	{
+		InventoryItem item = hit.collider.GetComponent<InventoryItem> ();
+
+
+		if (item != null)
+		{
+			inventory.AddItem (item);
+		}
+
+	}
+
 
     //Function to check if character is grounded
     private bool IsGrounded()
