@@ -1,5 +1,7 @@
 using System;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
 using Random = UnityEngine.Random;
@@ -42,6 +44,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_NextStep;
         private bool m_Jumping;
         private AudioSource m_AudioSource;
+
+
+		//555 Inventory pick up system code
+		public Inventory inventory;
+
 
         // Use this for initialization
         private void Start()
@@ -239,6 +246,23 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 StartCoroutine(!m_IsWalking ? m_FovKick.FOVKickUp() : m_FovKick.FOVKickDown());
             }
         }
+
+
+
+		//555 Pick up weapon (if the player hit weapon it store in the list)
+		private void OnControllColliderHit(ControllerColliderHit hit)
+		{
+			InventoryItem item = hit.collider.GetComponent<InventoryItem> ();
+
+
+			if (item != null)
+			{
+				inventory.AddItem (item);
+			}
+
+		}
+
+
 
 
         private void RotateView()

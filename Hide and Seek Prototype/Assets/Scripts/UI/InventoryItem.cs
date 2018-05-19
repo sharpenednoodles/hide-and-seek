@@ -20,7 +20,7 @@ public class InventoryEventArgs : EventArgs
 	public InventoryEventArgs(InventoryItem item)
 	{
 
-
+		Debug.Log ("Call from InventoryEvent");
 		Item = item;
 	}
 

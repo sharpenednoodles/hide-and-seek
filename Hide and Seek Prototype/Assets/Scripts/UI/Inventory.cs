@@ -17,10 +17,12 @@ public class Inventory : MonoBehaviour {
 	{
 		if (Items.Count < SLOTS)
 		{
+			Debug.Log ("Call from Inventory IF ITEM COUNT");
 			Collider collider = (item as MonoBehaviour).GetComponent<Collider>();
 
 			if (collider.enabled)
 			{
+				Debug.Log ("Call from Inventory Collider Enabled");
 				collider.enabled = false;
 
 				Items.Add(item);
@@ -29,6 +31,7 @@ public class Inventory : MonoBehaviour {
 
 				if (ItemAdded != null)
 				{
+					Debug.Log ("Call from Inventory ItemAdded");
 					ItemAdded(this, new InventoryEventArgs(item));
 				}
 			}

@@ -31,6 +31,7 @@ public class LightningGun : MonoBehaviour, InventoryItem
 	public void OnPickup()
 	{
 		// deactive the on screen object
-		//gameObject.SetActive (false);
+		gameObject.SetActive (false);
+		Debug.Log ("Collided with GUN");
 	}
 }
