@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 public class GameMenuController : MonoBehaviour {
 
 	public GameObject menuCanvas;
@@ -21,7 +22,7 @@ public class GameMenuController : MonoBehaviour {
 		menuCanvas.SetActive(false);
 	}
 
-	void ShowMenu()
+	public void ShowMenu()
 	{
 		menuCanvas.SetActive(true);
         //menuGroup.alpha = 1f;
@@ -30,7 +31,10 @@ public class GameMenuController : MonoBehaviour {
 		MenuState = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
     }
+
+
 
 	public void HideMenu()
 	{
