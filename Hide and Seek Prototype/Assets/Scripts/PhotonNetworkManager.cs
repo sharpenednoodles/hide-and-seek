@@ -9,6 +9,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     [SerializeField] GameObject player;
     [SerializeField] Transform spawnPoint;
     [SerializeField] GameObject joinCam;
+
+
     //Enter Game version here, this is to prevent different versions from connecting to the same servers
     static public string gameVersion = "Network Test 0.1.1";
 
@@ -39,6 +41,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         joinCam.SetActive(false);
         Debug.Log("Spawned at "+ randX + ",5," + randZ +" with rotation " +randYRot);
     }
+
+
 
 
     // Update is called once per frame
