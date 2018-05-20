@@ -46,8 +46,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private AudioSource m_AudioSource;
 
 
-		//555 Inventory pick up system code
-		public Inventory inventory;
+
+
+
+
+
 
 
         // Use this for initialization
@@ -64,7 +67,14 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Jumping = false;
             m_AudioSource = GetComponent<AudioSource>();
 			m_MouseLook.Init(transform , m_Camera.transform);
+
+
+
         }
+
+
+
+
 
 
         // Update is called once per frame
@@ -249,18 +259,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
 
 
-		//555 Pick up weapon (if the player hit weapon it store in the list)
-		private void OnControllColliderHit(ControllerColliderHit hit)
-		{
-			InventoryItem item = hit.collider.GetComponent<InventoryItem> ();
 
-
-			if (item != null)
-			{
-				inventory.AddItem (item);
-			}
-
-		}
 
 
 

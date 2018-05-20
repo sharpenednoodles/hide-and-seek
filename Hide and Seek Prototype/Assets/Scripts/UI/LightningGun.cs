@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LightningGun : MonoBehaviour, InventoryItem 
+public class LightningGun : MonoBehaviour
 {
 
 	public string Name
