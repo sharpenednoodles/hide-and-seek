@@ -2214,8 +2214,8 @@ Animator:
   m_GameObject: {fileID: 1950173015902812}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: df4dcfc4ae9460c4aa6010dce67d5d14, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 1
+  m_Controller: {fileID: 9100000, guid: 177fd60dbab3f58448d373da68e6cac2, type: 2}
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -2228,7 +2228,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1532786540187302}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbac2762a414a1f4bbc9d93df46ac831, type: 3}
   m_Name: 
@@ -2368,6 +2368,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 8bc94ec6ed537e743b481638bdcd503d, type: 3}
   m_JumpSound: {fileID: 8300000, guid: 5897aeed9b676024fbb8c694b421a861, type: 3}
   m_LandSound: {fileID: 8300000, guid: 3b09d59f4499d45428baa7a21e954296, type: 3}
+  animator: {fileID: 95108032474111250}
 --- !u!114 &114384491738737532
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2465,7 +2466,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1532786540187302}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5ce5e1f369b3eb49ac2ac8aa01287d5, type: 3}
   m_Name: 
@@ -2599,7 +2600,7 @@ CharacterController:
   m_Height: 2
   m_Radius: 0.5
   m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_StepOffset: 2
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0, z: 0}
