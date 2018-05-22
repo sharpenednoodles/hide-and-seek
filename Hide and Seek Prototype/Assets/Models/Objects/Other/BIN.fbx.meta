@@ -15,11 +15,13 @@ ModelImporter:
     400006: Sun
     2000000: Camera
     2100000: Material
+    2100002: Material.010
     2300000: Cube
     2300002: //RootNode
     3300000: Cube
     3300002: //RootNode
     4300000: Cube
+    4300002: Bin
     10800000: Sun
   externalObjects: {}
   materials:
