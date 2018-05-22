@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Default_Prototype
-  m_Shader: {fileID: 4800000, guid: 3a6e79a67e3129f409bae52acc3ab06b, type: 3}
+  m_Shader: {fileID: 4800000, guid: 5f2e318166a2346a4a1c50f27f484127, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
   m_EnableInstancingVariants: 0
@@ -39,11 +39,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _FirstTex:
-        m_Texture: {fileID: 2800000, guid: eb18006e3122d7e4a84e8ef8b708df02, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _FourthTex:
-        m_Texture: {fileID: 2800000, guid: 6b2e75e162ed72c428ddc9ca9cac6452, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -67,7 +67,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SecondTex:
-        m_Texture: {fileID: 2800000, guid: 20fa208453803ab41b65dfe6fe92c848, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
@@ -75,7 +75,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ThirdTex:
-        m_Texture: {fileID: 2800000, guid: 478de9d1d3cbac64bad0d9feaad9e272, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
@@ -87,10 +87,10 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _EmissionScaleUI: 0
-    - _Gloss: 0.5
+    - _Gloss: 1
     - _Glossiness: 0.48
     - _Lightmapping: 1
-    - _Metallic: 0
+    - _Metallic: 1
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02

@@ -1,5 +1,7 @@
 using System;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
 using Random = UnityEngine.Random;
@@ -27,7 +29,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] private AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
         [SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
         [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
-
+        [SerializeField] private Animator animator;
         private Camera m_Camera;
         private bool m_Jump;
         private float m_YRotation;
@@ -43,6 +45,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool m_Jumping;
         private AudioSource m_AudioSource;
 
+        //Animation hooks
+        
+
         // Use this for initialization
         private void Start()
         {
@@ -57,7 +62,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Jumping = false;
             m_AudioSource = GetComponent<AudioSource>();
 			m_MouseLook.Init(transform , m_Camera.transform);
+
+            //animator = GetComponent<Animator>();
         }
+
+
+
+
 
 
         // Update is called once per frame
@@ -76,6 +87,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 PlayLandingSound();
                 m_MoveDir.y = 0f;
                 m_Jumping = false;
+                animator.SetBool("isJumping", m_Jumping);
             }
             if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded)
             {
@@ -103,6 +115,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             float speed;
             GetInput(out speed);
+            
             // always move along the camera forward as it is the direction that it being aimed at
             Vector3 desiredMove = transform.forward*m_Input.y + transform.right*m_Input.x;
 
@@ -126,6 +139,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     PlayJumpSound();
                     m_Jump = false;
                     m_Jumping = true;
+                    animator.SetBool("isJumping", m_Jumping);
                 }
             }
             else
@@ -214,7 +228,14 @@ namespace UnityStandardAssets.Characters.FirstPerson
             float horizontal = CrossPlatformInputManager.GetAxis("Horizontal");
             float vertical = CrossPlatformInputManager.GetAxis("Vertical");
 
+            animator.SetFloat("Forward", vertical);
+            animator.SetFloat("Strafe", horizontal);
+
+            float movement = (Math.Abs(horizontal + vertical));
+            animator.SetFloat("MovementInput", movement);
+       
             bool waswalking = m_IsWalking;
+           
 
 #if !MOBILE_INPUT
             // On standalone builds, walk/run speed is modified by a key press.
@@ -223,6 +244,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 #endif
             // set the desired speed to be walking or running
             speed = m_IsWalking ? m_WalkSpeed : m_RunSpeed;
+            animator.SetFloat("speedMult", speed/5);
             m_Input = new Vector2(horizontal, vertical);
 
             // normalize input if it exceeds 1 in combined length:
@@ -239,6 +261,12 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 StartCoroutine(!m_IsWalking ? m_FovKick.FOVKickUp() : m_FovKick.FOVKickDown());
             }
         }
+
+
+
+
+
+
 
 
         private void RotateView()

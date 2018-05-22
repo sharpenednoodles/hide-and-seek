@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Pickup
   - Prop
+  - Boundary
   layers:
   - Default
   - TransparentFX

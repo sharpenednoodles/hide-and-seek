@@ -13,6 +13,8 @@ using System.Collections;
 
 public class PickupControllerPrototype : MonoBehaviour
 {
+
+
     public KeyCode pickUpKey;
     private GameObject aimedAt;
 	private bool isLookingAtObj, hasAcquiredObj;
@@ -28,6 +30,7 @@ public class PickupControllerPrototype : MonoBehaviour
 	{
 		if(isLookingAtObj) {
 			if (Input.GetKeyDown (pickUpKey)) {
+
 				acquiredObj_name = aimedAt.name;
 				Destroy (aimedAt);
 				hasAcquiredObj = true;
@@ -43,10 +46,12 @@ public class PickupControllerPrototype : MonoBehaviour
 		if (Physics.Raycast(ray, out hit)){
 			aimedAt = hit.collider.gameObject;
 			if (hit.collider.tag == "Pickup" && hit.distance <= 2 && aimedAt.name != "Terrain") {
+
 					isLookingAtObj = true;
 			}
 			else
 			{
+
 				isLookingAtObj = false;
 			}
 		}
@@ -56,6 +61,8 @@ public class PickupControllerPrototype : MonoBehaviour
 	{
 		if (isLookingAtObj) GUI.Box(new Rect (140, Screen.height - 50, Screen.width - 300, 120), "Press E to acquire " + aimedAt.name);
 		if (hasAcquiredObj) {
+
+
 			GUI.Box(new Rect (140, Screen.height - 50, Screen.width - 300, 120), "Acquired " + acquiredObj_name);
 			if (startTime < 5) startTime += Time.deltaTime;
 			else {

@@ -12,5 +12,8 @@ EditorBuildSettings:
     path: Assets/Scenes/Create Game.unity
     guid: 72ec410c324914709bc1f89a1611472d
   - enabled: 1
+    path: Assets/Scenes/Warehouse Blocking.unity
+    guid: 2cad59665d2a3af4b8e6fd01d09eba42
+  - enabled: 1
     path: Assets/Scenes/Network Test Scene - lighting fun.unity
     guid: 9207bc565d0c14747a940f7e1340c210

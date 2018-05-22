@@ -13,5 +13,6 @@ public class GameVersionDisplay : MonoBehaviour {
         Debug.Log("Game verion:" +PhotonNetworkManager.gameVersion);
         GameVersion.text = PhotonNetworkManager.gameVersion;
 
+
     }
 }
