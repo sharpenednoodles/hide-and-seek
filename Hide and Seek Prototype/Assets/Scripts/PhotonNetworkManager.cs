@@ -9,10 +9,13 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     [SerializeField] GameObject player;
     [SerializeField] Transform spawnPoint;
     [SerializeField] GameObject joinCam;
-
-
+    [Header("Coordinate Range")]
+    [SerializeField] int minX = -25;
+    [SerializeField] int maxX = 25;
+    [SerializeField] int minZ = -25;
+    [SerializeField] int maxZ = 25;
     //Enter Game version here, this is to prevent different versions from connecting to the same servers
-    static public string gameVersion = "Network Test 0.1.1";
+    static public string gameVersion = "Warehouse Test 0.1";
 
 
 
@@ -32,8 +35,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     public virtual void OnJoinedRoom()
     {
         Debug.Log("Connected to room");
-        int randX = Random.Range(-25, 25);
-        int randZ = Random.Range(-25, 25);
+        int randX = Random.Range(minX, maxX);
+        int randZ = Random.Range(minZ, maxZ);
         int randYRot = Random.Range(0, 360);
    
         PhotonNetwork.Instantiate(player.name, new Vector3(randX, 2, randZ), Quaternion.Euler(0, randYRot, 0), 0);
