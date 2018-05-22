@@ -13,10 +13,18 @@ public class LightningGun : MonoBehaviour
 			return "Lightning Gun";
 		}
 	}
-		
 
+    public int Count
+    {
 
-	public Sprite image = null;
+        get
+        {
+
+            return 200;
+        }
+    }
+
+    public Sprite image = null;
 
 
 	public Sprite Image
