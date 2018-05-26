@@ -14,7 +14,7 @@ using System.Collections;
 public class PickupControllerPrototype : MonoBehaviour
 {
 
-
+    //private Inventory inventory;
     public KeyCode pickUpKey;
     private GameObject aimedAt;
 	private bool isLookingAtObj, hasAcquiredObj;
@@ -35,20 +35,54 @@ public class PickupControllerPrototype : MonoBehaviour
 				Destroy (aimedAt);
 				hasAcquiredObj = true;
 				isLookingAtObj = false;
+
+
 			}
 		}
 	}
 
-	public void Raycast()
+    //		//555 Pick up weapon (if the player hit weapon it store in the list)
+   /* private void OnControllColliderHit(ControllerColliderHit hit)
+    {
+        Debug.Log("Call From First Controller");
+        InventoryItem item = hit.collider.GetComponent<InventoryItem>();
+
+
+        if (item != null)
+        {
+            Debug.Log("Call From Second if-----------------------");
+            Inventory.AddItem(item);
+        }
+
+    }*/
+
+
+
+
+    public void Raycast()
 	{
-		RaycastHit hit;
+
+        //private Inventory inventory ;
+        RaycastHit hit;
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		if (Physics.Raycast(ray, out hit)){
 			aimedAt = hit.collider.gameObject;
-			if (hit.collider.tag == "Pickup" && hit.distance <= 2 && aimedAt.name != "Terrain") {
+            InventoryItem item = hit.collider.GetComponent<InventoryItem>();
 
-					isLookingAtObj = true;
-			}
+
+            if (hit.collider.tag == "Pickup" && hit.distance <= 2 && aimedAt.name != "Terrain") {
+
+                if (item != null)
+                {
+                    Debug.Log("Call From Second if-----------------------");
+
+                    Inventory.AddItem(item);
+
+                }
+                isLookingAtObj = true;
+                Debug.Log("Call From First if");
+
+            }
 			else
 			{
 
