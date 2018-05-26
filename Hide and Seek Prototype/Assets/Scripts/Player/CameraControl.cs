@@ -6,10 +6,12 @@ using UnityEngine;
 
 public class CameraControl : MonoBehaviour
 {
+    //public GameObject PropSwitchingReference;
+
     private const float Y_ANGLE_MIN = 0.0f;
     private const float Y_ANGLE_MAX = 50.0f;
 
-    private Transform lookAt;
+    [SerializeField] private Transform lookAt;
     public GameObject camTransform;
     public Transform camPos;
     public float distance = 10.0f;
@@ -19,13 +21,20 @@ public class CameraControl : MonoBehaviour
     private float sensitivityX = 4.0f;
     private float sensitivityY = 1.0f;
 
-    private void Start()
+    public void Start()
     {
         //Set 
         Debug.Log("start method called");
-        GameObject target;
-        target = GameObject.Find("PropModel");
-        lookAt = target.transform;
+
+        //PropSwitching propSwitchInstance = GetComponent<PropSwitching>();
+        //lookAt = propSwitchInstance.prop.transform;
+    }
+
+    public void SwitchTarget()
+    {
+        Debug.Log("swithc target method called");
+        PropSwitching propSwitchInstance = GetComponent<PropSwitching>();
+        lookAt = propSwitchInstance.prop.transform;
     }
 
     public void InitialiseTarget(GameObject targetToLookAt)

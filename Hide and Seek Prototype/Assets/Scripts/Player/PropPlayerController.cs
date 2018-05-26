@@ -34,6 +34,8 @@ public class PropPlayerController : MonoBehaviour
     [Header("Additional Controls")]
 
     public KeyCode sprint;
+    public KeyCode rotateLeft;
+    public KeyCode rotateRight;
 
     void Start()
     {
@@ -48,7 +50,7 @@ public class PropPlayerController : MonoBehaviour
         translation *= Time.deltaTime;
         strafe *= Time.deltaTime;
 
-        transform.Translate(strafe, 0, translation);
+        this.transform.Translate(strafe, 0, translation);
 
         var mouseDirection = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
 
@@ -59,6 +61,17 @@ public class PropPlayerController : MonoBehaviour
         mouseLook.y = Mathf.Clamp(mouseLook.y, -65f, 65f);
         
         //transform.localRotation = Quaternion.AngleAxis(mouseLook.x, transform.up);
+        //Convert to rotation axis later
+        if (Input.GetKey(rotateLeft))
+        {
+            transform.localRotation = Quaternion.AngleAxis(-10 * Time.deltaTime, transform.up);
+        }
+
+        
+        if (Input.GetKey(rotateRight))
+        {
+            transform.localRotation = Quaternion.AngleAxis(10 * Time.deltaTime, transform.up);
+        }
 
         if  (Input.GetButtonDown("Jump") && IsGrounded())
         {

@@ -24,11 +24,14 @@ public class PlayerNetwork : MonoBehaviour
         if (photonView.isMine)
         {
             //Functionality for player
+            this.name = "Local Player";
         }
 
         //Handle functionality for other players
         else
         {
+            //Use Photon IDs later
+            this.name = "Remote Player";
             playerCamera.gameObject.SetActive(false);
             mapCamera.gameObject.SetActive(false);
             //like a for loop but I'm lazy - disable control scripts

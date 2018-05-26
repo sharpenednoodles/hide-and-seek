@@ -7,9 +7,8 @@ public class GameVersionDisplay : MonoBehaviour {
 
     [SerializeField] private Text GameVersion;
 
-    private void Start()
+    void Start()
     {
- 
         Debug.Log("Game verion:" +PhotonNetworkManager.gameVersion);
         GameVersion.text = PhotonNetworkManager.gameVersion;
 

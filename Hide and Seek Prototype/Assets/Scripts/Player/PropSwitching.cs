@@ -2,39 +2,44 @@
  * PropSwitching.cs
  * Version 1.0
  * Created by Dion Drake
- * Last Edited: 13/05/2018
+ * Last Edited: 26/05/2018
  * 
 */
-
-//To use - place "Prop" tag/add collider on obj intended to pickup. obj should have collider/rigidbody. Place on MainCamera object.
-
 
 using UnityEngine; 
 using System.Collections; 
 
 public class PropSwitching : MonoBehaviour
 {
-    public bool isProp;
-	public KeyCode pickUpKey;
-    [SerializeField] private GameObject playerModel;
-    [SerializeField] private CharacterController playerCollider;
-    [SerializeField] private MonoBehaviour firstPersonController, thirdPersonController, followCam;
+    //CameraControl cameraHook;
+    private bool isProp;
+    private GameObject playerModel;
+    public GameObject prop;
+    private CharacterController playerCollider;
+    private MonoBehaviour firstPersonController, thirdPersonController, followCam;
 
-    private GameObject aimedAt, newItem, self;
+    private GameObject aimedAt, newItem;
     private bool isLookingAtObj, hasAcquiredObj;
 	private string aimedObj_name, acquiredObj_name;
 	private float startTime = 0, holdTime = 0;
-	
-    
-    //public Camera propCam;
-	//Runs on script load
-	public void Start()
+    private PhotonView photonView;
+
+    CameraControl camControl;
+
+
+
+    public void Start()
 	{
+        photonView = GetComponent<PhotonView>();
         isProp = false;
 		InvokeRepeating ("Raycast", 0.1f, 0.1f);
-		self = GameObject.Find ("CapsulePlayer");
-
-	}
+        playerModel = this.gameObject.transform.GetChild(1).gameObject;
+        playerCollider = this.GetComponent<CharacterController>();
+        firstPersonController = GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
+        thirdPersonController = this.GetComponent<PropPlayerController>();
+        followCam = this.GetComponent<CameraControl>();
+        camControl = GetComponent<CameraControl>();
+    }
 
 	public void Update()
 	{
@@ -59,66 +64,88 @@ public class PropSwitching : MonoBehaviour
        
 	}
 
+    //Handle Player Prop Switching
     public void PropSwitch()
     {
         //reset time
         holdTime = 0;
         aimedObj_name = aimedAt.name;
-  
-        //new object
-        //playerCollider.enabled = false;
-        //firstPersonController.enabled = false;
-        //thirdPersonController.enabled = true;
-        if (!isProp)
-        {
-            playerModel.SetActive(false);
-            playerCollider.enabled = false;
-            newItem = Instantiate(aimedAt, playerModel.transform.position, aimedAt.transform.rotation);
-            newItem.transform.parent = transform;
-            followCam.enabled = true;
-            Rigidbody rb = newItem.GetComponent<Rigidbody>();
-            rb.detectCollisions = true;
-            //rb.isKinematic = true;
-
-            firstPersonController.enabled = false;
-            thirdPersonController.enabled = true;
-
-            //To remove "(Clone)" from the end of new obj name
-            newItem.name = "PropModel";
-            isProp = true;
-            
-        }
 
         if (isProp)
         {
-            //stuff for when already a prop
+            if (photonView.isMine)
+            {
+                Debug.Log("is prop called while as prop");
+
+                Destroy(prop);
+                newItem = Instantiate(aimedAt, playerModel.transform.position, aimedAt.transform.rotation);
+                newItem.transform.parent = transform;
+                Rigidbody rb = newItem.GetComponent<Rigidbody>();
+                rb.detectCollisions = true;
+                newItem.name = "PropModel";
+                camControl.SwitchTarget();
+            }
+            else
+            {
+                //code for remoate player
+            }
+
         }
 
-            
+        if (!isProp)
+        {
+            if (photonView.isMine)
+            {
+                playerModel.SetActive(false);
+                playerCollider.enabled = false;
 
-            //Destroy(aimedAt); //Destroys original prop so I don't need to deal with the problem of the old and new objects colliding
-            //newItem.GetComponent<Camera>().enabled = true; //GetComponent is an intensive method that iterates through all gameObjects. This version should just iterate through children.
-            //newItem.GetComponentInChildren<ThirdPersonController>().enabled = true;
-            //self.GetComponentInChildren<FirstPersonController> ().enabled = false;
-            //transform.parent = newItem.transform;
+                newItem = Instantiate(aimedAt, playerModel.transform.position, aimedAt.transform.rotation);
+                newItem.transform.parent = transform;
 
+                Rigidbody rb = newItem.GetComponent<Rigidbody>();
+                rb.detectCollisions = true;
+
+                firstPersonController.enabled = false;
+                thirdPersonController.enabled = true;
+
+                prop = newItem;
+                newItem.name = "PropModel";
+                isProp = true;
+
+                followCam.enabled = true;
+                camControl.SwitchTarget();
+            }
+            else
+            {
+                //code for remoate player
+            }
+
+        }
+
+        
         }
 
 
     private void RevertToPlayer()
     {
-        Debug.Log("RevertPlayerCalled");
-        playerModel.SetActive(true);
+        if (photonView.isMine)
+        {
+            Debug.Log("RevertPlayerCalled");
+            playerModel.SetActive(true);
+            Destroy(prop);
+            
+            followCam.enabled = false;
+            
+            thirdPersonController.enabled = false;
+            playerCollider.enabled = true;
+            firstPersonController.enabled = true;
 
-        GameObject prop;
-        prop = GameObject.Find("PropModel");
-        followCam.enabled = false;
-        Destroy(prop);
-        thirdPersonController.enabled = false;
-        playerCollider.enabled = true;
-        firstPersonController.enabled = true;
- 
-        isProp = false;
+            isProp = false;
+        }
+        else
+        {
+            //code for remote player
+        }
     }
 
     public void Raycast()
