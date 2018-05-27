@@ -6,8 +6,9 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour {
 
-    public Image image;
+    //public Image images;
     public Text count;
+    public Transform InventoryHolder; 
     /*public GameObject slot;
 
     public List<Sprite> ItemList = new List<Sprite>();
@@ -49,17 +50,18 @@ public class Inventory : MonoBehaviour {
 
         
         //image.enabled = true;
-        image.sprite = e.Item.Image;
-        count.text = "999";
-        /*Transform InventoryHolder = transform.Find("InventoryHolder");
+        //image.sprite = e.Item.Image;
+        //count.text = "999";
+        //Transform InventoryHolder = transform.Find("InventoryPanel");
         foreach (Transform slot in InventoryHolder)
         {
-            //Image image = slot.GetChild(0).GetComponent<Image>();
+            Image image = slot.GetChild(0).GetComponent<Image>();
 
 
-
-            if (!image.enabled)
+           
+            if (image.enabled && image.sprite == null)
             {
+
                 Debug.Log("Call from Inventory Script if condition");
                 image.enabled = true;
                 image.sprite = e.Item.Image;
@@ -68,7 +70,7 @@ public class Inventory : MonoBehaviour {
 
                 break;
             }
-        }*/
+        }
     }
 
 
