@@ -7,7 +7,7 @@ using System.Collections;
 
 public class PropSwitching : MonoBehaviour
 {
-    private bool isProp;
+    private bool isProp, remoteIsProp;
     private GameObject playerModel;
     public GameObject prop;
     private CharacterController playerCollider;
@@ -21,7 +21,7 @@ public class PropSwitching : MonoBehaviour
 
     CameraControl camControl;
 
-    public int propID, playerID;
+    public int propID, playerID, newPropID;
 
 
     public void Start()
@@ -39,9 +39,9 @@ public class PropSwitching : MonoBehaviour
 
     public void CallRemoteMethod()
     {
-        photonView.RPC("PropSwitch", PhotonTargets.AllBufferedViaServer, playerID, propID);
+        //photonView.RPC("PropSwitch", PhotonTargets.AllBufferedViaServer, playerID, propID);
         photonView.RPC("RevertToPlayer", PhotonTargets.AllBufferedViaServer, playerID);
-        photonView.RPC("RemoteSwitch", PhotonTargets.AllBufferedViaServer, playerID, propID);
+        photonView.RPC("RemoteSwitch", PhotonTargets.OthersBuffered, playerID, newPropID, remoteIsProp);
     }
 
 	public void Update()
@@ -66,15 +66,13 @@ public class PropSwitching : MonoBehaviour
                 PropSwitch();
 			}*/
 		}
-
-       
 	}
 
-    //DELET THIS
+    //Use this to call remote client
     [PunRPC]
-    public void RemoteSwitch(int playerID, int remoteID, bool isProp)
+    public void RemoteSwitch(int playerID, int remoteID, bool remoteIsProp)
     {
-        if (!isProp && !photonView.isMine)
+        if (!remoteIsProp && !photonView.isMine)
         {
             Debug.Log("Called Remote Switch !isProp");
 
@@ -91,100 +89,74 @@ public class PropSwitching : MonoBehaviour
             //rb.detectCollisions = true;
             rb.isKinematic = true;
             newItem.name = "PropModel";
+
         }
 
-        if (isProp && !photonView.isMine)
+        if (remoteIsProp && !photonView.isMine)
         {
 
         }
     }
 
     //Handle Player Prop Switching
-    [PunRPC]
-    public void PropSwitch(int playerID, int remoteID)
+
+    public void PropSwitch(int playerID, int propID)
     {
         //reset time
         holdTime = 0;
         aimedObj_name = aimedAt.name;
 
-        if (photonView.isMine)
+
+        //Still needs rewriting, mark when done
+        if (isProp)
         {
-            if (isProp)
-            {
-                Debug.Log("is prop called while as prop");
+            Debug.Log("is prop called while as prop");
 
-                Destroy(prop);
-                newItem = Instantiate(aimedAt, playerModel.transform.position, aimedAt.transform.rotation);
-                
-                newItem.transform.parent = transform;
-                Rigidbody rb = newItem.GetComponent<Rigidbody>();
-                //rb.detectCollisions = true;
-                rb.isKinematic = true;
-                newItem.name = "PropModel";
-                camControl.SwitchTarget();
-                RemoteSwitch(playerID, remoteID, true);
-            }
-            
-
-        }
-        else
-        {
-            //code for remote player
-        }
-
-        if (photonView.isMine)
-        {
-            if (!isProp)
-            {
-                Debug.Log("local Callback called");
-                playerModel.SetActive(false);
-                //playerCollider.enabled = false;
-
-
-                //newItem = Instantiate(aimedAt, playerModel.transform.position, aimedAt.transform.rotation);
-                newItem = PhotonNetwork.Instantiate(aimedAt.name, playerModel.transform.position, aimedAt.transform.rotation, 0);
-                
-                //disableView.enabled = true;
-                newItem.transform.parent = transform;
-
-                Rigidbody rb = newItem.GetComponent<Rigidbody>();
-                //rb.detectCollisions = true;
-                rb.isKinematic = true;
-
-                firstPersonController.enabled = false;
-                thirdPersonController.enabled = true;
-
-                prop = newItem;
-                newItem.name = "PropModel";
-                isProp = true;
-
-                followCam.enabled = true;
-                camControl.SwitchTarget();
-                RemoteSwitch(playerID, remoteID, true);
-            }
-        }
-        else
-        {
-            //code for remote player
-            Debug.Log("Called Remote RPC");
-
-            GameObject newItem = PhotonView.Find(remoteID).gameObject;
-            GameObject remotePlayerModel = PhotonView.Find(playerID).gameObject;
-
-            GameObject robotModel = remotePlayerModel.transform.GetChild(1).gameObject;
-            robotModel.SetActive(false);
-            //playerCollider.enabled = false;
+            Destroy(prop);
+            newItem = Instantiate(aimedAt, playerModel.transform.position, aimedAt.transform.rotation);
 
             newItem.transform.parent = transform;
-
             Rigidbody rb = newItem.GetComponent<Rigidbody>();
             //rb.detectCollisions = true;
             rb.isKinematic = true;
             newItem.name = "PropModel";
+            camControl.SwitchTarget();
+            //RemoteSwitch(playerID, propID, true);
+        }
+
+        //Done
+        if (!isProp)
+        {
+            Debug.Log("local Callback called");
+            playerModel.SetActive(false);
+            //playerCollider.enabled = false;
+
+
+            //newItem = Instantiate(aimedAt, playerModel.transform.position, aimedAt.transform.rotation);
+            newItem = PhotonNetwork.Instantiate(aimedAt.name, playerModel.transform.position, aimedAt.transform.rotation, 0);
+            newPropID = newItem.GetComponent<PhotonView>().viewID;
+            //disableView.enabled = true;
+            newItem.transform.parent = transform;
+
+            Rigidbody rb = newItem.GetComponent<Rigidbody>();
+            rb.isKinematic = true;
+
+            firstPersonController.enabled = false;
+            thirdPersonController.enabled = true;
+
+            prop = newItem;
+            newItem.name = "PropModel";
+            isProp = true;
+
+            followCam.enabled = true;
+            camControl.SwitchTarget();
+
+            
+            //Call RPC Function for remote players
+            RemoteSwitch(playerID, newPropID, false);
         }
     }
 
-    [PunRPC]
     private void RevertToPlayer()
     {
         if (photonView.isMine)
