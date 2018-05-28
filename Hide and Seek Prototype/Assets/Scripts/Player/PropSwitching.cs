@@ -3,6 +3,10 @@ using System.Collections;
 
 /// <summary>
 /// Handles Prop switching and network sync
+/// To USE
+/// Props to switch into must be tagged with a prop tag, and have a corresponding named prefab. 
+/// Obviosuly this causes an issue where players that are disguised can't be used as a prop to turn into
+/// Will change later to read from a script located upon object so that scene objects can be arbitrarily named
 /// </summary>
 
 public class PropSwitching : MonoBehaviour
@@ -14,15 +18,15 @@ public class PropSwitching : MonoBehaviour
     private MonoBehaviour firstPersonController, thirdPersonController, followCam;
 
     private GameObject aimedAt, newItem;
-    private bool isLookingAtObj, hasAcquiredObj;
-	private string aimedObj_name, acquiredObj_name;
+    private bool isLookingAtProp;
+	
 	private float startTime = 0, holdTime = 0;
+    public int timeHold = 1;
     private PhotonView photonView;
 
     CameraControl camControl;
 
-    public int propID, playerID, newPropID;
-
+    private int propID, playerID, newPropID;
 
     public void Start()
 	{
@@ -37,29 +41,6 @@ public class PropSwitching : MonoBehaviour
         camControl = GetComponent<CameraControl>();
     }
 
-    //probably unneeded, this is for continuous streams
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.isWriting)
-        {
-            stream.SendNext(propID);
-            stream.SendNext(playerID);
-            stream.SendNext(newPropID);
-        }
-        else
-        {
-            propID = (int)stream.ReceiveNext();
-            playerID = (int)stream.ReceiveNext();
-            newPropID = (int)stream.ReceiveNext();
-        }
-    }
-    public void CallRemoteMethod()
-    {
-        //photonView.RPC("PropSwitch", PhotonTargets.AllBufferedViaServer, playerID, propID);
-        photonView.RPC("RevertToPlayer", PhotonTargets.AllBufferedViaServer, playerID);
-        photonView.RPC("RemoteSwitch", PhotonTargets.AllBufferedViaServer, playerID, newPropID, remoteIsProp);
-    }
-
 	public void Update()
 	{
 
@@ -68,71 +49,62 @@ public class PropSwitching : MonoBehaviour
             RevertToPlayer();
         }
 
-        if (isLookingAtObj) {
-			if (Input.GetMouseButtonDown (1))
+        if (isLookingAtProp) {
+            if (Input.GetMouseButton(1))
             {
-                //holdTime += Time.deltaTime;
+                holdTime += Time.deltaTime;
                 playerID = photonView.viewID;
                 propID = aimedAt.GetPhotonView().viewID;
-                PropSwitch(playerID, propID);
+            }
+            else holdTime = 0;
 
-			}
-			/*if (holdTime > 5)
+            if (holdTime >= timeHold)
             {
-                PropSwitch();
-			}*/
+                //Call propswitch after timeHold has passed
+                PropSwitch(playerID, propID);
+			}
 		}
-	}
+    }
 
     //Use this to call remote client
     [PunRPC]
     public void RemoteSwitch(int playerID, int remoteID, bool remoteIsProp)
     {
-        if (!remoteIsProp && !photonView.isMine)
+        if (remoteIsProp && !photonView.isMine)
         {
             Debug.Log("Called Remote Switch !isProp from client " +photonView.viewID);
             Debug.Log("Recieved Player ID = " + playerID + " remoteID = " + remoteID);
 
             GameObject newRemoteItem = PhotonView.Find(remoteID).gameObject;
             GameObject remotePlayerModel = PhotonView.Find(playerID).gameObject;
-
             GameObject robotModel = remotePlayerModel.transform.GetChild(1).gameObject;
             robotModel.SetActive(false);
-            //playerCollider.enabled = false;
 
             newRemoteItem.transform.parent = transform;
 
             Rigidbody rb = newRemoteItem.GetComponent<Rigidbody>();
-            //rb.detectCollisions = true;
             rb.isKinematic = true;
             newRemoteItem.name = "PropModel";
-
         }
 
-        if (remoteIsProp)
+        if (!remoteIsProp && !photonView.isMine)
         {
             Debug.Log("Called remote switch back to player from client " + photonView.viewID);
-            //Implemmentation here
+          
             GameObject newRemoteItem = PhotonView.Find(remoteID).gameObject;
             GameObject remotePlayerModel = PhotonView.Find(playerID).gameObject;
             GameObject robotModel = remotePlayerModel.transform.GetChild(1).gameObject;
             robotModel.SetActive(true);
-
-            PhotonNetwork.Destroy(newRemoteItem);
-
+            //PhotonNetwork.Destroy(newRemoteItem);
         }
     }
 
     //Handle Player Prop Switching
-
     public void PropSwitch(int playerID, int propID)
     {
-        //reset time
         holdTime = 0;
-        aimedObj_name = aimedAt.name;
-
-
-        //Still needs rewriting, mark when done
+   
+        //Switch from Prop to Prop - currently not implemented
         if (isProp && photonView.isMine)
         {
             Debug.Log("Local Player is transforming into another prop from " +photonView.viewID);
@@ -142,25 +114,24 @@ public class PropSwitching : MonoBehaviour
 
             newItem.transform.parent = transform;
             Rigidbody rb = newItem.GetComponent<Rigidbody>();
-            //rb.detectCollisions = true;
+            
             rb.isKinematic = true;
             newItem.name = "PropModel";
             camControl.SwitchTarget();
-            //RemoteSwitch(playerID, propID, true);
+
+            //Call RPC Function for remote players
+            photonView.RPC("RemoteSwitch", PhotonTargets.AllBufferedViaServer, playerID, newPropID, isProp);
         }
 
-        //Done
+        //Switch from Robot to Prop
         if (!isProp && photonView.isMine)
         {
             Debug.Log("Local is player turning into a prop from " +photonView.viewID);
             playerModel.SetActive(false);
-            //playerCollider.enabled = false;
-
-
-            //newItem = Instantiate(aimedAt, playerModel.transform.position, aimedAt.transform.rotation);
+            
             newItem = PhotonNetwork.Instantiate(aimedAt.name, playerModel.transform.position, aimedAt.transform.rotation, 0);
             newPropID = newItem.GetComponent<PhotonView>().viewID;
-            //disableView.enabled = true;
+            
             newItem.transform.parent = transform;
 
             Rigidbody rb = newItem.GetComponent<Rigidbody>();
@@ -175,10 +146,9 @@ public class PropSwitching : MonoBehaviour
 
             followCam.enabled = true;
             camControl.SwitchTarget();
-            remoteIsProp = false;
 
             //Call RPC Function for remote players
-            photonView.RPC("RemoteSwitch", PhotonTargets.AllBufferedViaServer, playerID, newPropID, remoteIsProp);
+            photonView.RPC("RemoteSwitch", PhotonTargets.AllBufferedViaServer, playerID, newPropID, isProp);
         }
     }
 
@@ -193,10 +163,11 @@ public class PropSwitching : MonoBehaviour
             followCam.enabled = false;
 
             thirdPersonController.enabled = false;
-            //playerCollider.enabled = true;
             firstPersonController.enabled = true;
-
             isProp = false;
+
+            //Call RPC Function for remote players
+            photonView.RPC("RemoteSwitch", PhotonTargets.AllBufferedViaServer, playerID, newPropID, isProp);
         }
     }
 
@@ -207,22 +178,14 @@ public class PropSwitching : MonoBehaviour
 		if (Physics.Raycast(ray, out hit)){
 			aimedAt = hit.collider.gameObject;
 			if (hit.collider.tag == "Prop" && hit.distance <= 2)
-				isLookingAtObj = true;
+				isLookingAtProp = true;
 			else
-				isLookingAtObj = false;
+				isLookingAtProp = false;
 		}
 	}
 
 	public void OnGUI()
 	{
-		if (isLookingAtObj) GUI.Box(new Rect (140, Screen.height - 50, Screen.width - 300, 120), "Hold Right Mouse Button to transform into this prop");
-		if (hasAcquiredObj) {
-			GUI.Box(new Rect (140, Screen.height - 50, Screen.width - 300, 120), "Acquired " + acquiredObj_name);
-			if (startTime < 5) startTime += Time.deltaTime;
-			else {
-				hasAcquiredObj = false;
-				startTime = 0;
-			}
-		}
+        if (isLookingAtProp) GUI.Box(new Rect(140, Screen.height - 50, Screen.width - 300, 120), "Hold Right Mouse Button to transform into this prop");
 	}
 }

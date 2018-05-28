@@ -1530,7 +1530,7 @@ MonoBehaviour:
   runSpeed: 20
   pauseMult: 0
   inAirControlAcceleration: 3
-  jumpHeight: 0.5
+  jumpHeight: 2
   gravity: 20
   speedSmoothing: 10
   rotateSpeed: 500
@@ -1754,9 +1754,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prop: {fileID: 0}
-  propID: 0
-  playerID: 0
-  newPropID: 0
+  timeHold: 1
 --- !u!114 &114612856497053996
 MonoBehaviour:
   m_ObjectHideFlags: 1
