@@ -41,7 +41,7 @@ public class PropSwitching : MonoBehaviour
     {
         //photonView.RPC("PropSwitch", PhotonTargets.AllBufferedViaServer, playerID, propID);
         photonView.RPC("RevertToPlayer", PhotonTargets.AllBufferedViaServer, playerID);
-        photonView.RPC("RemoteSwitch", PhotonTargets.OthersBuffered, playerID, newPropID, remoteIsProp);
+        photonView.RPC("RemoteSwitch", PhotonTargets.AllBufferedViaServer, playerID, newPropID, remoteIsProp);
     }
 
 	public void Update()
@@ -92,7 +92,7 @@ public class PropSwitching : MonoBehaviour
 
         }
 
-        if (remoteIsProp && !photonView.isMine)
+        if (remoteIsProp)
         {
             Debug.Log("Called remote switch back to player from client " + photonView.viewID);
             //Implemmentation here
@@ -101,7 +101,7 @@ public class PropSwitching : MonoBehaviour
             GameObject robotModel = remotePlayerModel.transform.GetChild(1).gameObject;
             robotModel.SetActive(true);
 
-            Destroy(newRemoteItem);
+            PhotonNetwork.Destroy(newRemoteItem);
 
         }
     }
@@ -116,7 +116,7 @@ public class PropSwitching : MonoBehaviour
 
 
         //Still needs rewriting, mark when done
-        if (isProp)
+        if (isProp && photonView.isMine)
         {
             Debug.Log("Local Player is transforming into another prop from " +photonView.viewID);
 
@@ -133,7 +133,7 @@ public class PropSwitching : MonoBehaviour
         }
 
         //Done
-        if (!isProp)
+        if (!isProp && photonView.isMine)
         {
             Debug.Log("Local is player turning into a prop from " +photonView.viewID);
             playerModel.SetActive(false);
@@ -167,19 +167,25 @@ public class PropSwitching : MonoBehaviour
 
     private void RevertToPlayer()
     {
-            Debug.Log("Local Player is turning back into a robot from " +photonView.viewID);
+        if (photonView.isMine)
+        {
+
+
+            Debug.Log("Local Player is turning back into a robot from " + photonView.viewID);
             playerModel.SetActive(true);
             Destroy(prop);
-            
+
             followCam.enabled = false;
-            
+
             thirdPersonController.enabled = false;
             //playerCollider.enabled = true;
             firstPersonController.enabled = true;
 
             isProp = false;
+
+        }
     }
-   
+
     public void Raycast()
 	{
 		RaycastHit hit;

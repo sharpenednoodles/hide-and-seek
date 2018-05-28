@@ -10,12 +10,18 @@ public class PlayerNetwork : MonoBehaviour
     [SerializeField] private MonoBehaviour[] playerControlScripts;
 
     private PhotonView photonView;
+    int rand;
 
     private void Start()
     {
         photonView = GetComponent<PhotonView>();
 
+        rand = Random.Range(0, 100);
+
         Initialise();
+        RPCTest1(rand);
+        RPCTest2(rand);
+        
     }
 
     //handle local and global objects/scripts
@@ -41,6 +47,49 @@ public class PlayerNetwork : MonoBehaviour
             {
                 m.enabled = false;
             }
+        }
+    }
+
+    public void CallRemoteMethod()
+    {
+        photonView.RPC("RPCTest1", PhotonTargets.AllBufferedViaServer, rand);
+        photonView.RPC("RPCTest2", PhotonTargets.OthersBuffered, rand);
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown("k"))
+        {
+            RPCTest1(rand);
+            RPCTest2(rand);
+        }
+    }
+
+    [PunRPC]
+    public void RPCTest1(int rand)
+    {
+        if (photonView.isMine)
+        {
+            Debug.Log("RPC Test1 Local: Random = " + rand + " from " + photonView.viewID);
+        }
+
+        if (!photonView.isMine)
+        {
+            Debug.Log("RPC Test1 Networked: Random = " + rand + " from " + photonView.viewID);
+        }
+    }
+
+    [PunRPC]
+    public void RPCTest2(int rand)
+    {
+        if (photonView.isMine)
+        {
+            Debug.Log("RPC Test2 Local: Random =" + rand + " from " + photonView.viewID);
+        }
+
+        if (!photonView.isMine)
+        {
+            Debug.Log("RPC Test2 Networked: Random =" + rand + " from " + photonView.viewID);
         }
     }
 

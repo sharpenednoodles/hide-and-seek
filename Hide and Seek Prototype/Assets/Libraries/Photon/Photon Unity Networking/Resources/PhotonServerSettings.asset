@@ -45,4 +45,6 @@ MonoBehaviour:
   - PropSwitch
   - RevertToPlayer
   - RemoteSwitch
+  - RPCTest1
+  - RPCTest2
   DisableAutoOpenWizard: 1
