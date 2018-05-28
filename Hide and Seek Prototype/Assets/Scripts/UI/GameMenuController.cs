@@ -9,15 +9,9 @@ public class GameMenuController : MonoBehaviour {
 	//public Transform Menu;
     //we make this static so we can access from controller(s)
 	public static bool MenuState = false;
-    //public CanvasGroup menuGroup;
-
-	//public GameObject Menu;
-
-	// Use this for initialization
-	void Start () {
-		//menuGroup.alpha = 1f;
-		//menuGroup.blocksRaycasts = true;
-		//Menu.gameObject.SetActive (false);
+   
+	void Start ()
+    {
 		menuCanvas.SetActive(false);
 	}
 
@@ -26,7 +20,7 @@ public class GameMenuController : MonoBehaviour {
 		menuCanvas.SetActive(true);
         //menuGroup.alpha = 1f;
         //menuGroup.blocksRaycasts = true;
-        Debug.Log ("Set Active");
+        //Debug.Log ("Set Active");
 		MenuState = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -34,12 +28,9 @@ public class GameMenuController : MonoBehaviour {
 
 	public void HideMenu()
 	{
-		menuCanvas.gameObject.SetActive (false);
-        //Menu.SetActive(false);
-        //menuGroup.alpha = 0f;
-        //menuGroup.blocksRaycasts = true;
+        menuCanvas.gameObject.SetActive(false);
         MenuState = false;
-		Debug.Log ("Set Disable");
+		//Debug.Log ("Set Disable");
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -50,12 +41,12 @@ public class GameMenuController : MonoBehaviour {
 			if (MenuState)
 			{
 				HideMenu();
-				Debug.Log ("Call From hide");
+				//Debug.Log ("Call From hide");
 			} 
 			else 
 			{ 
 				ShowMenu ();
-				Debug.Log ("Call From show");
+				//Debug.Log ("Call From show");
 			}
 		}
 	}

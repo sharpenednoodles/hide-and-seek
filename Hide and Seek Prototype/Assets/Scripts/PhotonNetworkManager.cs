@@ -10,7 +10,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     [SerializeField] Transform spawnPoint;
     [SerializeField] GameObject joinCam;
     //Enter Game version here, this is to prevent different versions from connecting to the same servers
-    static public string gameVersion = "Network Test 0.1.1";
+    static public string gameVersion = "Network Test 0.1.2";
   
     // Use this for initialization
     void Start ()

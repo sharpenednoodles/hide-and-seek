@@ -23,16 +23,12 @@ public class CameraControl : MonoBehaviour
 
     public void Start()
     {
-        //Set 
-        Debug.Log("start method called");
-
-        //PropSwitching propSwitchInstance = GetComponent<PropSwitching>();
-        //lookAt = propSwitchInstance.prop.transform;
+        //Start stuff here
     }
 
     public void SwitchTarget()
     {
-        Debug.Log("swithc target method called");
+        Debug.Log("switch target method called");
         PropSwitching propSwitchInstance = GetComponent<PropSwitching>();
         lookAt = propSwitchInstance.prop.transform;
     }
@@ -52,6 +48,10 @@ public class CameraControl : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (GameMenuController.MenuState)
+        {
+            return;
+        }
         Vector3 dir = new Vector3(0, 0, -distance);
         Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
         camPos.position = lookAt.position + rotation * dir;

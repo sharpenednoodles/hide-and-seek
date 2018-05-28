@@ -365,7 +365,7 @@ GameObject:
   - component: {fileID: 114612856497053996}
   - component: {fileID: 114604131090588594}
   - component: {fileID: 114879671412531218}
-  - component: {fileID: 114461078817670552}
+  - component: {fileID: 114028809931180268}
   m_Layer: 0
   m_Name: CapsulePlayer
   m_TagString: Player
@@ -1513,6 +1513,30 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114028809931180268
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1532786540187302}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 955c74c013058e749bab96303414a7c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _characterState: 0
+  walkSpeed: 10
+  trotSpeed: 15
+  runSpeed: 20
+  pauseMult: 0
+  inAirControlAcceleration: 3
+  jumpHeight: 0.5
+  gravity: 20
+  speedSmoothing: 10
+  rotateSpeed: 500
+  trotAfterSeconds: 3
+  canJump: 1
+  isControllable: 1
 --- !u!114 &114203027999465798
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1692,28 +1716,6 @@ MonoBehaviour:
     InterpolateOption: 0
     InterpolateMoveTowardsSpeed: 1
     InterpolateLerpSpeed: 0
---- !u!114 &114461078817670552
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1532786540187302}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69ce83a6f0326544ab40c9a9b2de8409, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  walkSpeed: 10
-  sensitivity: 5
-  smoothing: 2
-  jumpForce: 5
-  sprintSpeed: 20
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  sprint: 0
-  rotateLeft: 0
-  rotateRight: 0
 --- !u!114 &114561861485630716
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1751,13 +1753,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddd0d2fd7df9f924995342a9d1eca2fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isProp: 0
-  pickUpKey: 0
-  playerModel: {fileID: 0}
-  playerCollider: {fileID: 0}
-  firstPersonController: {fileID: 0}
-  thirdPersonController: {fileID: 0}
-  followCam: {fileID: 0}
+  prop: {fileID: 0}
+  propID: 0
+  playerID: 0
 --- !u!114 &114612856497053996
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1796,6 +1794,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 936730f53894d794596ae5e007cf59e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lookAt: {fileID: 0}
   camTransform: {fileID: 1489794405599428}
   camPos: {fileID: 4259262820854922}
   distance: 10

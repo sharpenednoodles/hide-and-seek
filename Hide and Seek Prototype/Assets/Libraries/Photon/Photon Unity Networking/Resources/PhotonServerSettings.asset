@@ -42,4 +42,7 @@ MonoBehaviour:
   - RequestForPickupItems
   - RequestForPickupTimes
   - TaggedPlayer
+  - PropSwitch
+  - RevertToPlayer
+  - RemoteSwitch
   DisableAutoOpenWizard: 1
