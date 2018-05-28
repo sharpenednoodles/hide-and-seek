@@ -1756,6 +1756,7 @@ MonoBehaviour:
   prop: {fileID: 0}
   propID: 0
   playerID: 0
+  newPropID: 0
 --- !u!114 &114612856497053996
 MonoBehaviour:
   m_ObjectHideFlags: 1

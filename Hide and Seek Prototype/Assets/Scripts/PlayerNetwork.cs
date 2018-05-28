@@ -17,6 +17,7 @@ public class PlayerNetwork : MonoBehaviour
         photonView = GetComponent<PhotonView>();
 
         rand = Random.Range(0, 100);
+        Debug.Log("Printing " + rand);
 
         Initialise();
         RPCTest1(rand);
@@ -24,6 +25,19 @@ public class PlayerNetwork : MonoBehaviour
         
     }
 
+    //for observinbg photon views
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.isWriting)
+        {
+            stream.SendNext(rand);
+        }
+        else
+        {
+            rand = (int)stream.ReceiveNext(); 
+        }
+    }
     //handle local and global objects/scripts
     private void Initialise()
     {

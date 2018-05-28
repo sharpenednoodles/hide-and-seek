@@ -37,6 +37,22 @@ public class PropSwitching : MonoBehaviour
         camControl = GetComponent<CameraControl>();
     }
 
+    //probably unneeded, this is for continuous streams
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.isWriting)
+        {
+            stream.SendNext(propID);
+            stream.SendNext(playerID);
+            stream.SendNext(newPropID);
+        }
+        else
+        {
+            propID = (int)stream.ReceiveNext();
+            playerID = (int)stream.ReceiveNext();
+            newPropID = (int)stream.ReceiveNext();
+        }
+    }
     public void CallRemoteMethod()
     {
         //photonView.RPC("PropSwitch", PhotonTargets.AllBufferedViaServer, playerID, propID);
@@ -75,6 +91,7 @@ public class PropSwitching : MonoBehaviour
         if (!remoteIsProp && !photonView.isMine)
         {
             Debug.Log("Called Remote Switch !isProp from client " +photonView.viewID);
+            Debug.Log("Recieved Player ID = " + playerID + " remoteID = " + remoteID);
 
             GameObject newRemoteItem = PhotonView.Find(remoteID).gameObject;
             GameObject remotePlayerModel = PhotonView.Find(playerID).gameObject;
@@ -120,7 +137,7 @@ public class PropSwitching : MonoBehaviour
         {
             Debug.Log("Local Player is transforming into another prop from " +photonView.viewID);
 
-            Destroy(prop);
+            PhotonNetwork.Destroy(prop);
             newItem = Instantiate(aimedAt, playerModel.transform.position, aimedAt.transform.rotation);
 
             newItem.transform.parent = transform;
@@ -158,10 +175,10 @@ public class PropSwitching : MonoBehaviour
 
             followCam.enabled = true;
             camControl.SwitchTarget();
+            remoteIsProp = false;
 
-            
             //Call RPC Function for remote players
-            RemoteSwitch(playerID, newPropID, false);
+            photonView.RPC("RemoteSwitch", PhotonTargets.AllBufferedViaServer, playerID, newPropID, remoteIsProp);
         }
     }
 
@@ -169,11 +186,9 @@ public class PropSwitching : MonoBehaviour
     {
         if (photonView.isMine)
         {
-
-
             Debug.Log("Local Player is turning back into a robot from " + photonView.viewID);
             playerModel.SetActive(true);
-            Destroy(prop);
+            PhotonNetwork.Destroy(prop);
 
             followCam.enabled = false;
 
@@ -182,7 +197,6 @@ public class PropSwitching : MonoBehaviour
             firstPersonController.enabled = true;
 
             isProp = false;
-
         }
     }
 
