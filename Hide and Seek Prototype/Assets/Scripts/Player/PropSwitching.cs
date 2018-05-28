@@ -74,26 +74,34 @@ public class PropSwitching : MonoBehaviour
     {
         if (!remoteIsProp && !photonView.isMine)
         {
-            Debug.Log("Called Remote Switch !isProp");
+            Debug.Log("Called Remote Switch !isProp from client " +photonView.viewID);
 
-            GameObject newItem = PhotonView.Find(remoteID).gameObject;
+            GameObject newRemoteItem = PhotonView.Find(remoteID).gameObject;
             GameObject remotePlayerModel = PhotonView.Find(playerID).gameObject;
 
             GameObject robotModel = remotePlayerModel.transform.GetChild(1).gameObject;
             robotModel.SetActive(false);
             //playerCollider.enabled = false;
 
-            newItem.transform.parent = transform;
+            newRemoteItem.transform.parent = transform;
 
-            Rigidbody rb = newItem.GetComponent<Rigidbody>();
+            Rigidbody rb = newRemoteItem.GetComponent<Rigidbody>();
             //rb.detectCollisions = true;
             rb.isKinematic = true;
-            newItem.name = "PropModel";
+            newRemoteItem.name = "PropModel";
 
         }
 
         if (remoteIsProp && !photonView.isMine)
         {
+            Debug.Log("Called remote switch back to player from client " + photonView.viewID);
+            //Implemmentation here
+            GameObject newRemoteItem = PhotonView.Find(remoteID).gameObject;
+            GameObject remotePlayerModel = PhotonView.Find(playerID).gameObject;
+            GameObject robotModel = remotePlayerModel.transform.GetChild(1).gameObject;
+            robotModel.SetActive(true);
+
+            Destroy(newRemoteItem);
 
         }
     }
@@ -110,7 +118,7 @@ public class PropSwitching : MonoBehaviour
         //Still needs rewriting, mark when done
         if (isProp)
         {
-            Debug.Log("is prop called while as prop");
+            Debug.Log("Local Player is transforming into another prop from " +photonView.viewID);
 
             Destroy(prop);
             newItem = Instantiate(aimedAt, playerModel.transform.position, aimedAt.transform.rotation);
@@ -127,7 +135,7 @@ public class PropSwitching : MonoBehaviour
         //Done
         if (!isProp)
         {
-            Debug.Log("local Callback called");
+            Debug.Log("Local is player turning into a prop from " +photonView.viewID);
             playerModel.SetActive(false);
             //playerCollider.enabled = false;
 
@@ -159,9 +167,7 @@ public class PropSwitching : MonoBehaviour
 
     private void RevertToPlayer()
     {
-        if (photonView.isMine)
-        {
-            Debug.Log("RevertPlayerCalled");
+            Debug.Log("Local Player is turning back into a robot from " +photonView.viewID);
             playerModel.SetActive(true);
             Destroy(prop);
             
@@ -172,13 +178,8 @@ public class PropSwitching : MonoBehaviour
             firstPersonController.enabled = true;
 
             isProp = false;
-        }
-        else
-        {
-            //code for remote player
-        }
     }
-
+   
     public void Raycast()
 	{
 		RaycastHit hit;
