@@ -74,7 +74,7 @@ public class PropSwitching : MonoBehaviour
     [PunRPC]
     public void RemoteSwitch(int playerID, int remoteID, bool isProp)
     {
-        if (!isProp)
+        if (!isProp && !photonView.isMine)
         {
             Debug.Log("Called Remote Switch !isProp");
 
