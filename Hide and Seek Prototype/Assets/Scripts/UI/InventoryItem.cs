@@ -11,6 +11,9 @@ using System;
         string Name { get; }
 
         Sprite Image { get; }
+        Sprite Image2 { get; }
+
+    int Count { get; }
 
         void OnPickup();
 
