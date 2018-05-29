@@ -123,44 +123,60 @@ public class Inventory : MonoBehaviour {
         Image weapon5 = InventoryHolder.GetChild(4).GetChild(1).GetComponent<Image>();
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            weapon1.color = Color.white;
-            weapon2.color = Color.clear;
-            weapon3.color = Color.clear;
-            weapon4.color = Color.clear;
-            weapon5.color = Color.clear;
+            if (weapon1.sprite != null)
+            {
+                weapon1.color = Color.white;
+                weapon2.color = Color.clear;
+                weapon3.color = Color.clear;
+                weapon4.color = Color.clear;
+                weapon5.color = Color.clear;
+            }
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            weapon2.color = Color.white;
-            weapon1.color = Color.clear;
-            weapon3.color = Color.clear;
-            weapon4.color = Color.clear;
-            weapon5.color = Color.clear;
+            if (weapon2.sprite != null)
+            {
+                weapon2.color = Color.white;
+                weapon1.color = Color.clear;
+                weapon3.color = Color.clear;
+                weapon4.color = Color.clear;
+                weapon5.color = Color.clear;
+            }
 
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            weapon3.color = Color.white;
-            weapon1.color = Color.clear;
-            weapon2.color = Color.clear;
-            weapon4.color = Color.clear;
-            weapon5.color = Color.clear;
+            if (weapon3.sprite != null)
+            {
+                weapon3.color = Color.white;
+                weapon1.color = Color.clear;
+                weapon2.color = Color.clear;
+                weapon4.color = Color.clear;
+                weapon5.color = Color.clear;
+            }
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            weapon4.color = Color.white;
-            weapon2.color = Color.clear;
-            weapon3.color = Color.clear;
-            weapon1.color = Color.clear;
-            weapon5.color = Color.clear;
+            if (weapon4.sprite != null)
+            {
+
+                weapon4.color = Color.white;
+                weapon2.color = Color.clear;
+                weapon3.color = Color.clear;
+                weapon1.color = Color.clear;
+                weapon5.color = Color.clear;
+            }
         }
         else if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            weapon5.color = Color.white;
-            weapon2.color = Color.clear;
-            weapon3.color = Color.clear;
-            weapon4.color = Color.clear;
-            weapon1.color = Color.clear;
+            if (weapon4.sprite != null)
+            {
+                weapon5.color = Color.white;
+                weapon2.color = Color.clear;
+                weapon3.color = Color.clear;
+                weapon4.color = Color.clear;
+                weapon1.color = Color.clear;
+            }
         }
 
 
