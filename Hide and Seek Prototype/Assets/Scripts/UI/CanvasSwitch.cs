@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
+/// <summary>
+/// This script is used to trigger switching between different canvases.
+/// It also runs the methods for the 
+/// </summary>
 
 public class CanvasSwitch : MonoBehaviour {
 
+    GameMenuController gameMenuController;
     public GameObject priorCanvas;
     public GameObject canvasToSwich;
 
 	public AudioMixer audioMixer;
-//	public static bool MenuState = false;
-	// GameObject menuCanvas;
 
-
-
-
-	void Start(){
-
-		Debug.Log ("This code is running");
-
+	void Start()
+    {
+        //Debug.Log ("This code is running");
+        GameObject HUDCanvas = this.transform.parent.gameObject;
+        gameMenuController = HUDCanvas.GetComponent<GameMenuController>();
 	}
 
 
@@ -38,12 +39,10 @@ public class CanvasSwitch : MonoBehaviour {
 	}
 
 
-	public void SetVolume(float volume){
-
+	public void SetVolume(float volume)
+    {
 		Debug.Log (volume);
 		audioMixer.SetFloat ("InGameVolume", volume);
-
-
 	}
 
 
@@ -59,20 +58,13 @@ public class CanvasSwitch : MonoBehaviour {
     public void ContinuePress()
     {
 
-		Debug.Log ("Call From Continue");
-		//menuC.HideMenu();
-
-
-
-
-
-
-
-
-//		menuCanvas.SetActive(true);
-//		Debug.Log ("Set Disable");
-//		Cursor.lockState = CursorLockMode.Locked;
-//		Cursor.visible = false;
+        Debug.Log("Call From Continue");
+        gameMenuController.HideMenu();
+        //menuC.HideMenu();
+        //		menuCanvas.SetActive(true);
+        //		Debug.Log ("Set Disable");
+        //		Cursor.lockState = CursorLockMode.Locked;
+        //		Cursor.visible = false;
         //Call to unpause
     }
 }

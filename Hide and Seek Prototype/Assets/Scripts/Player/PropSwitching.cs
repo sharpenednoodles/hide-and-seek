@@ -25,7 +25,7 @@ public class PropSwitching : MonoBehaviour
     private PhotonView photonView;
 
     CameraControl camControl;
-    //PropInfo propInfo;
+    PropInfo propInfo;
     public string prefabName;
 
     private int propID, playerID, newPropID;
@@ -60,8 +60,8 @@ public class PropSwitching : MonoBehaviour
                 propID = aimedAt.GetPhotonView().viewID;
 
                 //Turning this off for release 1
-                /*propInfo = aimedAt.GetComponent<PropInfo>();
-                prefabName = propInfo.prefabName;*/
+                propInfo = aimedAt.GetComponent<PropInfo>();
+                prefabName = propInfo.prefabName;
             }
             else holdTime = 0;
 
@@ -143,8 +143,9 @@ public class PropSwitching : MonoBehaviour
                 return;
             }*/
             
-            newItem = PhotonNetwork.Instantiate(aimedAt.name, playerModel.transform.position, aimedAt.transform.rotation, 0);
-            //newItem = PhotonNetwork.Instantiate(prefabName, playerModel.transform.position, aimedAt.transform.rotation, 0);
+            //newItem = PhotonNetwork.Instantiate(aimedAt.name, playerModel.transform.position, aimedAt.transform.rotation, 0);
+            //Calculate appropriate y height vaule here
+            newItem = PhotonNetwork.Instantiate(prefabName, playerModel.transform.position, aimedAt.transform.rotation, 0);
             newPropID = newItem.GetComponent<PhotonView>().viewID;
             
             newItem.transform.parent = transform;
