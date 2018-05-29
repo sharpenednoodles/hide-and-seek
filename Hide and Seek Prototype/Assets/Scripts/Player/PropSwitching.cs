@@ -1,100 +1,175 @@
-﻿/**************
- * PropSwitching.cs
- * Version 1.0
- * Created by Dion Drake
- * Last Edited: 13/05/2018
- * 
-*/
-
-//To use - place "Prop" tag/add collider on obj intended to pickup. obj should have collider/rigidbody. Place on MainCamera object.
-
-
-using UnityEngine; 
+﻿using UnityEngine; 
 using System.Collections; 
+
+/// <summary>
+/// Handles Prop switching and network sync
+/// To USE
+/// Props to switch into must be tagged with a prop tag, and have a corresponding named prefab. 
+/// Obviosuly this causes an issue where players that are disguised can't be used as a prop to turn into
+/// Will change later to read from a script located upon object so that scene objects can be arbitrarily named
+/// </summary>
 
 public class PropSwitching : MonoBehaviour
 {
-    public bool isProp;
-	public KeyCode pickUpKey;
-    [SerializeField] private GameObject playerModel;
-    [SerializeField] private CharacterController playerCollider;
-    [SerializeField] private MonoBehaviour firstPersonController, thirdPersonController, followCam;
+    private bool isProp, remoteIsProp;
+    private GameObject playerModel;
+    public GameObject prop;
+    private CharacterController playerCollider;
+    private MonoBehaviour firstPersonController, thirdPersonController, followCam;
 
-    private GameObject aimedAt, newItem, self;
-    private bool isLookingAtObj, hasAcquiredObj;
-	private string aimedObj_name, acquiredObj_name;
-	private float startTime = 0, holdTime = 0;
+    private GameObject aimedAt, newItem;
+    private bool isLookingAtProp;
 	
-    
-    //public Camera propCam;
-	//Runs on script load
-	public void Start()
+	private float startTime = 0, holdTime = 0;
+    public int timeHold = 1;
+    private PhotonView photonView;
+
+    CameraControl camControl;
+
+    private int propID, playerID, newPropID;
+
+    public void Start()
 	{
+        photonView = GetComponent<PhotonView>();
         isProp = false;
 		InvokeRepeating ("Raycast", 0.1f, 0.1f);
-		self = GameObject.Find ("CapsulePlayer");
-
-	}
+        playerModel = this.gameObject.transform.GetChild(1).gameObject;
+        playerCollider = this.GetComponent<CharacterController>();
+        firstPersonController = GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
+        thirdPersonController = this.GetComponent<ThirdPersonController>();
+        followCam = this.GetComponent<CameraControl>();
+        camControl = GetComponent<CameraControl>();
+    }
 
 	public void Update()
 	{
-		if (isLookingAtObj) {
-			if (Input.GetMouseButton (1)) {
-                //holdTime += Time.deltaTime;
-                PropSwitch();
-			}
-			/*if (holdTime > 5)
-            {
-                PropSwitch();
-			}*/
-		}
-	}
 
-    public void PropSwitch()
-    {
-        //reset time
-        holdTime = 0;
-        aimedObj_name = aimedAt.name;
-  
-        //new object
-        //playerCollider.enabled = false;
-        //firstPersonController.enabled = false;
-        //thirdPersonController.enabled = true;
-        if (!isProp)
+        if (Input.GetMouseButtonDown(1) && isProp)
         {
-            playerModel.SetActive(false);
-            playerCollider.enabled = false;
+            RevertToPlayer();
+        }
+
+        if (isLookingAtProp) {
+            if (Input.GetMouseButton(1))
+            {
+                holdTime += Time.deltaTime;
+                playerID = photonView.viewID;
+                propID = aimedAt.GetPhotonView().viewID;
+            }
+            else holdTime = 0;
+
+            if (holdTime >= timeHold)
+            {
+                //Call propswitch after timeHold has passed
+                PropSwitch(playerID, propID);
+			}
+		}
+    }
+
+    //Use this to call remote client
+    [PunRPC]
+    public void RemoteSwitch(int playerID, int remoteID, bool remoteIsProp)
+    {
+        if (remoteIsProp && !photonView.isMine)
+        {
+            Debug.Log("Called Remote Switch !isProp from client " +photonView.viewID);
+            Debug.Log("Recieved Player ID = " + playerID + " remoteID = " + remoteID);
+
+            GameObject newRemoteItem = PhotonView.Find(remoteID).gameObject;
+            GameObject remotePlayerModel = PhotonView.Find(playerID).gameObject;
+            GameObject robotModel = remotePlayerModel.transform.GetChild(1).gameObject;
+            robotModel.SetActive(false);
+
+            newRemoteItem.transform.parent = transform;
+
+            Rigidbody rb = newRemoteItem.GetComponent<Rigidbody>();
+            rb.isKinematic = true;
+            newRemoteItem.name = "PropModel";
+        }
+
+        if (!remoteIsProp && !photonView.isMine)
+        {
+            Debug.Log("Called remote switch back to player from client " + photonView.viewID);
+          
+            GameObject newRemoteItem = PhotonView.Find(remoteID).gameObject;
+            GameObject remotePlayerModel = PhotonView.Find(playerID).gameObject;
+            GameObject robotModel = remotePlayerModel.transform.GetChild(1).gameObject;
+            robotModel.SetActive(true);
+            //PhotonNetwork.Destroy(newRemoteItem);
+        }
+    }
+
+    //Handle Player Prop Switching
+    public void PropSwitch(int playerID, int propID)
+    {
+        holdTime = 0;
+   
+        //Switch from Prop to Prop - currently not implemented
+        if (isProp && photonView.isMine)
+        {
+            Debug.Log("Local Player is transforming into another prop from " +photonView.viewID);
+
+            PhotonNetwork.Destroy(prop);
             newItem = Instantiate(aimedAt, playerModel.transform.position, aimedAt.transform.rotation);
+
             newItem.transform.parent = transform;
-            followCam.enabled = true;
-            playerModel.SetActive(false);
             Rigidbody rb = newItem.GetComponent<Rigidbody>();
-            rb.detectCollisions = true;
-            //rb.isKinematic = true;
+            
+            rb.isKinematic = true;
+            newItem.name = "PropModel";
+            camControl.SwitchTarget();
+
+            //Call RPC Function for remote players
+            photonView.RPC("RemoteSwitch", PhotonTargets.AllBufferedViaServer, playerID, newPropID, isProp);
+        }
+
+        //Switch from Robot to Prop
+        if (!isProp && photonView.isMine)
+        {
+            Debug.Log("Local is player turning into a prop from " +photonView.viewID);
+            playerModel.SetActive(false);
+            
+            newItem = PhotonNetwork.Instantiate(aimedAt.name, playerModel.transform.position, aimedAt.transform.rotation, 0);
+            newPropID = newItem.GetComponent<PhotonView>().viewID;
+            
+            newItem.transform.parent = transform;
+
+            Rigidbody rb = newItem.GetComponent<Rigidbody>();
+            rb.isKinematic = true;
 
             firstPersonController.enabled = false;
             thirdPersonController.enabled = true;
 
-            //To remove "(Clone)" from the end of new obj name
+            prop = newItem;
             newItem.name = "PropModel";
             isProp = true;
-            
-        }
 
-        if (isProp)
+            followCam.enabled = true;
+            camControl.SwitchTarget();
+
+            //Call RPC Function for remote players
+            photonView.RPC("RemoteSwitch", PhotonTargets.AllBufferedViaServer, playerID, newPropID, isProp);
+        }
+    }
+
+    private void RevertToPlayer()
+    {
+        if (photonView.isMine)
         {
-            //stuff for when already a prop
+            Debug.Log("Local Player is turning back into a robot from " + photonView.viewID);
+            playerModel.SetActive(true);
+            PhotonNetwork.Destroy(prop);
+
+            followCam.enabled = false;
+
+            thirdPersonController.enabled = false;
+            firstPersonController.enabled = true;
+            isProp = false;
+
+            //Call RPC Function for remote players
+            photonView.RPC("RemoteSwitch", PhotonTargets.AllBufferedViaServer, playerID, newPropID, isProp);
         }
-
-            
-
-            //Destroy(aimedAt); //Destroys original prop so I don't need to deal with the problem of the old and new objects colliding
-            //newItem.GetComponent<Camera>().enabled = true; //GetComponent is an intensive method that iterates through all gameObjects. This version should just iterate through children.
-            //newItem.GetComponentInChildren<ThirdPersonController>().enabled = true;
-            //self.GetComponentInChildren<FirstPersonController> ().enabled = false;
-            //transform.parent = newItem.transform;
-
-        }
+    }
 
     public void Raycast()
 	{
@@ -102,23 +177,15 @@ public class PropSwitching : MonoBehaviour
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		if (Physics.Raycast(ray, out hit)){
 			aimedAt = hit.collider.gameObject;
-			if (hit.collider.tag == "Prop" && hit.distance <= 2 && aimedAt.name != "Terrain")
-				isLookingAtObj = true;
+			if (hit.collider.tag == "Prop" && hit.distance <= 2)
+				isLookingAtProp = true;
 			else
-				isLookingAtObj = false;
+				isLookingAtProp = false;
 		}
 	}
 
 	public void OnGUI()
 	{
-		if (isLookingAtObj) GUI.Box(new Rect (140, Screen.height - 50, Screen.width - 300, 120), "Hold Right Mouse Button to switch to " + aimedAt.name);
-		if (hasAcquiredObj) {
-			GUI.Box(new Rect (140, Screen.height - 50, Screen.width - 300, 120), "Acquired " + acquiredObj_name);
-			if (startTime < 5) startTime += Time.deltaTime;
-			else {
-				hasAcquiredObj = false;
-				startTime = 0;
-			}
-		}
+        if (isLookingAtProp) GUI.Box(new Rect(140, Screen.height - 50, Screen.width - 300, 120), "Hold Right Mouse Button to transform into this prop");
 	}
 }

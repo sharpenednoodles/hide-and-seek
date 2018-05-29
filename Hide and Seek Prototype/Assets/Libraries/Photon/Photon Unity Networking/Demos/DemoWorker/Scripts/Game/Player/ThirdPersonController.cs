@@ -10,24 +10,13 @@ public enum CharacterState
     Jumping = 4,
 }
 
+/// <summary>
+/// Rewritten to be used for prop controlling
+/// Heaps of stuff still needs fixing, but this is a good place for release 1
+/// </summary>
+
 public class ThirdPersonController : MonoBehaviour
 {
-
-    public AnimationClip idleAnimation;
-    public AnimationClip walkAnimation;
-    public AnimationClip runAnimation;
-    public AnimationClip jumpPoseAnimation;
-
-    public float walkMaxAnimationSpeed = 0.75f;
-    public float trotMaxAnimationSpeed = 1.0f;
-    public float runMaxAnimationSpeed = 1.0f;
-    public float jumpAnimationSpeed = 1.15f;
-    public float landAnimationSpeed = 1.0f;
-
-    private Animation _animation;
-
-  
-
     public CharacterState _characterState;
 
     // The speed when walking
@@ -36,6 +25,8 @@ public class ThirdPersonController : MonoBehaviour
     public float trotSpeed = 4.0f;
     // when pressing "Fire3" button (cmd) we start running
     public float runSpeed = 6.0f;
+
+    public float pauseMult;
 
     public float inAirControlAcceleration = 3.0f;
 
@@ -92,38 +83,6 @@ public class ThirdPersonController : MonoBehaviour
     void Awake()
     {
         moveDirection = transform.TransformDirection(Vector3.forward);
-
-        _animation = GetComponent<Animation>();
-        if (!_animation)
-            Debug.Log("The character you would like to control doesn't have animations. Moving her might look weird.");
-
-        /*
-    public AnimationClip idleAnimation;
-    public AnimationClip walkAnimation;
-    public AnimationClip runAnimation;
-    public AnimationClip jumpPoseAnimation;	
-        */
-        if (!idleAnimation)
-        {
-            _animation = null;
-            Debug.Log("No idle animation found. Turning off animations.");
-        }
-        if (!walkAnimation)
-        {
-            _animation = null;
-            Debug.Log("No walk animation found. Turning off animations.");
-        }
-        if (!runAnimation)
-        {
-            _animation = null;
-            Debug.Log("No run animation found. Turning off animations.");
-        }
-        if (!jumpPoseAnimation && canJump)
-        {
-            _animation = null;
-            Debug.Log("No jump animation found and the character has canJump enabled. Turning off animations.");
-        }
-
     }
 
     private Vector3 lastPos;
@@ -226,10 +185,8 @@ public class ThirdPersonController : MonoBehaviour
             if (isMoving)
                 inAirVelocity += targetDirection.normalized * Time.deltaTime * inAirControlAcceleration;
         }
-
-
-
     }
+
     void ApplyJumping()
     {
         // Prevent jumping too fast after each other
@@ -310,7 +267,7 @@ public class ThirdPersonController : MonoBehaviour
 
 
             // Calculate actual motion
-            Vector3 movement = moveDirection * moveSpeed + new Vector3(0, verticalSpeed, 0) + inAirVelocity;
+            Vector3 movement = moveDirection * moveSpeed *pauseMult + new Vector3(0, verticalSpeed, 0) + inAirVelocity;
             movement *= Time.deltaTime;
 
             // Move the controller
@@ -318,70 +275,6 @@ public class ThirdPersonController : MonoBehaviour
             collisionFlags = controller.Move(movement);
         }
         velocity = (transform.position - lastPos)*25;
-
-        // ANIMATION sector
-        if (_animation)
-        {
-            if (_characterState == CharacterState.Jumping)
-            {
-                if (!jumpingReachedApex)
-                {
-                    _animation[jumpPoseAnimation.name].speed = jumpAnimationSpeed;
-                    _animation[jumpPoseAnimation.name].wrapMode = WrapMode.ClampForever;
-                    _animation.CrossFade(jumpPoseAnimation.name);
-                }
-                else
-                {
-                    _animation[jumpPoseAnimation.name].speed = -landAnimationSpeed;
-                    _animation[jumpPoseAnimation.name].wrapMode = WrapMode.ClampForever;
-                    _animation.CrossFade(jumpPoseAnimation.name);
-                }
-            }
-            else
-            {
-                if (this.isControllable && velocity.sqrMagnitude < 0.001f)
-                {
-                    _characterState = CharacterState.Idle;
-                    _animation.CrossFade(idleAnimation.name);
-                }
-                else
-                {
-                    if (_characterState == CharacterState.Idle)
-                    {
-                        _animation.CrossFade(idleAnimation.name);
-                    }
-                    else if (_characterState == CharacterState.Running)
-                    {
-                        _animation[runAnimation.name].speed = runMaxAnimationSpeed;
-                        if (this.isControllable)
-                        {
-                            _animation[runAnimation.name].speed = Mathf.Clamp(velocity.magnitude, 0.0f, runMaxAnimationSpeed);
-                        }
-                        _animation.CrossFade(runAnimation.name);
-                    }
-                    else if (_characterState == CharacterState.Trotting)
-                    {
-                        _animation[walkAnimation.name].speed = trotMaxAnimationSpeed;
-                        if (this.isControllable)
-                        {
-                            _animation[walkAnimation.name].speed = Mathf.Clamp(velocity.magnitude, 0.0f, trotMaxAnimationSpeed);
-                        }
-                        _animation.CrossFade(walkAnimation.name);
-                    }
-                    else if (_characterState == CharacterState.Walking)
-                    {
-                        _animation[walkAnimation.name].speed = walkMaxAnimationSpeed;
-                        if (this.isControllable)
-                        {
-                            _animation[walkAnimation.name].speed = Mathf.Clamp(velocity.magnitude, 0.0f, walkMaxAnimationSpeed);
-                        }
-                        _animation.CrossFade(walkAnimation.name);
-                    }
-
-                }
-            }
-        }
-        // ANIMATION sector
 
         // Set rotation to the move direction
         if (IsGrounded())
@@ -399,7 +292,7 @@ public class ThirdPersonController : MonoBehaviour
             {
                 transform.rotation = Quaternion.LookRotation(xzMove);
             }*/
-        }
+    }
 
         // We are in jump mode but just became grounded
         if (IsGrounded())
@@ -412,6 +305,11 @@ public class ThirdPersonController : MonoBehaviour
                 SendMessage("DidLand", SendMessageOptions.DontRequireReceiver);
             }
         }
+        if (GameMenuController.MenuState == true)
+        {
+            pauseMult = 0f;
+        }
+        else pauseMult = 1.0f;
 
         lastPos = transform.position;
     }
@@ -422,6 +320,8 @@ public class ThirdPersonController : MonoBehaviour
         if (hit.moveDirection.y > 0.01f)
             return;
     }
+
+    //Accessors
 
     public float GetSpeed()
     {
@@ -468,10 +368,9 @@ public class ThirdPersonController : MonoBehaviour
         return lastGroundedTime + groundedTimeout > Time.time;
     }
 
+    //This may need to be modified later
     public void Reset()
     {
         gameObject.tag = "Player";
     }
-
-
 }

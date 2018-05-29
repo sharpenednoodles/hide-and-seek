@@ -14,8 +14,7 @@ public class PlayerNetwork : MonoBehaviour
     private void Start()
     {
         photonView = GetComponent<PhotonView>();
-
-        Initialise();
+        Initialise();     
     }
 
     //handle local and global objects/scripts
@@ -24,11 +23,17 @@ public class PlayerNetwork : MonoBehaviour
         if (photonView.isMine)
         {
             //Functionality for player
+            this.name = "Local Player";
+            //Debug.Log("Local Hello World from " +photonView.viewID);
         }
 
         //Handle functionality for other players
         else
         {
+            //Use Photon IDs later
+            this.name = "Remote Player";
+            //Debug.Log("Remote Hello World from " +photonView.viewID);
+
             playerCamera.gameObject.SetActive(false);
             mapCamera.gameObject.SetActive(false);
             //like a for loop but I'm lazy - disable control scripts
@@ -38,5 +43,4 @@ public class PlayerNetwork : MonoBehaviour
             }
         }
     }
-
 }

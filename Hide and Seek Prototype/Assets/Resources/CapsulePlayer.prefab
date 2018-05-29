@@ -595,7 +595,6 @@ GameObject:
   - component: {fileID: 124174730472901608}
   - component: {fileID: 114861819377683830}
   - component: {fileID: 114203027999465798}
-  - component: {fileID: 114167925549156184}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -619,6 +618,9 @@ GameObject:
   - component: {fileID: 114561861485630716}
   - component: {fileID: 114612856497053996}
   - component: {fileID: 114130049324795260}
+  - component: {fileID: 114567852822383176}
+  - component: {fileID: 114428915737545186}
+  - component: {fileID: 114725445436233664}
   m_Layer: 0
   m_Name: CapsulePlayer
   m_TagString: Player
@@ -1390,8 +1392,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4259262820854922}
-  - {fileID: 4585614285880272}
   - {fileID: 4928963178320302}
+  - {fileID: 4585614285880272}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1606,7 +1608,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4380786517725852}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!4 &4589304708272536
 Transform:
@@ -1988,7 +1990,7 @@ Transform:
   - {fileID: 4386333650949694}
   - {fileID: 4818965536048764}
   m_Father: {fileID: 4380786517725852}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4945481728114206
 Transform:
@@ -2264,24 +2266,6 @@ MonoBehaviour:
   playerInBoundary: 0
   seconds: 
   boundarySphere: {fileID: 0}
---- !u!114 &114167925549156184
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1489794405599428}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddd0d2fd7df9f924995342a9d1eca2fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isProp: 0
-  pickUpKey: 324
-  playerModel: {fileID: 0}
-  playerCollider: {fileID: 0}
-  firstPersonController: {fileID: 114277594435014724}
-  thirdPersonController: {fileID: 0}
-  followCam: {fileID: 114861819377683830}
 --- !u!114 &114203027999465798
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2392,8 +2376,8 @@ MonoBehaviour:
     BobAmount: 0.1
   m_StepInterval: 5
   m_FootstepSounds:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 8bc94ec6ed537e743b481638bdcd503d, type: 3}
+  - {fileID: 8300000, guid: 42e65e088b3f4374e851b8dbd38f3df9, type: 3}
   m_JumpSound: {fileID: 8300000, guid: 5897aeed9b676024fbb8c694b421a861, type: 3}
   m_LandSound: {fileID: 8300000, guid: 3b09d59f4499d45428baa7a21e954296, type: 3}
   animator: {fileID: 95108032474111250}
@@ -2497,6 +2481,30 @@ MonoBehaviour:
     InterpolateOption: 0
     InterpolateMoveTowardsSpeed: 1
     InterpolateLerpSpeed: 0
+--- !u!114 &114428915737545186
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1532786540187302}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 955c74c013058e749bab96303414a7c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _characterState: 0
+  walkSpeed: 10
+  trotSpeed: 8
+  runSpeed: 20
+  pauseMult: 0
+  inAirControlAcceleration: 3
+  jumpHeight: 0.5
+  gravity: 20
+  speedSmoothing: 10
+  rotateSpeed: 500
+  trotAfterSeconds: 3
+  canJump: 1
+  isControllable: 1
 --- !u!114 &114561861485630716
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2523,6 +2531,19 @@ MonoBehaviour:
   instantiationId: -1
   currentMasterID: -1
   isRuntimeInstantiated: 0
+--- !u!114 &114567852822383176
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1532786540187302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddd0d2fd7df9f924995342a9d1eca2fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prop: {fileID: 0}
+  timeHold: 1
 --- !u!114 &114612856497053996
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2538,6 +2559,21 @@ MonoBehaviour:
   mapCamera: {fileID: 1217205341206332}
   playerControlScripts:
   - {fileID: 114277594435014724}
+--- !u!114 &114725445436233664
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1532786540187302}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 936730f53894d794596ae5e007cf59e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lookAt: {fileID: 0}
+  camTransform: {fileID: 1489794405599428}
+  camPos: {fileID: 4259262820854922}
+  distance: 10
 --- !u!114 &114861819377683830
 MonoBehaviour:
   m_ObjectHideFlags: 1

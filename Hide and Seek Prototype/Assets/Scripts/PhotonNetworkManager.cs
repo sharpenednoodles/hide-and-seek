@@ -9,16 +9,15 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     [SerializeField] GameObject player;
     [SerializeField] Transform spawnPoint;
     [SerializeField] GameObject joinCam;
+
     [Header("Coordinate Range")]
     [SerializeField] int minX = -25;
     [SerializeField] int maxX = 25;
     [SerializeField] int minZ = -25;
     [SerializeField] int maxZ = 25;
     //Enter Game version here, this is to prevent different versions from connecting to the same servers
-    static public string gameVersion = "Warehouse Test 0.1";
-
-
-
+    static public string gameVersion = "Warehouse Blocking 0.1";
+  
     // Use this for initialization
     void Start ()
     {
@@ -44,8 +43,6 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         joinCam.SetActive(false);
         Debug.Log("Spawned at "+ randX + ",5," + randZ +" with rotation " +randYRot);
     }
-
-
 
 
     // Update is called once per frame
