@@ -35,7 +35,7 @@ public class CanvasSwitch : MonoBehaviour {
 
 	public void InGameQuit()
 	{
-		Debug.Log ("In Game Quite");
+		Debug.Log ("In Game Quit");
 		Application.Quit ();
 	}
 

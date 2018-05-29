@@ -23,10 +23,21 @@ public class AlivePlayers : MonoBehaviour {
         updateAlivePlayers();
     }
 
-    
+    [PunRPC]
     public void updateAlivePlayers()
     {
         textMeshPro.SetText("{0}", PhotonNetwork.playerList.Length);
+    }
+
+
+    void OnPhotonPlayerDisconnected()
+    {
+        callRPC();
+    }
+
+    public void callRPC()
+    {
+        photonView.RPC("updateAlivePlayers", PhotonTargets.All);
     }
 
 

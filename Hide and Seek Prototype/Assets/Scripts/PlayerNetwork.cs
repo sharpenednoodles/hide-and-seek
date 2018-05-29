@@ -18,10 +18,13 @@ public class PlayerNetwork : MonoBehaviour
     [SerializeField] private MonoBehaviour[] playerControlScripts;
 
     private PhotonView photonView;
+    public AlivePlayers alivePlayers;
 
     private void Start()
     {
         photonView = GetComponent<PhotonView>();
+        GameObject alive = GameObject.Find("Alive");
+        alivePlayers = alive.GetComponent<AlivePlayers>();
         Initialise();     
     }
 
@@ -32,6 +35,8 @@ public class PlayerNetwork : MonoBehaviour
         {
             //Functionality for player
             this.name = "Local Player";
+            alivePlayers.callRPC();
+        
             //Debug.Log("Local Hello World from " +photonView.viewID);
         }
 

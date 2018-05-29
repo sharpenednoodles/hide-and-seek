@@ -195,6 +195,6 @@ public class PropSwitching : MonoBehaviour
 
 	public void OnGUI()
 	{
-        if (isLookingAtProp) GUI.Box(new Rect(140, Screen.height - 50, Screen.width - 300, 120), "Hold Right Mouse Button to transform into this prop");
+        if (isLookingAtProp) GUI.Box(new Rect(140, Screen.height - 50, Screen.width - 300, 120), "Hold Right Mouse Button to transform into "+prefabName);
 	}
 }
