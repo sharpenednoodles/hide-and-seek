@@ -28,7 +28,7 @@ public class PropSwitching : MonoBehaviour
     PropInfo propInfo;
     public string prefabName;
 
-    private int propID, playerID, newPropID;
+    private int playerID, newPropID;
 
     public void Start()
 	{
@@ -57,7 +57,7 @@ public class PropSwitching : MonoBehaviour
             {
                 holdTime += Time.deltaTime;
                 playerID = photonView.viewID;
-                propID = aimedAt.GetPhotonView().viewID;
+                
 
                 //Turning this off for release 1
                 propInfo = aimedAt.GetComponent<PropInfo>();
@@ -68,7 +68,7 @@ public class PropSwitching : MonoBehaviour
             if (holdTime >= timeHold)
             {
                 //Call propswitch after timeHold has passed
-                PropSwitch(playerID, propID);
+                PropSwitch(playerID);
 			}
 		}
     }
@@ -107,11 +107,11 @@ public class PropSwitching : MonoBehaviour
     }
 
     //Handle Player Prop Switching
-    public void PropSwitch(int playerID, int propID)
+    public void PropSwitch(int playerID)
     {
         holdTime = 0;
    
-        //Switch from Prop to Prop - currently not implemented
+        //Switch from Prop to Prop - CURRENTLY NOT IN USE
         if (isProp && photonView.isMine)
         {
             Debug.Log("Local Player is transforming into another prop from " +photonView.viewID);
@@ -135,16 +135,9 @@ public class PropSwitching : MonoBehaviour
         {
             Debug.Log("Local is player turning into a prop from " +photonView.viewID);
             playerModel.SetActive(false);
-
-            /*
-            if (prefabName == null)
-            {
-                Debug.Log("Unable to Parse Prop info script");
-                return;
-            }*/
             
             //newItem = PhotonNetwork.Instantiate(aimedAt.name, playerModel.transform.position, aimedAt.transform.rotation, 0);
-            //Calculate appropriate y height vaule here
+            //Todo - Calculate appropriate y height vaule here (or just read in from a script)
             newItem = PhotonNetwork.Instantiate(prefabName, playerModel.transform.position, aimedAt.transform.rotation, 0);
             newPropID = newItem.GetComponent<PhotonView>().viewID;
             

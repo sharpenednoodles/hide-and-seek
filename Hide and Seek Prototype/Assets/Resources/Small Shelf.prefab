@@ -21,9 +21,10 @@ GameObject:
   - component: {fileID: 4460177508406516}
   - component: {fileID: 33895814762262282}
   - component: {fileID: 23699445348034980}
-  - component: {fileID: 64976491719851100}
   - component: {fileID: 114425080424629080}
   - component: {fileID: 114772334416483542}
+  - component: {fileID: 65229608486773614}
+  - component: {fileID: 54070653337647260}
   m_Layer: 0
   m_Name: Small Shelf
   m_TagString: Prop
@@ -85,8 +86,23 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1670048928096286}
   m_Mesh: {fileID: 4300002, guid: e5fa0a978ab424b46b37c0be35fada7b, type: 3}
---- !u!64 &64976491719851100
-MeshCollider:
+--- !u!54 &54070653337647260
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1670048928096286}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &65229608486773614
+BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -94,11 +110,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_SkinWidth: 0.01
-  m_Mesh: {fileID: 4300002, guid: e5fa0a978ab424b46b37c0be35fada7b, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.028900802, y: 0.009720001, z: 0.028188005}
+  m_Center: {x: -0.000000007450581, y: 0, z: 0.014204001}
 --- !u!114 &114425080424629080
 MonoBehaviour:
   m_ObjectHideFlags: 1

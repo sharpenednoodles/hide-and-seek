@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 54274530461961510}
   - component: {fileID: 65975265983888878}
   - component: {fileID: 114256135689180326}
+  - component: {fileID: 114570641536989700}
   m_Layer: 0
   m_Name: Crate
   m_TagString: Prop
@@ -138,3 +139,16 @@ MonoBehaviour:
   instantiationId: -1
   currentMasterID: -1
   isRuntimeInstantiated: 0
+--- !u!114 &114570641536989700
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1029584841057196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2651f42dcc05b94a98d0f51870e1196, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabName: Crate
+  healthMult: 0

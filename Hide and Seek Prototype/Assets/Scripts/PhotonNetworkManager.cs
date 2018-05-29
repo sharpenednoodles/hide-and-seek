@@ -16,7 +16,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     [SerializeField] int minZ = -25;
     [SerializeField] int maxZ = 25;
     //Enter Game version here, this is to prevent different versions from connecting to the same servers
-    static public string gameVersion = "Warehouse Blocking 0.1";
+    static public string gameVersion = "Release 1 Warehouse BlockIn";
   
     // Use this for initialization
     void Start ()

@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
+/// <summary>
+/// Handles switching between canvases and also pause menu buttons 
+/// (becasue I'm lazy and didn't put them in a seperate script)
+/// </summary>
 
 public class GameMenuController : MonoBehaviour {
 
@@ -18,17 +21,14 @@ public class GameMenuController : MonoBehaviour {
 	//public GameObject Menu;
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
 		//menuGroup.alpha = 1f;
 		//menuGroup.blocksRaycasts = true;
 		//Menu.gameObject.SetActive (false);
 		menuCanvas.SetActive(false);
 
 	}
-
-
-
-
 
 	public void ShowMenu()
 	{
@@ -42,14 +42,9 @@ public class GameMenuController : MonoBehaviour {
 
     }
 
-
-
 	public void HideMenu()
 	{
 		menuCanvas.gameObject.SetActive (false);
-        //Menu.SetActive(false);
-        //menuGroup.alpha = 0f;
-        //menuGroup.blocksRaycasts = true;
         MenuState = false;
 		Debug.Log ("Set Disable");
         Cursor.lockState = CursorLockMode.Locked;

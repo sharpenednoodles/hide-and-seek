@@ -150,5 +150,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2651f42dcc05b94a98d0f51870e1196, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabName: 
+  prefabName: Pallet
   healthMult: 0

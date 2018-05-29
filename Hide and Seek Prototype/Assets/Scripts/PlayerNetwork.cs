@@ -2,6 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///This script handles player network spawns locally for the local and remotely connected players.
+///ON connection, any control scripts from remote players (stored in playerControlScripts[]) will be disabed
+///Same for cameras
+///This is to prevent Unity from becoming confused
+///TODO - Add offline mode
+/// </summary>
+
 public class PlayerNetwork : MonoBehaviour
 {
     [SerializeField] private GameObject playerCamera;

@@ -7,6 +7,8 @@ using UnityEngine;
 /// <summary>
 /// This is a basic firstperson controller that handles firstperson control
 /// Hopefully this will be easier to use than the standard asset
+/// 
+/// DEPRECATED DO NOT USE
 /// </summary>
 
 public class FirstPersonController : MonoBehaviour

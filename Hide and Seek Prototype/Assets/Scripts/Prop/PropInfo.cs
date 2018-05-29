@@ -5,6 +5,7 @@ using UnityEngine;
 /// <summary>
 /// This script is used to pass parameters about the current prop
 /// such as prop resource name and health multiplier
+/// Everything is public, will use properties and accessors later when I can be bothered
 /// </summary>
 public class PropInfo : MonoBehaviour {
 

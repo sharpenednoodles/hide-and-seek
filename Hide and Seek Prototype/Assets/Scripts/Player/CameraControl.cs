@@ -4,6 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Simple script to handle third person camera while as prop
+/// To use
+/// Provide a refernece in inspector for the camera object, everything is automatic
+/// Todo; add auto reference so script becomes automagic
+/// </summary>
+
 public class CameraControl : MonoBehaviour
 {
     //public GameObject PropSwitchingReference;
@@ -18,8 +25,8 @@ public class CameraControl : MonoBehaviour
 
     private float currentX = 0.0f;
     private float currentY = 45.0f;
-    private float sensitivityX = 4.0f;
-    private float sensitivityY = 1.0f;
+    //private float sensitivityX = 4.0f;
+    //private float sensitivityY = 1.0f;
 
     public void Start()
     {
