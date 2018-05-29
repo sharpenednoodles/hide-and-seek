@@ -25,6 +25,8 @@ public class PropSwitching : MonoBehaviour
     private PhotonView photonView;
 
     CameraControl camControl;
+    //PropInfo propInfo;
+    public string prefabName;
 
     private int propID, playerID, newPropID;
 
@@ -39,6 +41,7 @@ public class PropSwitching : MonoBehaviour
         thirdPersonController = this.GetComponent<ThirdPersonController>();
         followCam = this.GetComponent<CameraControl>();
         camControl = GetComponent<CameraControl>();
+        
     }
 
 	public void Update()
@@ -55,6 +58,10 @@ public class PropSwitching : MonoBehaviour
                 holdTime += Time.deltaTime;
                 playerID = photonView.viewID;
                 propID = aimedAt.GetPhotonView().viewID;
+
+                //Turning this off for release 1
+                /*propInfo = aimedAt.GetComponent<PropInfo>();
+                prefabName = propInfo.prefabName;*/
             }
             else holdTime = 0;
 
@@ -128,8 +135,16 @@ public class PropSwitching : MonoBehaviour
         {
             Debug.Log("Local is player turning into a prop from " +photonView.viewID);
             playerModel.SetActive(false);
+
+            /*
+            if (prefabName == null)
+            {
+                Debug.Log("Unable to Parse Prop info script");
+                return;
+            }*/
             
             newItem = PhotonNetwork.Instantiate(aimedAt.name, playerModel.transform.position, aimedAt.transform.rotation, 0);
+            //newItem = PhotonNetwork.Instantiate(prefabName, playerModel.transform.position, aimedAt.transform.rotation, 0);
             newPropID = newItem.GetComponent<PhotonView>().viewID;
             
             newItem.transform.parent = transform;
