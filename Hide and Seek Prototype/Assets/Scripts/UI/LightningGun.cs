@@ -25,9 +25,10 @@ public class LightningGun : MonoBehaviour, InventoryItem
     }
 
     public Sprite image = null;
+    public Sprite image2 = null;
 
 
-	public Sprite Image
+    public Sprite Image
 	{
 		get { 
 
@@ -36,7 +37,17 @@ public class LightningGun : MonoBehaviour, InventoryItem
 	}
 
 
-	public void OnPickup()
+    public Sprite Image2
+    {
+        get
+        {
+
+            return image2;
+        }
+    }
+
+
+    public void OnPickup()
 	{
 		// deactive the on screen object
 		gameObject.SetActive (false);
