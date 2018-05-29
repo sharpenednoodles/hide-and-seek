@@ -13,14 +13,15 @@ public class CanvasSwitch : MonoBehaviour {
     GameMenuController gameMenuController;
     public GameObject priorCanvas;
     public GameObject canvasToSwich;
+    public GameMenuController gameMenu;
 
 	public AudioMixer audioMixer;
 
 	void Start()
     {
         //Debug.Log ("This code is running");
-        GameObject HUDCanvas = this.transform.parent.gameObject;
-        gameMenuController = HUDCanvas.GetComponent<GameMenuController>();
+        /*GameObject HUDCanvas = this.transform.parent.gameObject;
+        gameMenuController = HUDCanvas.GetComponent<GameMenuController>();*/
 	}
 
 
@@ -59,12 +60,7 @@ public class CanvasSwitch : MonoBehaviour {
     {
 
         Debug.Log("Call From Continue");
-        gameMenuController.HideMenu();
-        //menuC.HideMenu();
-        //		menuCanvas.SetActive(true);
-        //		Debug.Log ("Set Disable");
-        //		Cursor.lockState = CursorLockMode.Locked;
-        //		Cursor.visible = false;
-        //Call to unpause
+        gameMenu.HideMenu();
+      
     }
 }

@@ -43,4 +43,5 @@ MonoBehaviour:
   - RequestForPickupTimes
   - TaggedPlayer
   - RemoteSwitch
+  - updateAlivePlayers
   DisableAutoOpenWizard: 1
