@@ -34,3 +34,6 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+# God Damn Mac OSX being a shit
+.DS_Store
