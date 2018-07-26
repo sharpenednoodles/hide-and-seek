@@ -71,6 +71,10 @@ ModelImporter:
     100126: waist
     100128: wrist.r
     100130: wrist.r_end
+    100132: Camera
+    100134: pipe 5
+    100136: pipe 6
+    100138: pipe 6_end
     400000: ankle.l
     400002: ankle.r
     400004: arm target.l
@@ -137,6 +141,11 @@ ModelImporter:
     400126: waist
     400128: wrist.r
     400130: wrist.r_end
+    400132: Camera
+    400134: pipe 5
+    400136: pipe 6
+    400138: pipe 6_end
+    2000000: Camera
     2100000: Material
     4300000: Cube
     7400000: Player IDLE
