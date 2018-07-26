@@ -1,0 +1,230 @@
+fileFormatVersion: 2
+guid: 2649a9c0e536d4def862a112e1fd54c4
+timeCreated: 1532590468
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: ankle.l
+    100002: ankle.r
+    100004: arm target.l
+    100006: arm target.l_end
+    100008: arm target.r
+    100010: arm target.r_end
+    100012: Armature
+    100014: backpack
+    100016: Camera
+    100018: Core
+    100020: Cube
+    100022: elbow.l
+    100024: elbow.r
+    100026: head
+    100028: head_end
+    100030: hip.l
+    100032: hip.r
+    100034: //RootNode
+    100036: inner toe.l
+    100038: inner toe.l_end
+    100040: inner toe.r
+    100042: inner toe.r_end
+    100044: knee.l
+    100046: knee.l_end
+    100048: knee.r
+    100050: knee.r_end
+    100052: leg target.l
+    100054: leg target.l_end
+    100056: leg target.r
+    100058: leg target.r_end
+    100060: lower arm.l
+    100062: lower arm.r
+    100064: lower shin.l
+    100066: lower shin.r
+    100068: neck 1
+    100070: neck 2
+    100072: neck 3
+    100074: outer toe.l
+    100076: outer toe.l_end
+    100078: outer toe.r
+    100080: outer toe.r_end
+    100082: pelvis
+    100084: pipe 1
+    100086: pipe 2
+    100088: pipe 3
+    100090: pipe 4
+    100092: pipe 5
+    100094: pipe 6
+    100096: pipe 6_end
+    100098: pipe attachment
+    100100: pipe attachment_end
+    100102: rear toe 1.l
+    100104: rear toe 1.r
+    100106: rear toe 2.l
+    100108: rear toe 2.l_end
+    100110: rear toe 2.r
+    100112: rear toe 2.r_end
+    100114: shin.l
+    100116: shin.r
+    100118: shoulder.l
+    100120: shoulder.r
+    100122: thigh.l
+    100124: thigh.r
+    100126: torso
+    100128: upper arm.l
+    100130: upper arm.r
+    100132: waist
+    100134: wrist.r
+    100136: wrist.r_end
+    400000: ankle.l
+    400002: ankle.r
+    400004: arm target.l
+    400006: arm target.l_end
+    400008: arm target.r
+    400010: arm target.r_end
+    400012: Armature
+    400014: backpack
+    400016: Camera
+    400018: Core
+    400020: Cube
+    400022: elbow.l
+    400024: elbow.r
+    400026: head
+    400028: head_end
+    400030: hip.l
+    400032: hip.r
+    400034: //RootNode
+    400036: inner toe.l
+    400038: inner toe.l_end
+    400040: inner toe.r
+    400042: inner toe.r_end
+    400044: knee.l
+    400046: knee.l_end
+    400048: knee.r
+    400050: knee.r_end
+    400052: leg target.l
+    400054: leg target.l_end
+    400056: leg target.r
+    400058: leg target.r_end
+    400060: lower arm.l
+    400062: lower arm.r
+    400064: lower shin.l
+    400066: lower shin.r
+    400068: neck 1
+    400070: neck 2
+    400072: neck 3
+    400074: outer toe.l
+    400076: outer toe.l_end
+    400078: outer toe.r
+    400080: outer toe.r_end
+    400082: pelvis
+    400084: pipe 1
+    400086: pipe 2
+    400088: pipe 3
+    400090: pipe 4
+    400092: pipe 5
+    400094: pipe 6
+    400096: pipe 6_end
+    400098: pipe attachment
+    400100: pipe attachment_end
+    400102: rear toe 1.l
+    400104: rear toe 1.r
+    400106: rear toe 2.l
+    400108: rear toe 2.l_end
+    400110: rear toe 2.r
+    400112: rear toe 2.r_end
+    400114: shin.l
+    400116: shin.r
+    400118: shoulder.l
+    400120: shoulder.r
+    400122: thigh.l
+    400124: thigh.r
+    400126: torso
+    400128: upper arm.l
+    400130: upper arm.r
+    400132: waist
+    400134: wrist.r
+    400136: wrist.r_end
+    2000000: Camera
+    2100000: Material
+    4300000: Cube
+    9500000: //RootNode
+    13700000: Cube
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

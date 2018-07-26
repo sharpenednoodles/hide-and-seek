@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: df4dcfc4ae9460c4aa6010dce67d5d14
-timeCreated: 1525671522
+guid: b6ddebebec4f64d92acd4572a746d7c9
+timeCreated: 1532590470
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -11,17 +11,17 @@ ModelImporter:
     100006: arm target.l_end
     100008: arm target.r
     100010: arm target.r_end
-    100012: Armature
+    100012: Armature.001
     100014: backpack
-    100016: Core
-    100018: Cube
+    100016: Camera
+    100018: Core
     100020: elbow.l
     100022: elbow.r
-    100024: head
-    100026: head_end
-    100028: hip.l
-    100030: hip.r
-    100032: //RootNode
+    100024: //RootNode
+    100026: head
+    100028: head_end
+    100030: hip.l
+    100032: hip.r
     100034: inner toe.l
     100036: inner toe.l_end
     100038: inner toe.r
@@ -50,48 +50,47 @@ ModelImporter:
     100084: pipe 2
     100086: pipe 3
     100088: pipe 4
-    100090: pipe 4_end
-    100092: pipe attachment
-    100094: pipe attachment_end
-    100096: rear toe 1.l
-    100098: rear toe 1.r
-    100100: rear toe 2.l
-    100102: rear toe 2.l_end
-    100104: rear toe 2.r
-    100106: rear toe 2.r_end
-    100108: shin.l
-    100110: shin.r
-    100112: shoulder.l
-    100114: shoulder.r
-    100116: thigh.l
-    100118: thigh.r
-    100120: torso
-    100122: upper arm.l
-    100124: upper arm.r
-    100126: waist
-    100128: wrist.r
-    100130: wrist.r_end
-    100132: Camera
-    100134: pipe 5
-    100136: pipe 6
-    100138: pipe 6_end
+    100090: pipe 5
+    100092: pipe 6
+    100094: pipe 6_end
+    100096: pipe attachment
+    100098: pipe attachment_end
+    100100: rear toe 1.l
+    100102: rear toe 1.r
+    100104: rear toe 2.l
+    100106: rear toe 2.l_end
+    100108: rear toe 2.r
+    100110: rear toe 2.r_end
+    100112: ROBOT
+    100114: shin.l
+    100116: shin.r
+    100118: shoulder.l
+    100120: shoulder.r
+    100122: thigh.l
+    100124: thigh.r
+    100126: torso
+    100128: upper arm.l
+    100130: upper arm.r
+    100132: waist
+    100134: wrist.r
+    100136: wrist.r_end
     400000: ankle.l
     400002: ankle.r
     400004: arm target.l
     400006: arm target.l_end
     400008: arm target.r
     400010: arm target.r_end
-    400012: Armature
+    400012: Armature.001
     400014: backpack
-    400016: Core
-    400018: Cube
+    400016: Camera
+    400018: Core
     400020: elbow.l
     400022: elbow.r
-    400024: head
-    400026: head_end
-    400028: hip.l
-    400030: hip.r
-    400032: //RootNode
+    400024: //RootNode
+    400026: head
+    400028: head_end
+    400030: hip.l
+    400032: hip.r
     400034: inner toe.l
     400036: inner toe.l_end
     400038: inner toe.r
@@ -120,37 +119,36 @@ ModelImporter:
     400084: pipe 2
     400086: pipe 3
     400088: pipe 4
-    400090: pipe 4_end
-    400092: pipe attachment
-    400094: pipe attachment_end
-    400096: rear toe 1.l
-    400098: rear toe 1.r
-    400100: rear toe 2.l
-    400102: rear toe 2.l_end
-    400104: rear toe 2.r
-    400106: rear toe 2.r_end
-    400108: shin.l
-    400110: shin.r
-    400112: shoulder.l
-    400114: shoulder.r
-    400116: thigh.l
-    400118: thigh.r
-    400120: torso
-    400122: upper arm.l
-    400124: upper arm.r
-    400126: waist
-    400128: wrist.r
-    400130: wrist.r_end
-    400132: Camera
-    400134: pipe 5
-    400136: pipe 6
-    400138: pipe 6_end
+    400090: pipe 5
+    400092: pipe 6
+    400094: pipe 6_end
+    400096: pipe attachment
+    400098: pipe attachment_end
+    400100: rear toe 1.l
+    400102: rear toe 1.r
+    400104: rear toe 2.l
+    400106: rear toe 2.l_end
+    400108: rear toe 2.r
+    400110: rear toe 2.r_end
+    400112: ROBOT
+    400114: shin.l
+    400116: shin.r
+    400118: shoulder.l
+    400120: shoulder.r
+    400122: thigh.l
+    400124: thigh.r
+    400126: torso
+    400128: upper arm.l
+    400130: upper arm.r
+    400132: waist
+    400134: wrist.r
+    400136: wrist.r_end
     2000000: Camera
-    2100000: Material
-    4300000: Cube
-    7400000: Player IDLE
+    2100000: Material.002
+    4300000: ROBOT
+    7400000: Armature.001|Armature.001Action
     9500000: //RootNode
-    13700000: Cube
+    13700000: ROBOT
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -177,35 +175,7 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations:
-    - serializedVersion: 16
-      name: Player IDLE
-      takeName: Armature|ArmatureAction
-      firstFrame: 0
-      lastFrame: 250
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+    clipAnimations: []
     isReadable: 1
   meshes:
     lODScreenPercentages: []
