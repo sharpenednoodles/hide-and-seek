@@ -2622,6 +2622,7 @@ MonoBehaviour:
   mapCamera: {fileID: 1217205341206332}
   playerControlScripts:
   - {fileID: 114277594435014724}
+  headBoneRoot: {fileID: 1271651156128032}
   alivePlayers: {fileID: 0}
 --- !u!114 &114725445436233664
 MonoBehaviour:

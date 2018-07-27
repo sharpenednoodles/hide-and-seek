@@ -16,6 +16,7 @@ public class PropSwitching : MonoBehaviour
     public GameObject prop;
     private CharacterController playerCollider;
     private MonoBehaviour firstPersonController, thirdPersonController, followCam;
+    private PlayerNetwork playerNetwork;
 
     private GameObject aimedAt, newItem;
     private bool isLookingAtProp;
@@ -41,6 +42,7 @@ public class PropSwitching : MonoBehaviour
         thirdPersonController = this.GetComponent<ThirdPersonController>();
         followCam = this.GetComponent<CameraControl>();
         camControl = GetComponent<CameraControl>();
+        playerNetwork = this.GetComponent<PlayerNetwork>();
         
     }
 
@@ -174,7 +176,8 @@ public class PropSwitching : MonoBehaviour
             thirdPersonController.enabled = false;
             firstPersonController.enabled = true;
             isProp = false;
-
+            playerNetwork.HideHead();
+  
             //Call RPC Function for remote players
             photonView.RPC("RemoteSwitch", PhotonTargets.AllBufferedViaServer, playerID, newPropID, isProp);
         }
