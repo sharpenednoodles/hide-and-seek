@@ -144,6 +144,7 @@ ModelImporter:
     2000000: Camera
     2100000: Material
     4300000: Cube
+    7400000: Armature|ArmatureAction
     9500000: //RootNode
     13700000: Cube
   externalObjects: {}
