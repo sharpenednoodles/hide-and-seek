@@ -13,6 +13,7 @@ public class GameMenuController : MonoBehaviour {
 	public GameObject menuCanvas;
 
 
+
 	//public Transform Menu;
     //we make this static so we can access from controller(s)
 	public static bool MenuState = false;
@@ -42,6 +43,7 @@ public class GameMenuController : MonoBehaviour {
 
     }
 
+
 	public void HideMenu()
 	{
 		menuCanvas.gameObject.SetActive (false);
@@ -50,6 +52,7 @@ public class GameMenuController : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
+
 
 	void Update () {
 		//Debug.Log ("refresh key");
