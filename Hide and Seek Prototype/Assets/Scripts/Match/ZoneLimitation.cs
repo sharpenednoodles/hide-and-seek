@@ -28,7 +28,8 @@ public GameObject boundarySphere;
 	// Update is called once per frame
 	public void Update () 
 	{
-		if (!playerInBoundary) 
+        /*
+        if (!playerInBoundary) 
 			if (TimeLimit < TimeLeft) 
 				TimeLeft -= Time.deltaTime;
 		if (TimeLeft < 0) {
@@ -37,11 +38,13 @@ public GameObject boundarySphere;
 			//Time.timeScale = 0;
 		}
 		roundTime -= Time.deltaTime;
-		z1.Play ("Doorbone|Doorbone Action");
+		//z1.Play ("Doorbone|Doorbone Action");
+        */
 	}
 
 	public void FixedUpdate()
 	{
+        /*
 		if (roundTime > 10) {
 			boundarySphere.transform.localScale -= new Vector3 (0.1f, 0.1f, 0.1f);
 		}
@@ -55,6 +58,7 @@ public GameObject boundarySphere;
 				}
 			}
 		}
+        */
 	}
 
 	public void shutZone()
@@ -82,9 +86,12 @@ public GameObject boundarySphere;
 
 	public void OnGUI() 
 	{
+        /*
 		if (!playerInBoundary) {
 			string seconds = Mathf.Floor(TimeLeft % 60).ToString("00");
 			GUI.Box (new Rect (140, Screen.height - 50, Screen.width - 300, 120), "Return to game area in " + seconds + " seconds");
 		}
-	}
+        */
+    }
+
 }

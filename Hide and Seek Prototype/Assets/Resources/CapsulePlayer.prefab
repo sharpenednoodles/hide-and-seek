@@ -3574,7 +3574,7 @@ MonoBehaviour:
     emptyFX: []
     reloadFX: []
     fireFX: []
-    damageDecals: 
+    damageDecals: Default Bullethole
   minigun:
     model: {fileID: 1968096950733248}
     fireOrigin: {fileID: 1194330937070068}
