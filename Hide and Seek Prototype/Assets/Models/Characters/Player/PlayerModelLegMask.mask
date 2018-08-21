@@ -1,0 +1,167 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: PlayerModelLegMask
+  m_Mask: 00000000010000000100000000000000000000000100000001000000010000000100000000000000000000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Armature
+    m_Weight: 1
+  - m_Path: Armature/arm target.l
+    m_Weight: 1
+  - m_Path: Armature/arm target.l/arm target.l_end
+    m_Weight: 1
+  - m_Path: Armature/arm target.r
+    m_Weight: 1
+  - m_Path: Armature/arm target.r/arm target.r_end
+    m_Weight: 1
+  - m_Path: Armature/Core
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.l
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.l/thigh.l
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.l/thigh.l/knee.l
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.l/thigh.l/knee.l/knee.l_end
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.l/thigh.l/shin.l
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.l/thigh.l/shin.l/lower shin.l
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.l/thigh.l/shin.l/lower shin.l/ankle.l
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.l/thigh.l/shin.l/lower shin.l/ankle.l/inner toe.l
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.l/thigh.l/shin.l/lower shin.l/ankle.l/inner toe.l/inner
+      toe.l_end
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.l/thigh.l/shin.l/lower shin.l/ankle.l/outer toe.l
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.l/thigh.l/shin.l/lower shin.l/ankle.l/outer toe.l/outer
+      toe.l_end
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.l/thigh.l/shin.l/lower shin.l/ankle.l/rear toe
+      1.l
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.l/thigh.l/shin.l/lower shin.l/ankle.l/rear toe
+      1.l/rear toe 2.l
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.l/thigh.l/shin.l/lower shin.l/ankle.l/rear toe
+      1.l/rear toe 2.l/rear toe 2.l_end
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.r
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.r/thigh.r
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.r/thigh.r/knee.r
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.r/thigh.r/knee.r/knee.r_end
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.r/thigh.r/shin.r
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.r/thigh.r/shin.r/lower shin.r
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.r/thigh.r/shin.r/lower shin.r/ankle.r
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.r/thigh.r/shin.r/lower shin.r/ankle.r/inner toe.r
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.r/thigh.r/shin.r/lower shin.r/ankle.r/inner toe.r/inner
+      toe.r_end
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.r/thigh.r/shin.r/lower shin.r/ankle.r/outer toe.r
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.r/thigh.r/shin.r/lower shin.r/ankle.r/outer toe.r/outer
+      toe.r_end
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.r/thigh.r/shin.r/lower shin.r/ankle.r/rear toe
+      1.r
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.r/thigh.r/shin.r/lower shin.r/ankle.r/rear toe
+      1.r/rear toe 2.r
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/hip.r/thigh.r/shin.r/lower shin.r/ankle.r/rear toe
+      1.r/rear toe 2.r/rear toe 2.r_end
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/backpack
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/backpack/pipe 1
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/backpack/pipe 1/pipe 2
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/backpack/pipe 1/pipe 2/pipe 3
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/backpack/pipe 1/pipe 2/pipe 3/pipe 4
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/backpack/pipe 1/pipe 2/pipe 3/pipe 4/pipe
+      5
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/backpack/pipe 1/pipe 2/pipe 3/pipe 4/pipe
+      5/pipe 6
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/backpack/pipe 1/pipe 2/pipe 3/pipe 4/pipe
+      5/pipe 6/pipe 6_end
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/neck 1
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/neck 1/neck 2
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/neck 1/neck 2/neck 3
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/neck 1/neck 2/neck 3/head
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/neck 1/neck 2/neck 3/head/head_end
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/shoulder.l
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/shoulder.l/upper arm.l
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/shoulder.l/upper arm.l/elbow.l
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/shoulder.l/upper arm.l/elbow.l/lower
+      arm.l
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/shoulder.l/upper arm.l/elbow.l/lower
+      arm.l/pipe attachment
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/shoulder.l/upper arm.l/elbow.l/lower
+      arm.l/pipe attachment/pipe attachment_end
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/shoulder.r
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/shoulder.r/upper arm.r
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/shoulder.r/upper arm.r/elbow.r
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/shoulder.r/upper arm.r/elbow.r/lower
+      arm.r
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/shoulder.r/upper arm.r/elbow.r/lower
+      arm.r/wrist.r
+    m_Weight: 1
+  - m_Path: Armature/Core/pelvis/waist/torso/shoulder.r/upper arm.r/elbow.r/lower
+      arm.r/wrist.r/wrist.r_end
+    m_Weight: 1
+  - m_Path: Armature/leg target.l
+    m_Weight: 1
+  - m_Path: Armature/leg target.l/leg target.l_end
+    m_Weight: 1
+  - m_Path: Armature/leg target.r
+    m_Weight: 1
+  - m_Path: Armature/leg target.r/leg target.r_end
+    m_Weight: 1
+  - m_Path: Camera
+    m_Weight: 0
+  - m_Path: Cube
+    m_Weight: 0

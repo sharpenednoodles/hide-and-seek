@@ -44,4 +44,12 @@ MonoBehaviour:
   - TaggedPlayer
   - RemoteSwitch
   - updateAlivePlayers
+  - SwitchWeapon
+  - deathEvent
+  - TakeDamage
+  - DeathEvent
+  - PhysicsForce
+  - SyncWeapon
+  - SyncShot
+  - SpawnDecal
   DisableAutoOpenWizard: 1

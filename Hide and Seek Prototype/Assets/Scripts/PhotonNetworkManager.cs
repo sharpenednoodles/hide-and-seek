@@ -3,12 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Photon Netwrok manager handles all instances of rounds
+/// </summary>
 public class PhotonNetworkManager : Photon.MonoBehaviour
 {
     [SerializeField] Text connectText;
     [SerializeField] GameObject player;
-    [SerializeField] Transform spawnPoint;
+    //An array of spawn points for players to randomly spawn at
+    [SerializeField] Transform[] spawnPoints;
     [SerializeField] GameObject joinCam;
+
+    //Time Declerations
+    float gameTimer, roundTimer;
 
     [Header("Coordinate Range")]
     [SerializeField] int minX = -25;
@@ -16,15 +23,53 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     [SerializeField] int minZ = -25;
     [SerializeField] int maxZ = 25;
     //Enter Game version here, this is to prevent different versions from connecting to the same servers
-    static public string gameVersion = "Release 1 Warehouse BlockIn";
-  
+    static public string gameVersion = "Sprint 2 Week 2";
+
+    public bool offlineMode = false, debug = true;
+    private Text debugFeed;
+    [Header("Game Stats")]
+    public int[] alivePlayersList, connectedPlayersList, deadPlayersList;
+    public int alivePlayers, connectedPlayers, deadPlayers;
+    public enum gameState { 
+        warmUp,
+        ///<Sumary>
+        ///Game state as players intially join the game. Players will be able to join the room during this state, but won't be able to score 
+        ///</Sumary> 
+        roundStart,
+        /// <summary>
+        /// This is the default game state, while in this state the round is active, players can score. 
+        /// Players will be able to join, but as a flycam. Spawn occurs next round
+        /// </summary>
+        roundEnd,
+        /// <summary>
+        /// Current score displayed, temporary state until the next round begins
+        /// </summary>
+        matchEnd
+        /// <summary>
+        /// Final scoreboard, game ends after this state - players booted back to main menu
+        /// </summary>
+    }
+
     // Use this for initialization
     void Start ()
     {
-        //Specify game build verison
-        PhotonNetwork.ConnectUsingSettings(gameVersion);
+        debugFeed = GameObject.Find("Debug Feed").GetComponent<Text>();
+
+        if (PhotonNetwork.offlineMode == true)
+        {
+            Debug.Log("Offline Mode");
+            OnJoinedRoom();
+        }
+        else
+        {
+            //Specify game build verison
+            PhotonNetwork.ConnectUsingSettings(gameVersion);
+        }
+        
 	}
+
 	
+    //To do, migrate this to another scene before hand
     public virtual void OnConnectedToMaster()
     {
         Debug.Log("Connected to master server");
@@ -33,6 +78,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
 
     public virtual void OnJoinedRoom()
     {
+        //Old spawn method, to be migrated to spawn points
         Debug.Log("Connected to room");
         int randX = Random.Range(minX, maxX);
         int randZ = Random.Range(minZ, maxZ);
@@ -50,5 +96,15 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     {
         //Debug output
         connectText.text = PhotonNetwork.connectionStateDetailed.ToString();
+        //Remove this before final build
+        gameTimer += Time.deltaTime;
 	}
+
+    public void PlayerDeath(int playerID)
+    {
+        if (PhotonNetwork.isMasterClient)
+        {
+            //Store death
+        }
+    }
 }

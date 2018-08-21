@@ -4,9 +4,7 @@ using System.Collections;
 /// <summary>
 /// Handles Prop switching and network sync
 /// To USE
-/// Props to switch into must be tagged with a prop tag, and have a corresponding named prefab. 
-/// Obviosuly this causes an issue where players that are disguised can't be used as a prop to turn into
-/// Will change later to read from a script located upon object so that scene objects can be arbitrarily named
+/// Props to switch into must be tagged with a prop tag, and have a prop script attached, with the label matching the one found in resources 
 /// </summary>
 
 public class PropSwitching : MonoBehaviour
@@ -17,8 +15,9 @@ public class PropSwitching : MonoBehaviour
     private CharacterController playerCollider;
     private MonoBehaviour firstPersonController, thirdPersonController, followCam;
     private PlayerNetwork playerNetwork;
+    
 
-    private GameObject aimedAt, newItem;
+    private GameObject aimedAt, newItem, weapons;
     private bool isLookingAtProp;
 	
 	private float startTime = 0, holdTime = 0;
@@ -33,22 +32,23 @@ public class PropSwitching : MonoBehaviour
 
     public void Start()
 	{
+        //Get game objects
         photonView = GetComponent<PhotonView>();
         isProp = false;
 		InvokeRepeating ("Raycast", 0.1f, 0.1f);
         playerModel = this.gameObject.transform.GetChild(1).gameObject;
+        weapons = this.gameObject.transform.GetChild(3).gameObject;
         playerCollider = this.GetComponent<CharacterController>();
         firstPersonController = GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
         thirdPersonController = this.GetComponent<ThirdPersonController>();
         followCam = this.GetComponent<CameraControl>();
         camControl = GetComponent<CameraControl>();
         playerNetwork = this.GetComponent<PlayerNetwork>();
-        
     }
 
 	public void Update()
 	{
-
+        //Read input
         if (Input.GetMouseButtonDown(1) && isProp)
         {
             RevertToPlayer();
@@ -87,7 +87,10 @@ public class PropSwitching : MonoBehaviour
             GameObject newRemoteItem = PhotonView.Find(remoteID).gameObject;
             GameObject remotePlayerModel = PhotonView.Find(playerID).gameObject;
             GameObject robotModel = remotePlayerModel.transform.GetChild(1).gameObject;
+            GameObject weaponRemote = remotePlayerModel.transform.GetChild(3).gameObject;
             robotModel.SetActive(false);
+            weaponRemote.SetActive(false);
+
 
             newRemoteItem.transform.parent = transform;
 
@@ -103,7 +106,9 @@ public class PropSwitching : MonoBehaviour
             GameObject newRemoteItem = PhotonView.Find(remoteID).gameObject;
             GameObject remotePlayerModel = PhotonView.Find(playerID).gameObject;
             GameObject robotModel = remotePlayerModel.transform.GetChild(1).gameObject;
+            GameObject weaponRemote = remotePlayerModel.transform.GetChild(3).gameObject;
             robotModel.SetActive(true);
+            weaponRemote.SetActive(true);
             //PhotonNetwork.Destroy(newRemoteItem);
         }
     }
@@ -137,6 +142,7 @@ public class PropSwitching : MonoBehaviour
         {
             Debug.Log("Local is player turning into a prop from " +photonView.viewID);
             playerModel.SetActive(false);
+            weapons.SetActive(false);
             
             //newItem = PhotonNetwork.Instantiate(aimedAt.name, playerModel.transform.position, aimedAt.transform.rotation, 0);
             //Todo - Calculate appropriate y height vaule here (or just read in from a script)
@@ -169,6 +175,7 @@ public class PropSwitching : MonoBehaviour
         {
             Debug.Log("Local Player is turning back into a robot from " + photonView.viewID);
             playerModel.SetActive(true);
+            weapons.SetActive(true);
             PhotonNetwork.Destroy(prop);
 
             followCam.enabled = false;
@@ -200,4 +207,10 @@ public class PropSwitching : MonoBehaviour
 	{
         if (isLookingAtProp) GUI.Box(new Rect(140, Screen.height - 50, Screen.width - 300, 120), "Hold Right Mouse Button to transform into "+prefabName);
 	}
+
+    //function to terminate all invoking methods
+    public void Death()
+    {
+        CancelInvoke();
+    }
 }

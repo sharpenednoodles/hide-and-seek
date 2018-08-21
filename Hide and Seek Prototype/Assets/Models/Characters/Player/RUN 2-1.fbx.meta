@@ -146,7 +146,7 @@ ModelImporter:
     2000000: Camera
     2100000: Material
     4300000: Cube
-    7400000: Player RUN
+    7400000: PlayerModel_RunAnim
     9500000: //RootNode
     13700000: Cube
   externalObjects: {}
@@ -177,7 +177,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Player RUN
+      name: PlayerModel_RunAnim
       takeName: Armature|ArmatureAction
       firstFrame: 0
       lastFrame: 250
