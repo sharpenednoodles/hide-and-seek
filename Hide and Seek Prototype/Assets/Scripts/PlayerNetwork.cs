@@ -27,7 +27,7 @@ public class PlayerNetwork : MonoBehaviour
         photonView = GetComponent<PhotonView>();
         GameObject alive = GameObject.Find("Alive");
         //Communicate to server when we are connected and whether we are alive or dead
-        alivePlayers = alive.GetComponent<AlivePlayers>();
+        //alivePlayers = alive.GetComponent<AlivePlayers>();
         Initialise();     
     }
 
@@ -38,7 +38,9 @@ public class PlayerNetwork : MonoBehaviour
         {
             //Functionality for player
             this.name = "Local Player";
-            alivePlayers.callRPC();
+
+            //uncomment this after
+            //alivePlayers.callRPC();
 
             //Shrink our head bone so we don't see it
             HideHead();

@@ -43,6 +43,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_StepCycle;
         private float m_NextStep;
         private bool m_Jumping;
+        private GameObject reticle;
+        private Animator retAnim;
         private AudioSource m_AudioSource;
 
         //Animation hooks
@@ -62,8 +64,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Jumping = false;
             m_AudioSource = GetComponent<AudioSource>();
 			m_MouseLook.Init(transform , m_Camera.transform);
-
-            //animator = GetComponent<Animator>();
+            GameObject reticle = GameObject.FindGameObjectWithTag("Reticle");
+            retAnim = reticle.GetComponent<Animator>();
         }
 
 
@@ -88,6 +90,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 m_MoveDir.y = 0f;
                 m_Jumping = false;
                 animator.SetBool("isJumping", m_Jumping);
+                retAnim.SetBool("isJumping", m_Jumping);
             }
             if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded)
             {
@@ -140,6 +143,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     m_Jump = false;
                     m_Jumping = true;
                     animator.SetBool("isJumping", m_Jumping);
+                    retAnim.SetBool("isJumping", m_Jumping);
                 }
             }
             else
@@ -245,6 +249,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             // set the desired speed to be walking or running
             speed = m_IsWalking ? m_WalkSpeed : m_RunSpeed;
             animator.SetFloat("speedMult", speed/5);
+            retAnim.SetFloat("speed", speed * movement);
             m_Input = new Vector2(horizontal, vertical);
 
             // normalize input if it exceeds 1 in combined length:

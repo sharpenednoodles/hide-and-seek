@@ -19,7 +19,7 @@ Caitlin Eiszele
 
 Hugh Mohr
 
-Junchen Wang
+~~Junchen Wang~~
 
 ## External Tools and Libraries
 This is a list of the third party tools included within the Unity Project
@@ -27,9 +27,12 @@ This is a list of the third party tools included within the Unity Project
 - [Post Processing Stack](https://assetstore.unity.com/packages/essentials/post-processing-stack-83912 "Mmm pretty...")
 - [ProBuilder](https://assetstore.unity.com/packages/tools/modeling/probuilder-111418 "For creating meshes inside Unity")
 - [ProGrids](https://assetstore.unity.com/packages/3d/progrids-111425 "Proper Grid Snapping")
-- [SpaceSkiesFree](https://assetstore.unity.com/packages/2d/textures-materials/sky/spaceskies-free-80503 "Someone send me a Discord message if you see this text")}
+- [SpaceSkiesFree](https://assetstore.unity.com/packages/2d/textures-materials/sky/spaceskies-free-80503 "Someone send me a Discord message if you see this text")
 - [TextMesh Pro](https://assetstore.unity.com/packages/essentials/beta-projects/textmesh-pro-84126 "Vector Text, hell yeah")
 - [Unity Standard Assets](https://assetstore.unity.com/packages/essentials/asset-packs/standard-assets-32351)
 
 ## Asset Credits
 List third party sounds, music, textures and models requiring credit here
+Parts of the sounds designed, derived or used from the BOOM Guns Designed Library
+
+Audio files will be removed from GIT after active development ceases
