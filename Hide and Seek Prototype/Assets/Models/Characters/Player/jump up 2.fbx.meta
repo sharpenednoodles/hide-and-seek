@@ -73,6 +73,7 @@ ModelImporter:
     100130: waist
     100132: wrist.r
     100134: wrist.r_end
+    100136: ROBOT.001
     400000: ankle.l
     400002: ankle.r
     400004: arm target.l
@@ -141,11 +142,14 @@ ModelImporter:
     400130: waist
     400132: wrist.r
     400134: wrist.r_end
+    400136: ROBOT.001
     2100000: Material.002
     4300000: ROBOT
+    4300002: ROBOT.001
     7400000: Armature.001|Armature.001Action.002
     9500000: //RootNode
     13700000: ROBOT
+    13700002: ROBOT.001
   externalObjects: {}
   materials:
     importMaterials: 1

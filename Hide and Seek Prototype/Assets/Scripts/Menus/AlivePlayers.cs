@@ -10,6 +10,8 @@ using TMPro;
 ///Will just set the amount of alive players to the canvas to show how many players are "alive"
 ///
 /// No one can currently die though lol
+/// 
+/// To do: remove this and move to new system
 /// </summary>
 
 public class AlivePlayers : MonoBehaviour {

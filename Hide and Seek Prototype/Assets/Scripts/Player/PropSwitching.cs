@@ -18,7 +18,7 @@ public class PropSwitching : MonoBehaviour
     
 
     private GameObject aimedAt, newItem, weapons;
-    private bool isLookingAtProp;
+    private bool isLookingAtProp, debug = true;
 	
 	private float startTime = 0, holdTime = 0;
     public int timeHold = 1;
@@ -81,9 +81,11 @@ public class PropSwitching : MonoBehaviour
     {
         if (remoteIsProp && !photonView.isMine)
         {
-            Debug.Log("Called Remote Switch !isProp from client " +photonView.viewID);
-            Debug.Log("Recieved Player ID = " + playerID + " remoteID = " + remoteID);
-
+            if (debug)
+            {
+                Debug.Log("Called Remote Switch !isProp from client " + photonView.viewID);
+                Debug.Log("Recieved Player ID = " + playerID + " remoteID = " + remoteID);
+            }
             GameObject newRemoteItem = PhotonView.Find(remoteID).gameObject;
             GameObject remotePlayerModel = PhotonView.Find(playerID).gameObject;
             GameObject robotModel = remotePlayerModel.transform.GetChild(1).gameObject;
@@ -101,7 +103,8 @@ public class PropSwitching : MonoBehaviour
 
         if (!remoteIsProp && !photonView.isMine)
         {
-            Debug.Log("Called remote switch back to player from client " + photonView.viewID);
+            if (debug)
+                Debug.Log("Called remote switch back to player from client " + photonView.viewID);
           
             GameObject newRemoteItem = PhotonView.Find(remoteID).gameObject;
             GameObject remotePlayerModel = PhotonView.Find(playerID).gameObject;
@@ -121,7 +124,8 @@ public class PropSwitching : MonoBehaviour
         //Switch from Prop to Prop - CURRENTLY NOT IN USE
         if (isProp && photonView.isMine)
         {
-            Debug.Log("Local Player is transforming into another prop from " +photonView.viewID);
+            if (debug)
+                Debug.Log("Local Player is transforming into another prop from " +photonView.viewID);
 
             PhotonNetwork.Destroy(prop);
             newItem = Instantiate(aimedAt, playerModel.transform.position, aimedAt.transform.rotation);
@@ -140,7 +144,8 @@ public class PropSwitching : MonoBehaviour
         //Switch from Robot to Prop
         if (!isProp && photonView.isMine)
         {
-            Debug.Log("Local is player turning into a prop from " +photonView.viewID);
+            if (debug)
+                Debug.Log("Local is player turning into a prop from " +photonView.viewID);
             playerModel.SetActive(false);
             weapons.SetActive(false);
             
@@ -173,7 +178,8 @@ public class PropSwitching : MonoBehaviour
     {
         if (photonView.isMine)
         {
-            Debug.Log("Local Player is turning back into a robot from " + photonView.viewID);
+            if (debug)
+                Debug.Log("Local Player is turning back into a robot from " + photonView.viewID);
             playerModel.SetActive(true);
             weapons.SetActive(true);
             PhotonNetwork.Destroy(prop);
@@ -190,6 +196,8 @@ public class PropSwitching : MonoBehaviour
         }
     }
 
+    //raycast every second to check for objects to switch to
+    //TODO: remove invoke and only check when physics objects enter boundary
     public void Raycast()
 	{
 		RaycastHit hit;
@@ -203,6 +211,7 @@ public class PropSwitching : MonoBehaviour
 		}
 	}
 
+    //TODO: Miagrate to custom UI elements
 	public void OnGUI()
 	{
         if (isLookingAtProp) GUI.Box(new Rect(140, Screen.height - 50, Screen.width - 300, 120), "Hold Right Mouse Button to transform into "+prefabName);

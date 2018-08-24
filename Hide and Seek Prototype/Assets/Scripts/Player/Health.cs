@@ -23,6 +23,7 @@ public class Health : MonoBehaviour {
     private float currentHealth;
     private int playerID;
     private PhotonView photonView;
+    private bool deathCalled;
 
     private void Start()
     {
@@ -34,6 +35,7 @@ public class Health : MonoBehaviour {
             master = GameObject.Find("Game Controller").GetComponent<PhotonNetworkManager>();
             healthBar = healthObject.GetComponent<Image>();
             playerID = photonView.viewID;
+            deathCalled = false;
         } 
     }
 
@@ -65,19 +67,22 @@ public class Health : MonoBehaviour {
             healthBar.fillAmount -= ((float)damage / defaultHealth);
         }
 
-        if (currentHealth <= 0)
+        if (currentHealth <= 0 && !deathCalled)
             Death();
     }
 
     void Death()
     {
+        deathCalled = true;
         //Convert to ragdoll
         //Send death RPC to master client
         //Convert to flycam
         Debug.Log(transform.name +" destroyed");
         photonView.RPC("DeathEvent", PhotonTargets.All, playerID);
+        
     }
 
+    //Todo keep reference of flycam to destroy later
     [PunRPC]
     public void DeathEvent(int remoteID)
     {

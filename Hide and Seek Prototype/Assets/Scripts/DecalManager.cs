@@ -5,6 +5,7 @@ using UnityEngine;
 /// <summary>
 /// Handle decals from bullets and other damage such as melee or explosives
 /// Uses object pooling to minimise overhead
+/// To do, randomise rotation in local y space
 /// </summary>
 
 namespace HideSeek.WeaponController
@@ -38,7 +39,7 @@ namespace HideSeek.WeaponController
 
                 for (int i = 0; i < pool.size; i++)
                 {
-                    GameObject obj = Instantiate(pool.prefab, gameObject.transform.GetChild(1));
+                    GameObject obj = Instantiate(pool.prefab, new Vector3(0,0,0), Quaternion.Euler(0, Random.Range(0, 360), 0), gameObject.transform.GetChild(1));
                     obj.SetActive(false);
                     objectPool.Enqueue(obj);
                 }

@@ -10,6 +10,8 @@ using UnityEngine;
 ///TODO - Add offline mode
 /// </summary>
 
+
+
 public class PlayerNetwork : MonoBehaviour
 {
     [SerializeField] private GameObject playerCamera;
@@ -19,6 +21,7 @@ public class PlayerNetwork : MonoBehaviour
     //Head bone is connected to then, neck bone
     [SerializeField] private GameObject headBoneRoot;
 
+    private PhotonNetworkManager master;
     private PhotonView photonView;
     public AlivePlayers alivePlayers;
 
@@ -26,9 +29,10 @@ public class PlayerNetwork : MonoBehaviour
     {
         photonView = GetComponent<PhotonView>();
         GameObject alive = GameObject.Find("Alive");
+        PhotonNetworkManager master = GameObject.Find("Game Controller").GetComponent<PhotonNetworkManager>();
         //Communicate to server when we are connected and whether we are alive or dead
         //alivePlayers = alive.GetComponent<AlivePlayers>();
-        Initialise();     
+        Initialise();
     }
 
     //handle local and global objects/scripts
@@ -38,13 +42,14 @@ public class PlayerNetwork : MonoBehaviour
         {
             //Functionality for player
             this.name = "Local Player";
-
+            PhotonNetwork.playerName = PlayerPrefs.GetString("Username", "Default Name");
             //uncomment this after
             //alivePlayers.callRPC();
 
             //Shrink our head bone so we don't see it
             HideHead();
             //Debug.Log("Local Hello World from " +photonView.viewID);
+
         }
 
         //Handle functionality for other players
@@ -69,4 +74,23 @@ public class PlayerNetwork : MonoBehaviour
         Debug.Log("Hide Head Called");
         headBoneRoot.transform.localScale = new Vector3(0, 0, 0);
     }
+
+    public PhotonNetworkManager.PlayerData SendPlayerData()
+    {
+        PhotonNetworkManager.PlayerData playerData = new PhotonNetworkManager.PlayerData
+        {
+            //Will use players name as tag eventually
+            //tag = photonView.viewID.ToString(),
+            playerID = photonView.viewID,
+            playerModel = gameObject.transform.GetChild(1).gameObject,
+            weapons = gameObject.transform.GetChild(3).gameObject,
+            pistol = gameObject.transform.GetChild(3).gameObject.transform.GetChild(0).gameObject,
+            lightningGun = gameObject.transform.GetChild(3).gameObject.transform.GetChild(1).gameObject,
+            minigun = gameObject.transform.GetChild(3).gameObject.transform.GetChild(2).gameObject,
+            isAlive = true
+        };
+        return playerData;
+    }
 }
+
+
