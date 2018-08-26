@@ -25,6 +25,7 @@ ModelImporter:
     4300000: Cube
     7400000: gunbone|CubeAction
     7400002: gunbone|gunboneAction
+    7400004: gunbone|gunboneAction.002
     9500000: //RootNode
     13700000: Cube
   externalObjects: {}

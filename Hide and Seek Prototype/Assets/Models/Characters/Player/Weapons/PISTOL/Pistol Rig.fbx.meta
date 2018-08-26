@@ -11,12 +11,25 @@ ModelImporter:
     100006: Maingun
     100008: Maingun_end
     100010: //RootNode
+    100012: Armature.001
+    100014: Barrel
+    100016: Barrel_end
+    100018: Camera
+    100020: wrist.r
+    100022: wrist.r_end
     400000: Cube.001
     400002: Gunbase
     400004: gunbone
     400006: Maingun
     400008: Maingun_end
     400010: //RootNode
+    400012: Armature.001
+    400014: Barrel
+    400016: Barrel_end
+    400018: Camera
+    400020: wrist.r
+    400022: wrist.r_end
+    2000000: Camera
     2100000: Material.001
     4300000: Cube.001
     7400000: gunbone|CubeAction
