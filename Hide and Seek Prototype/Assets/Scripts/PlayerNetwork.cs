@@ -10,8 +10,6 @@ using UnityEngine;
 ///TODO - Add offline mode
 /// </summary>
 
-
-
 public class PlayerNetwork : MonoBehaviour
 {
     [SerializeField] private GameObject playerCamera;
@@ -20,6 +18,7 @@ public class PlayerNetwork : MonoBehaviour
     [SerializeField] private MonoBehaviour[] playerControlScripts;
     //Head bone is connected to then, neck bone
     [SerializeField] private GameObject headBoneRoot;
+    [SerializeField] private bool debug = false;
 
     private PhotonNetworkManager master;
     private PhotonView photonView;
@@ -29,9 +28,10 @@ public class PlayerNetwork : MonoBehaviour
     {
         photonView = GetComponent<PhotonView>();
         GameObject alive = GameObject.Find("Alive");
-        PhotonNetworkManager master = GameObject.Find("Game Controller").GetComponent<PhotonNetworkManager>();
+        master = FindObjectOfType<PhotonNetworkManager>();
         //Communicate to server when we are connected and whether we are alive or dead
-        //alivePlayers = alive.GetComponent<AlivePlayers>();
+        alivePlayers = alive.GetComponent<AlivePlayers>();
+
         Initialise();
     }
 
@@ -44,11 +44,12 @@ public class PlayerNetwork : MonoBehaviour
             this.name = "Local Player";
             PhotonNetwork.playerName = PlayerPrefs.GetString("Username", "Default Name");
             //uncomment this after
-            //alivePlayers.callRPC();
+            alivePlayers.callRPC();
 
             //Shrink our head bone so we don't see it
             HideHead();
-            //Debug.Log("Local Hello World from " +photonView.viewID);
+            if (debug)
+                    Debug.Log("Local Hello World from " +photonView.viewID);
 
         }
 
@@ -57,10 +58,12 @@ public class PlayerNetwork : MonoBehaviour
         {
             //Use Photon IDs later
             this.name = "Remote Player";
-            //Debug.Log("Remote Hello World from " +photonView.viewID);
+            if (debug)
+                Debug.Log("Remote Hello World from " +photonView.viewID);
 
             playerCamera.gameObject.SetActive(false);
             mapCamera.gameObject.SetActive(false);
+
             //like a for loop but I'm lazy - disable control scripts
             foreach (MonoBehaviour m in playerControlScripts)
             {
@@ -71,16 +74,20 @@ public class PlayerNetwork : MonoBehaviour
 
     public void HideHead()
     {
-        Debug.Log("Hide Head Called");
+        if (debug)
+            Debug.Log("Hide Head Called");
+        //Fix head scale, needs deprecating
         headBoneRoot.transform.localScale = new Vector3(0, 0, 0);
     }
 
     public PhotonNetworkManager.PlayerData SendPlayerData()
     {
+        
         PhotonNetworkManager.PlayerData playerData = new PhotonNetworkManager.PlayerData
         {
             //Will use players name as tag eventually
-            //tag = photonView.viewID.ToString(),
+            /*
+            tag = photonView.viewID.ToString(),
             playerID = photonView.viewID,
             playerModel = gameObject.transform.GetChild(1).gameObject,
             weapons = gameObject.transform.GetChild(3).gameObject,
@@ -88,6 +95,7 @@ public class PlayerNetwork : MonoBehaviour
             lightningGun = gameObject.transform.GetChild(3).gameObject.transform.GetChild(1).gameObject,
             minigun = gameObject.transform.GetChild(3).gameObject.transform.GetChild(2).gameObject,
             isAlive = true
+            */
         };
         return playerData;
     }

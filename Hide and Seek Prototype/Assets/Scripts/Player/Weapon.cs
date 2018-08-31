@@ -17,7 +17,7 @@ namespace HideSeek.WeaponController
         public int remainingClip;
         public int ammo;
         public float reloadTime;
-        public bool canFire = true, isEquipped = false, crosshair = true;
+        public bool canFire = true, isEquipped = false, crosshair = true, needWarmUp = false;
         //Audio arrays containing our related audio files
         public AudioClip[] emptyFX;
         public AudioClip[] reloadFX;

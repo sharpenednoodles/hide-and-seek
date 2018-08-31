@@ -4,6 +4,7 @@
  * Created by Dion Drake
  * Created: 20/08/18
 */
+/*
 
 using System.Collections;
 using System.Collections.Generic;
@@ -39,7 +40,7 @@ public GameObject boundarySphere;
 		}
 		roundTime -= Time.deltaTime;
 		//z1.Play ("Doorbone|Doorbone Action");
-        */
+        
 	}
 
 	public void FixedUpdate()
@@ -58,7 +59,7 @@ public GameObject boundarySphere;
 				}
 			}
 		}
-        */
+        
 	}
 
 	public void shutZone()
@@ -91,7 +92,8 @@ public GameObject boundarySphere;
 			string seconds = Mathf.Floor(TimeLeft % 60).ToString("00");
 			GUI.Box (new Rect (140, Screen.height - 50, Screen.width - 300, 120), "Return to game area in " + seconds + " seconds");
 		}
-        */
+        
     }
 
 }
+*/

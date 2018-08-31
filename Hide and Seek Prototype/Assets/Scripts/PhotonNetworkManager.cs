@@ -8,9 +8,9 @@ using UnityEngine.UI;
 /// </summary>
 /// 
 
-
 public class PhotonNetworkManager : Photon.MonoBehaviour
 {
+    const int ZONE_COUNT = 4;
     private PlayerNetwork local;
     //experimental
     [System.Serializable]
@@ -32,6 +32,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     //An array of spawn points for players to randomly spawn at
     [SerializeField] Transform[] spawnPoints;
     [SerializeField] GameObject joinCam;
+
+    //TEMP
     PlayerData playa;
 
     //Time Declerations
@@ -43,14 +45,19 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     [SerializeField] int minZ = -25;
     [SerializeField] int maxZ = 25;
     //Enter Game version here, this is to prevent different versions from connecting to the same servers
-    static public string gameVersion = "Sprint 2 Week 3";
+    static public string gameVersion = "Sprint 3 Week 1";
     
     public bool offlineMode = false, debug = true, useSpawnPoint = false;
     private Text debugFeed;
     [Header("Game Stats")]
     public int[] alivePlayersList, connectedPlayersList, deadPlayersList;
     public int alivePlayers, connectedPlayers, deadPlayers;
-    public enum gameState
+
+    [Header("Timer Settings")]
+    [Tooltip("Specify the length of events in minutes")]
+    [SerializeField] private float warmUpTime;
+    [SerializeField] private float roundTime;
+    public enum GameState
     {
         warmUp,
         ///<Sumary>
@@ -71,12 +78,15 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         /// </summary>
     }
 
+    private GameState currentState = GameState.warmUp;
+
     // Use this for initialization
     void Start()
     {
         PhotonNetwork.offlineMode = offlineMode;
         debugFeed = GameObject.Find("Debug Feed").GetComponent<Text>();
         playerData = new Dictionary<int, PlayerData>();
+        
 
         if (PhotonNetwork.offlineMode == true)
         {
@@ -91,7 +101,6 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
 
     }
 
-
     //To do, migrate this to another scene before hand
     public virtual void OnConnectedToMaster()
     {
@@ -102,11 +111,11 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
 
     public virtual void OnJoinedRoom()
     {
-
         SpawnPlayer();
-        
+        GetGameState();
+        StartCoroutine(EventTimer(warmUpTime, currentState));
+        //photonView.RPC("GetGameState", PhotonTargets.AllBufferedViaServer);
     }
-
 
     // Update is called once per frame
     void Update()
@@ -115,7 +124,46 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         connectText.text = PhotonNetwork.connectionStateDetailed.ToString();
         //Remove this before final build
         gameTimer += Time.deltaTime;
+    }
 
+    private void GetGameState()
+    {
+        if (PhotonNetwork.isMasterClient)
+        {
+            debugFeed.color = Color.red;
+            Debug.Log("Sending Gamestate as " + currentState);
+            int sendState = (int)currentState;
+            if (photonView == null)
+                Debug.LogError("Photon View missing on master object");
+            else
+            photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, sendState);
+            //StartCoroutine(EventTimer(warmUpTime, currentState));
+        }
+        else
+        {
+            Debug.Log("Recieving Gamestate from master");
+        }
+    }
+
+    [PunRPC]
+    private void SetGameState(int gameStateInt)
+    {
+        //Cast from int to enum
+        currentState = (GameState)gameStateInt;
+        Debug.Log("Recieving Gamestate from master as " + currentState);
+        //thing to call appropriate function for game states
+        switch(currentState)
+        {
+            case GameState.warmUp:
+                debugFeed.text = ("Now Warming Up");
+                break;
+            case GameState.roundStart:
+                debugFeed.text = ("The game has started");
+                break;
+            case GameState.matchEnd:
+                debugFeed.text = ("The round has now ended");
+                break;
+        }
     }
 
     //Announce player death
@@ -136,6 +184,40 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         SpawnPlayer();
     }
 
+    //Events timers
+    private IEnumerator EventTimer(float time, GameState game)
+    {
+        //convert to seconds
+        time *= 60;
+        yield return new WaitForSeconds(time);
+
+        //call helper function with parameters
+        switch (game)
+        {
+            case GameState.warmUp:
+                Debug.Log("Event Timer: warm up");
+                break;
+
+            case GameState.roundStart:
+                Debug.Log("Event Timer: round start");
+                break;
+
+            case GameState.roundEnd:
+                Debug.Log("Event Timer: round end");
+                break;
+
+            case GameState.matchEnd:
+                Debug.Log("Event Timer: match end");
+                break;
+        }
+
+    }
+
+    private void ZoneCloseEvents(GameState game)
+    {
+        
+    }
+
     public void SpawnPlayer()
     {
         //Old spawn method, to be migrated to spawn points
@@ -154,7 +236,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
             Debug.Log("Spawned at " + randX + ",5," + randZ + " with rotation " + randYRot);
 
         local = playerRef.GetComponent<PlayerNetwork>();
-        RecieveData();
+        //RecieveData();
     }
 
     //Announce player variables to the master client

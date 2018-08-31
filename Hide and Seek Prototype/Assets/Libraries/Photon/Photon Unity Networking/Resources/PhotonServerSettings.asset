@@ -52,4 +52,5 @@ MonoBehaviour:
   - SyncWeapon
   - SyncShot
   - SpawnDecal
+  - SetGameState
   DisableAutoOpenWizard: 1
