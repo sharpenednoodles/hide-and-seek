@@ -2807,7 +2807,7 @@ Camera:
   m_AllowMSAA: 0
   m_AllowDynamicResolution: 1
   m_ForceIntoRT: 0
-  m_OcclusionCulling: 1
+  m_OcclusionCulling: 0
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
 --- !u!20 &20575458275945978
@@ -3457,6 +3457,7 @@ MonoBehaviour:
   playerControlScripts:
   - {fileID: 114277594435014724}
   headBoneRoot: {fileID: 1271651156128032}
+  debug: 0
   alivePlayers: {fileID: 0}
 --- !u!114 &114725445436233664
 MonoBehaviour:
@@ -3479,7 +3480,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1489794405599428}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
   m_Name: 
@@ -3529,6 +3530,7 @@ MonoBehaviour:
     canFire: 1
     isEquipped: 0
     crosshair: 0
+    needWarmUp: 0
     emptyFX: []
     reloadFX: []
     fireFX: []
@@ -3547,6 +3549,7 @@ MonoBehaviour:
     canFire: 1
     isEquipped: 0
     crosshair: 1
+    needWarmUp: 0
     emptyFX:
     - {fileID: 8300000, guid: 152c5da8d5bc16345859678cb8daa80c, type: 3}
     reloadFX:
@@ -3571,6 +3574,7 @@ MonoBehaviour:
     canFire: 1
     isEquipped: 0
     crosshair: 1
+    needWarmUp: 0
     emptyFX: []
     reloadFX: []
     fireFX: []
@@ -3589,6 +3593,7 @@ MonoBehaviour:
     canFire: 1
     isEquipped: 0
     crosshair: 1
+    needWarmUp: 0
     emptyFX:
     - {fileID: 8300000, guid: 4c6aef64f25bcca4fa99c1e641523f44, type: 3}
     reloadFX:
@@ -3615,6 +3620,7 @@ MonoBehaviour:
     canFire: 1
     isEquipped: 0
     crosshair: 1
+    needWarmUp: 0
     emptyFX: []
     reloadFX: []
     fireFX: []
