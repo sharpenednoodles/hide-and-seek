@@ -1,25 +1,16 @@
 fileFormatVersion: 2
-guid: f6f8cda78ea136540b9ff710f51b6ed3
+guid: 404259abed10ab940881a5e6fcf7138c
+timeCreated: 1537432745
+licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Camera
-    100004: Cylinder
-    100006: Lamp
     400000: //RootNode
-    400002: Camera
-    400004: Cylinder
-    400006: Lamp
-    2000000: Camera
-    2100000: Material.001
-    2300000: Cylinder
-    2300002: //RootNode
-    3300000: Cylinder
-    3300002: //RootNode
-    4300000: Cylinder
-    9500000: //RootNode
-    10800000: Lamp
+    2100000: Material
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: Cube
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -94,7 +85,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
