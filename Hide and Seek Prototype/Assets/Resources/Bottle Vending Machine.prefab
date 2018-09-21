@@ -22,9 +22,9 @@ GameObject:
   - component: {fileID: 33218503571016162}
   - component: {fileID: 23176108162184028}
   - component: {fileID: 54175735850056312}
-  - component: {fileID: 65934176396798170}
   - component: {fileID: 114013906313936138}
   - component: {fileID: 114178018412738222}
+  - component: {fileID: 65244231440493364}
   m_Layer: 0
   m_Name: Bottle Vending Machine
   m_TagString: Prop
@@ -38,13 +38,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1485615135316830}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0, y: 1.6912646, z: -0.025523314}
-  m_LocalScale: {x: 54.99376, y: 90.39331, z: 159.54509}
+  m_LocalRotation: {x: -0, y: 0.7072302, z: 0.7069834, w: 0}
+  m_LocalPosition: {x: -1.601, y: 0.05, z: -95.16522}
+  m_LocalScale: {x: 54.993805, y: 90.393326, z: 159.54512}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
 --- !u!23 &23176108162184028
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -85,7 +85,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1485615135316830}
-  m_Mesh: {fileID: 4300000, guid: 785194f8d03bf498386b7cc104f12d49, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 58976ca6da8c94df3acdd4900830a398, type: 3}
 --- !u!54 &54175735850056312
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -101,7 +101,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &65934176396798170
+--- !u!65 &65244231440493364
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -111,8 +111,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.020000007, y: 0.020000005, z: 0.020568227}
-  m_Center: {x: -4.656613e-10, y: -9.313224e-10, z: -0.00028411436}
+  m_Size: {x: 0.020000016, y: 0.020000016, z: 0.020568231}
+  m_Center: {x: -4.656615e-10, y: -0.0000000041799733, z: 0.010293508}
 --- !u!114 &114013906313936138
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2651f42dcc05b94a98d0f51870e1196, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabName: Blue Vending Machine
+  prefabName: Bottle Vending Machine
   healthMult: 0
 --- !u!114 &114178018412738222
 MonoBehaviour:
@@ -148,7 +148,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 0}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 124
+  instantiationId: 124
   currentMasterID: -1
   isRuntimeInstantiated: 0
