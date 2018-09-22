@@ -96,7 +96,6 @@ public class Health : MonoBehaviour {
             //Not working for whatever reason
             //GameObject flycam = (GameObject)Instantiate(Resources.Load("Flycam"), pos);
             GameObject flycam = (GameObject)Instantiate(Resources.Load("Flycam"));
-
         }
         else
         {
