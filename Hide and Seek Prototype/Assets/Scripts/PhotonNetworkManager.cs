@@ -181,6 +181,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     private IEnumerator RespawnTest()
     {
         yield return new WaitForSeconds(5);
+		joinCam.SetActive(false);
         SpawnPlayer();
     }
 

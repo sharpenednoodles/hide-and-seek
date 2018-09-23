@@ -79,7 +79,6 @@ public class Health : MonoBehaviour {
         //Convert to flycam
         Debug.Log(transform.name +" destroyed");
         photonView.RPC("DeathEvent", PhotonTargets.All, playerID);
-        
     }
 
     //Todo keep reference of flycam to destroy later
