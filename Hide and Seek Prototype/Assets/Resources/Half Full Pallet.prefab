@@ -22,10 +22,9 @@ GameObject:
   - component: {fileID: 33968113282936772}
   - component: {fileID: 23011087522080062}
   - component: {fileID: 54713063520128838}
-  - component: {fileID: 114614046118759712}
-  - component: {fileID: 65917680760737830}
   - component: {fileID: 114666277200347538}
   - component: {fileID: 114852671810413468}
+  - component: {fileID: 64600137316305628}
   m_Layer: 0
   m_Name: Half Full Pallet
   m_TagString: Prop
@@ -102,8 +101,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &65917680760737830
-BoxCollider:
+--- !u!64 &64600137316305628
+MeshCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -111,22 +110,11 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.019289099, y: 0.019422172, z: 0.007940998}
-  m_Center: {x: -0.00000006146729, y: 9.313228e-10, z: 0.0039764997}
---- !u!114 &114614046118759712
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1844801007110744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2651f42dcc05b94a98d0f51870e1196, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabName: 
-  healthMult: 0
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300000, guid: 770012723b98ddc459076d938798a6d1, type: 3}
 --- !u!114 &114666277200347538
 MonoBehaviour:
   m_ObjectHideFlags: 1

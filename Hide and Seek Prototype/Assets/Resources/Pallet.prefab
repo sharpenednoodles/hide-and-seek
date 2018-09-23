@@ -22,9 +22,9 @@ GameObject:
   - component: {fileID: 33379467846445504}
   - component: {fileID: 23707233143276480}
   - component: {fileID: 54356352341960470}
-  - component: {fileID: 65438797504678936}
   - component: {fileID: 114055124179732268}
   - component: {fileID: 114512450017403228}
+  - component: {fileID: 65433536084541232}
   m_Layer: 0
   m_Name: Pallet
   m_TagString: Prop
@@ -38,13 +38,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1462016563637414}
-  m_LocalRotation: {x: 0, y: -0.9848078, z: -0.17364809, w: 0}
-  m_LocalPosition: {x: 66.808, y: -6.33, z: -47.51}
+  m_LocalRotation: {x: -0.12600736, y: -0.6776127, z: -0.11948135, w: 0.714624}
+  m_LocalPosition: {x: 80.133, y: 1.0103519, z: -37.453}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 200, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 200, y: 93.046, z: 180}
 --- !u!23 &23707233143276480
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -101,7 +101,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &65438797504678936
+--- !u!65 &65433536084541232
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -111,8 +111,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.019289099, y: 0.019422174, z: 0.002808001}
-  m_Center: {x: -0.0000000018626451, y: -0.00000001591593, z: 0.0014000002}
+  m_Size: {x: 0.0192891, y: 0.019422177, z: 0.0028080018}
+  m_Center: {x: -0.0000000018417837, y: -9.714162e-10, z: 0.0013999406}
 --- !u!114 &114055124179732268
 MonoBehaviour:
   m_ObjectHideFlags: 1
