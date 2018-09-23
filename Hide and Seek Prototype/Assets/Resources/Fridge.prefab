@@ -21,10 +21,10 @@ GameObject:
   - component: {fileID: 4712675509115872}
   - component: {fileID: 33913488243562918}
   - component: {fileID: 23078552711035332}
-  - component: {fileID: 54534314896805068}
-  - component: {fileID: 65958092870620222}
-  - component: {fileID: 114076646973150614}
-  - component: {fileID: 114480436041553704}
+  - component: {fileID: 114809798519195780}
+  - component: {fileID: 114193299561300164}
+  - component: {fileID: 54623933881339372}
+  - component: {fileID: 65457115091811382}
   m_Layer: 0
   m_Name: Fridge
   m_TagString: Prop
@@ -85,8 +85,8 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1633225504814360}
-  m_Mesh: {fileID: 4300000, guid: 051061155ebc51b458397f6d32397ef6, type: 3}
---- !u!54 &54534314896805068
+  m_Mesh: {fileID: 4300000, guid: 6ff68b10fe3c6434b871f97305fd4f61, type: 3}
+--- !u!54 &54623933881339372
 Rigidbody:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -101,7 +101,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &65958092870620222
+--- !u!65 &65457115091811382
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -112,8 +112,8 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.011745678, y: 0.011653702, z: 0.020890567}
-  m_Center: {x: 0.005673117, y: 0.004364313, z: 0.0051073493}
---- !u!114 &114076646973150614
+  m_Center: {x: -0.00059506204, y: 0.0001498046, z: 0.010880878}
+--- !u!114 &114193299561300164
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -126,7 +126,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabName: Fridge
   healthMult: 0
---- !u!114 &114480436041553704
+--- !u!114 &114809798519195780
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
