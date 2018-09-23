@@ -151,7 +151,7 @@ public class PropSwitching : MonoBehaviour
             
             //newItem = PhotonNetwork.Instantiate(aimedAt.name, playerModel.transform.position, aimedAt.transform.rotation, 0);
             //Todo - Calculate appropriate y height vaule here (or just read in from a script)
-            newItem = PhotonNetwork.Instantiate(prefabName, playerModel.transform.position, aimedAt.transform.rotation, 0);
+			newItem = PhotonNetwork.Instantiate(prefabName, playerModel.transform.position, aimedAt.transform.rotation, 0); //This should always be upright - otherwise origin point leads model to be underground if prop upside down
             newPropID = newItem.GetComponent<PhotonView>().viewID;
             
             newItem.transform.parent = transform;
