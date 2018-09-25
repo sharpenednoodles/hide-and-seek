@@ -62,6 +62,7 @@ namespace HideSeek.WeaponController
             laserDebug = GetComponent<LineRenderer>();
 
             //DISABLE ALL WEAPONS INITIALLY
+            unarmed.model.SetActive(true);
             minigun.model.SetActive(false);
             lightningGun.model.SetActive(false);
             pistol.model.SetActive(false);
@@ -366,7 +367,7 @@ namespace HideSeek.WeaponController
             weaponAnim.SetInteger("weaponType", (int)currentID);
             playerAnim.SetInteger("weaponType", (int)currentID);
 
-            //unarmed.model.SetActive(false);
+            unarmed.model.SetActive(false);
             minigun.model.SetActive(false);
             lightningGun.model.SetActive(false);
             pistol.model.SetActive(false);
@@ -375,7 +376,7 @@ namespace HideSeek.WeaponController
             switch (currentID)
             {
                 case Weapon.ID.unarmed:
-                    //unarmed.model.SetActive(true);
+                    unarmed.model.SetActive(true);
                     currWeapon = unarmed;
                     break;
                 case Weapon.ID.pistol:
@@ -413,12 +414,12 @@ namespace HideSeek.WeaponController
             remotePlayer = PhotonView.Find(playerID).gameObject;
             remoteWeapon = remotePlayer.transform.GetChild(3).gameObject;
 
-            //remoteUnArmed = remoteWeapon.transform.GetChild(0).gameObject;
-            remotePistol = remoteWeapon.transform.GetChild(0).gameObject;
-            remoteLightningGun = remoteWeapon.transform.GetChild(1).gameObject;
-            remoteMinigun = remoteWeapon.transform.GetChild(2).gameObject;
+            remoteUnArmed = remoteWeapon.transform.GetChild(1).gameObject;
+            remotePistol = remoteWeapon.transform.GetChild(2).gameObject;
+            remoteLightningGun = remoteWeapon.transform.GetChild(3).gameObject;
+            remoteMinigun = remoteWeapon.transform.GetChild(4).gameObject;
 
-            //remoteUnArmed.SetActive(false);
+            remoteUnArmed.SetActive(false);
             remotePistol.SetActive(false);
             remoteLightningGun.SetActive(false);
             remoteMinigun.SetActive(false);
@@ -426,7 +427,7 @@ namespace HideSeek.WeaponController
             switch (currentID)
             {
                 case Weapon.ID.unarmed:
-                    //remoteUnArmed.SetActive(true);
+                    remoteUnArmed.SetActive(true);
                     break;
                 case Weapon.ID.pistol:
                     remotePistol.SetActive(true);
