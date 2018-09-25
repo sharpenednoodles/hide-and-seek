@@ -2362,7 +2362,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1532786540187302}
   m_LocalRotation: {x: -0, y: -0.99894685, z: -0, w: -0.045883648}
-  m_LocalPosition: {x: 75.28124, y: 12.09773, z: -51.50217}
+  m_LocalPosition: {x: -78.32608, y: 7.88988, z: 73.350044}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4259262820854922}
@@ -3581,12 +3581,12 @@ Animator:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1631379243699184}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 9000000, guid: d4e0046eb88613347b79f362e554db70, type: 3}
   m_Controller: {fileID: 9100000, guid: 0f08e1457f5eafb48bebe565c8797eba, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
@@ -4079,7 +4079,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unarmed:
     model: {fileID: 1786243747256936}
-    fireOrigin: {fileID: 0}
+    fireOrigin: {fileID: 1299378489118704}
     fireRate: 0.5
     fireRange: 1
     damage: 1
