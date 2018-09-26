@@ -2362,7 +2362,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1532786540187302}
   m_LocalRotation: {x: -0, y: -0.99894685, z: -0, w: -0.045883648}
-  m_LocalPosition: {x: 75.69417, y: 10.097729, z: -40.78112}
+  m_LocalPosition: {x: 76.33453, y: 10.097729, z: -50.97341}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4259262820854922}
@@ -4080,7 +4080,7 @@ MonoBehaviour:
   unarmed:
     model: {fileID: 1786243747256936}
     fireOrigin: {fileID: 1299378489118704}
-    fireRate: 0.75
+    fireRate: 1
     fireRange: 3
     damage: 15
     impactForce: 500
@@ -4097,7 +4097,7 @@ MonoBehaviour:
     reloadFX: []
     fireFX:
     - {fileID: 8300000, guid: a078921276259d2429a82e99f5e208d9, type: 3}
-    damageDecals: Default Bullethole
+    damageDecals: 
   pistol:
     model: {fileID: 1965825449304838}
     fireOrigin: {fileID: 1500277326589812}
