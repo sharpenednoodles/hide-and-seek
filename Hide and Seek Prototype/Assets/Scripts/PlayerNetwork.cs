@@ -19,19 +19,17 @@ public class PlayerNetwork : MonoBehaviour
     //Head bone is connected to then, neck bone
     [SerializeField] private GameObject headBoneRoot;
     [SerializeField] private bool debug = false;
+    public int viewID;
 
     private PhotonNetworkManager master;
     private PhotonView photonView;
-    public AlivePlayers alivePlayers;
+    
 
     private void Start()
     {
         photonView = GetComponent<PhotonView>();
-        GameObject alive = GameObject.Find("Alive");
         master = FindObjectOfType<PhotonNetworkManager>();
-        //Communicate to server when we are connected and whether we are alive or dead
-        alivePlayers = alive.GetComponent<AlivePlayers>();
-
+        
         Initialise();
     }
 
@@ -43,13 +41,12 @@ public class PlayerNetwork : MonoBehaviour
             //Functionality for player
             this.name = "Local Player";
             PhotonNetwork.playerName = PlayerPrefs.GetString("Username", "Default Name");
-            //uncomment this after
-            alivePlayers.callRPC();
-
+            viewID = photonView.viewID;
             //Shrink our head bone so we don't see it
+            //TODO - Switch to selective renderer
             HideHead();
-            if (debug)
-                    Debug.Log("Local Hello World from " +photonView.viewID);
+            //if (debug)
+                    //Debug.Log("Local Hello World from " +photonView.viewID);
 
         }
 
@@ -58,8 +55,8 @@ public class PlayerNetwork : MonoBehaviour
         {
             //Use Photon IDs later
             this.name = "Remote Player";
-            if (debug)
-                Debug.Log("Remote Hello World from " +photonView.viewID);
+            //if (debug)
+                //Debug.Log("Remote Hello World from " +photonView.viewID);
 
             playerCamera.gameObject.SetActive(false);
             mapCamera.gameObject.SetActive(false);
@@ -80,13 +77,14 @@ public class PlayerNetwork : MonoBehaviour
         headBoneRoot.transform.localScale = new Vector3(0, 0, 0);
     }
 
+    //DEPRECATED
+    /*
     public PhotonNetworkManager.PlayerData SendPlayerData()
     {
         
         PhotonNetworkManager.PlayerData playerData = new PhotonNetworkManager.PlayerData
         {
             //Will use players name as tag eventually
-            /*
             tag = photonView.viewID.ToString(),
             playerID = photonView.viewID,
             playerModel = gameObject.transform.GetChild(1).gameObject,
@@ -95,10 +93,11 @@ public class PlayerNetwork : MonoBehaviour
             lightningGun = gameObject.transform.GetChild(3).gameObject.transform.GetChild(1).gameObject,
             minigun = gameObject.transform.GetChild(3).gameObject.transform.GetChild(2).gameObject,
             isAlive = true
-            */
+            
         };
         return playerData;
     }
+    */
 }
 
 

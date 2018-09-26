@@ -17,6 +17,8 @@ namespace HideSeek.WeaponController
         public float reloadTime = 10;
         public AudioClip[] soundEffects;
         */
+        [Tooltip("The amount of time before the weapon will begin to fire")]
+        public float warmUpTime;
         public AudioClip[] warmUpFX;
         public AudioClip[] coolDownFX;
 

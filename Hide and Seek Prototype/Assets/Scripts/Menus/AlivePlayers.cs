@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/// DEPRECATED
 /// <summary>
 /// This is for release 1
-/// Doesn't do much, actually it's a fucking joke
 /// 
 ///Will just set the amount of alive players to the canvas to show how many players are "alive"
 ///

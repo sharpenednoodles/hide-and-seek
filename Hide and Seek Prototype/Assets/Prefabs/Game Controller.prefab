@@ -11,6 +11,21 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1416747191704774}
   m_IsPrefabParent: 1
+--- !u!1 &1412500389856504
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4474640715763768}
+  m_Layer: 0
+  m_Name: Decals
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1416747191704774
 GameObject:
   m_ObjectHideFlags: 0
@@ -20,6 +35,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4270860436875072}
   - component: {fileID: 114186565316325616}
+  - component: {fileID: 114085134793327570}
+  - component: {fileID: 114189194711910234}
   m_Layer: 0
   m_Name: Game Controller
   m_TagString: Untagged
@@ -57,8 +74,22 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4487297695619270}
+  - {fileID: 4474640715763768}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4474640715763768
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1412500389856504}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4270860436875072}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4487297695619270
 Transform:
@@ -116,6 +147,21 @@ AudioListener:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1873005461207618}
   m_Enabled: 1
+--- !u!114 &114085134793327570
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1416747191704774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 112b807f260779f4785b2dcb90005ec6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pools:
+  - tag: Default Bullethole
+    prefab: {fileID: 1520749851710214, guid: 5548db2517d40404494334b9fbd0fc01, type: 2}
+    size: 150
 --- !u!114 &114186565316325616
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -129,12 +175,77 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   connectText: {fileID: 0}
   player: {fileID: 1532786540187302, guid: 84e28e3982107094d9b7558a8a4ca9d6, type: 2}
-  spawnPoint: {fileID: 0}
   joinCam: {fileID: 1873005461207618}
+  eventContentFeed: {fileID: 0}
+  eventListPrefab: {fileID: 1113056332421002, guid: 74cc676b5dadf4d4cba0b613e4000e72,
+    type: 2}
+  eventListPrefabShort: {fileID: 1077975219394610, guid: dc0e556ca49c56d44b24cf854cad57fc,
+    type: 2}
+  useSpawnPoints: 1
+  spawnPoints:
+  - tag: Retail
+    SpawnPointArray:
+    - {fileID: 0}
+    - {fileID: 0}
+  - tag: Warehouse
+    SpawnPointArray:
+    - {fileID: 0}
+    - {fileID: 0}
+  - tag: Residential
+    SpawnPointArray:
+    - {fileID: 0}
+  - tag: Park
+    SpawnPointArray:
+    - {fileID: 0}
+  - tag: Maintenance
+    SpawnPointArray:
+    - {fileID: 0}
   minX: 2
   maxX: 76
   minZ: -92
   maxZ: -4
+  offlineMode: 0
+  debug: 1
+  alivePlayersList: []
+  connectedPlayersList: []
+  deadPlayersList: []
+  alivePlayers: 0
+  connectedPlayers: 0
+  deadPlayers: 0
+  currentID: 0
+  statusBoard: {fileID: 0}
+  statusContentFeed: {fileID: 0}
+  scoreListItem: {fileID: 0}
+  aliveDisplay: {fileID: 0}
+  connectedDisplay: {fileID: 0}
+  warmUpTime: 1
+  roundTime: 1
+--- !u!114 &114189194711910234
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1416747191704774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  OwnerShipWasTransfered: 0
+  prefixBackup: -1
+  synchronization: 0
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  currentMasterID: -1
+  isRuntimeInstantiated: 0
 --- !u!114 &114524407865895178
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -53,4 +53,8 @@ MonoBehaviour:
   - SyncShot
   - SpawnDecal
   - SetGameState
+  - AnnounceNextZone
+  - PerformSpawn
+  - RequestSpawn
+  - ToggleZone
   DisableAutoOpenWizard: 1

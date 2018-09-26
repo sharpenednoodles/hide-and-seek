@@ -34,8 +34,9 @@ public class Health : MonoBehaviour {
             healthObject = GameObject.Find("Health Bar");
             master = GameObject.Find("Game Controller").GetComponent<PhotonNetworkManager>();
             healthBar = healthObject.GetComponent<Image>();
-            playerID = photonView.viewID;
+            playerID = master.currentID;
             deathCalled = false;
+            healthBar.fillAmount = 100;
         } 
     }
 
@@ -55,6 +56,13 @@ public class Health : MonoBehaviour {
         photonView.RPC("TakeDamage", PhotonTargets.All, damage);
     }
 
+    //Call to refresh players GUI health on respawn
+    //Only call on player objects!
+    public void RefreshHealth()
+    {
+        healthBar.fillAmount = 100;
+    }
+
     [PunRPC]
     public void TakeDamage(int damage)
     {
@@ -68,24 +76,30 @@ public class Health : MonoBehaviour {
         }
 
         if (currentHealth <= 0 && !deathCalled)
+        {
+            deathCalled = true;
             Death();
+        }
+            
     }
 
     void Death()
     {
-        deathCalled = true;
         //Convert to ragdoll
         //Send death RPC to master client
         //Convert to flycam
         Debug.Log(transform.name +" destroyed");
-        photonView.RPC("DeathEvent", PhotonTargets.All, playerID);
+        //photonView.RPC("DeathEvent", PhotonTargets.All, playerID);
+
+        master.SetGameStateRemote(0, (byte)PhotonNetworkManager.EventType.playerDeath);
     }
 
+    //DEPRECATED
     //Todo keep reference of flycam to destroy later
     [PunRPC]
     public void DeathEvent(int remoteID)
     {
-        master.PlayerDeath(remoteID);
+        master.SetGameStateRemote(0, (byte)PhotonNetworkManager.EventType.playerDeath);
         if (photonView.isMine)
         {
             Transform pos = gameObject.transform;
@@ -95,6 +109,7 @@ public class Health : MonoBehaviour {
             //Not working for whatever reason
             //GameObject flycam = (GameObject)Instantiate(Resources.Load("Flycam"), pos);
             GameObject flycam = (GameObject)Instantiate(Resources.Load("Flycam"));
+
         }
         else
         {

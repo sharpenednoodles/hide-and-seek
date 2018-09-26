@@ -55,8 +55,6 @@ public class PropSwitching : MonoBehaviour
         }
 
         if (isLookingAtProp) {
-			propInfo = aimedAt.GetComponent<PropInfo>();
-			prefabName = propInfo.prefabName;
             if (Input.GetMouseButton(1))
             {
                 holdTime += Time.deltaTime;
@@ -64,6 +62,8 @@ public class PropSwitching : MonoBehaviour
                 
 
                 //Turning this off for release 1
+                propInfo = aimedAt.GetComponent<PropInfo>();
+                prefabName = propInfo.prefabName;
             }
             else holdTime = 0;
 
@@ -95,6 +95,11 @@ public class PropSwitching : MonoBehaviour
 
 
             newRemoteItem.transform.parent = transform;
+            //If no rigidbody, add one
+            if (newRemoteItem.GetComponent<Rigidbody>() == null)
+            {
+                newRemoteItem.AddComponent<Rigidbody>();
+            }
 
             Rigidbody rb = newRemoteItem.GetComponent<Rigidbody>();
             rb.isKinematic = true;
@@ -128,9 +133,14 @@ public class PropSwitching : MonoBehaviour
                 Debug.Log("Local Player is transforming into another prop from " +photonView.viewID);
 
             PhotonNetwork.Destroy(prop);
-            newItem = Instantiate(aimedAt, playerModel.transform.position, aimedAt.transform.rotation);
+            newItem = Instantiate(aimedAt, playerModel.transform.position, Quaternion.Euler(-90, aimedAt.transform.rotation.y, 0));
 
             newItem.transform.parent = transform;
+            //If no rigidbody, add one
+            if (newItem.GetComponent<Rigidbody>() == null)
+            {
+                newItem.AddComponent<Rigidbody>();
+            }
             Rigidbody rb = newItem.GetComponent<Rigidbody>();
             
             rb.isKinematic = true;
@@ -151,7 +161,7 @@ public class PropSwitching : MonoBehaviour
             
             //newItem = PhotonNetwork.Instantiate(aimedAt.name, playerModel.transform.position, aimedAt.transform.rotation, 0);
             //Todo - Calculate appropriate y height vaule here (or just read in from a script)
-			newItem = PhotonNetwork.Instantiate(prefabName, playerModel.transform.position, aimedAt.transform.rotation, 0); //This should always be upright - otherwise origin point leads model to be underground if prop upside down
+            newItem = PhotonNetwork.Instantiate(prefabName, playerModel.transform.position, Quaternion.Euler(-90, aimedAt.transform.rotation.y, 0), 0);
             newPropID = newItem.GetComponent<PhotonView>().viewID;
             
             newItem.transform.parent = transform;
@@ -214,7 +224,7 @@ public class PropSwitching : MonoBehaviour
     //TODO: Miagrate to custom UI elements
 	public void OnGUI()
 	{
-		if (isLookingAtProp) GUI.Box(new Rect(140, Screen.height - 50, Screen.width - 300, 120), "Hold Right Mouse Button to transform into "+ propInfo.prefabName);
+        if (isLookingAtProp) GUI.Box(new Rect(140, Screen.height - 50, Screen.width - 300, 120), "Hold Right Mouse Button to transform into "+prefabName);
 	}
 
     //function to terminate all invoking methods
