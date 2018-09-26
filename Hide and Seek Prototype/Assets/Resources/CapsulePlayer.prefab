@@ -2362,7 +2362,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1532786540187302}
   m_LocalRotation: {x: -0, y: -0.99894685, z: -0, w: -0.045883648}
-  m_LocalPosition: {x: -78.32608, y: 7.88988, z: 73.350044}
+  m_LocalPosition: {x: 76.28265, y: 12.09773, z: -51.88718}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4259262820854922}
@@ -3581,7 +3581,7 @@ Animator:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1631379243699184}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: d4e0046eb88613347b79f362e554db70, type: 3}
   m_Controller: {fileID: 9100000, guid: 0f08e1457f5eafb48bebe565c8797eba, type: 2}
   m_CullingMode: 0
@@ -3649,8 +3649,8 @@ Animator:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1534975876664816}
-  m_Enabled: 0
-  m_Avatar: {fileID: 9000000, guid: d4e0046eb88613347b79f362e554db70, type: 3}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 93aea5af8675e3046b0ece7d2942c1f9, type: 3}
   m_Controller: {fileID: 9100000, guid: 0f08e1457f5eafb48bebe565c8797eba, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
@@ -3767,7 +3767,7 @@ MonoBehaviour:
     YSensitivity: 2
     clampVerticalRotation: 1
     MinimumX: -90
-    MaximumX: 90
+    MaximumX: 70
     smooth: 0
     smoothTime: 5
     lockCursor: 1
@@ -4080,21 +4080,24 @@ MonoBehaviour:
   unarmed:
     model: {fileID: 1786243747256936}
     fireOrigin: {fileID: 1299378489118704}
-    fireRate: 0.5
-    fireRange: 1
-    damage: 1
+    fireRate: 0.75
+    fireRange: 3
+    damage: 15
     impactForce: 500
-    clipSize: -1
-    remainingClip: -1
-    ammo: -1
+    clipSize: 10000
+    remainingClip: 0
+    ammo: 10000
     reloadTime: 0
     canFire: 1
-    isEquipped: 0
+    isEquipped: 1
     crosshair: 0
     needWarmUp: 0
-    emptyFX: []
-    reloadFX: []
-    fireFX: []
+    emptyFX:
+    - {fileID: 8300000, guid: b760809e959114c4cbc5c47ef9036abf, type: 3}
+    reloadFX:
+    - {fileID: 8300000, guid: b3aeb2cfa616c024db8ecec28f820b33, type: 3}
+    fireFX:
+    - {fileID: 8300000, guid: a078921276259d2429a82e99f5e208d9, type: 3}
     damageDecals: Default Bullethole
   pistol:
     model: {fileID: 1965825449304838}

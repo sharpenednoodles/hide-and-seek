@@ -119,71 +119,11 @@ ModelImporter:
     tangentImportMode: 3
     normalCalculationMode: 4
   importAnimation: 1
-  copyAvatar: 0
+  copyAvatar: 1
   humanDescription:
     serializedVersion: 2
     human: []
-    skeleton:
-    - name: Minigun spin(Clone)
-      parentName: 
-      position: {x: 0, y: 0, z: 0}
-      rotation: {x: 0, y: 0, z: 0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Armature.001
-      parentName: Minigun spin(Clone)
-      position: {x: -0, y: 1.323, z: 0}
-      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-      scale: {x: 5, y: 5, z: 5}
-    - name: wrist.r
-      parentName: Armature.001
-      position: {x: 4.1633362e-19, y: -4.440892e-18, z: 0}
-      rotation: {x: -0.71014804, y: -5.8822835e-11, z: 0.0010424014, w: 0.7040516}
-      scale: {x: 1.0000006, y: 1.0000013, z: 1.0000006}
-    - name: gunbone
-      parentName: wrist.r
-      position: {x: 3.7252902e-11, y: 0.037684154, z: 0.000000004917383}
-      rotation: {x: 1.8626452e-10, y: 4.5110936e-11, z: 2.3283065e-11, w: 1}
-      scale: {x: 20, y: 20, z: 20}
-    - name: Gunbase
-      parentName: gunbone
-      position: {x: -0, y: 0, z: 0}
-      rotation: {x: 0.0000000754979, y: -0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: barrel brace
-      parentName: Gunbase
-      position: {x: -0.000011005324, y: 0.0019085057, z: 0.000059605052}
-      rotation: {x: 0.0026577108, y: -0.0013413866, z: 0.60469073, w: 0.79645485}
-      scale: {x: 1, y: 1, z: 1}
-    - name: barrel brace_end
-      parentName: barrel brace
-      position: {x: -0, y: 0.0008749912, z: 0}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: barrels
-      parentName: Gunbase
-      position: {x: -0.000006480951, y: 0.00024174973, z: 0.00006916075}
-      rotation: {x: -0.0051236125, y: 2.319965e-11, z: 0.00030929086, w: 0.9999868}
-      scale: {x: 1, y: 1, z: 1}
-    - name: barrels_end
-      parentName: barrels
-      position: {x: -0, y: 0.0032004577, z: 0}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: wrist.r_end
-      parentName: wrist.r
-      position: {x: -0, y: 0.037684135, z: 0}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Camera
-      parentName: Minigun spin(Clone)
-      position: {x: -4.7751055, y: 2.8144915, z: 3.8592033}
-      rotation: {x: 0.055530336, y: 0.8952658, z: -0.116589636, w: 0.42640635}
-      scale: {x: 100, y: 100.00001, z: 100}
-    - name: Cube.002
-      parentName: Minigun spin(Clone)
-      position: {x: -0.0002765658, y: 1.1345862, z: 0.001624661}
-      rotation: {x: 0.99999017, y: -0.00073708914, z: -0.000737089, w: 0.0043107206}
-      scale: {x: 5.000003, y: 5.0000067, z: 5.000003}
+    skeleton: []
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
@@ -194,9 +134,10 @@ ModelImporter:
     rootMotionBoneName: 
     rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
-    hasExtraRoot: 1
+    hasExtraRoot: 0
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 93aea5af8675e3046b0ece7d2942c1f9,
+    type: 3}
   animationType: 2
   humanoidOversampling: 1
   additionalBone: 0

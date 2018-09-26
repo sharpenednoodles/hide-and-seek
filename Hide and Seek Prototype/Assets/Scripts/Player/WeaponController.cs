@@ -67,6 +67,7 @@ namespace HideSeek.WeaponController
             lightningGun.model.SetActive(false);
             pistol.model.SetActive(false);
 
+            unarmed.remainingClip = unarmed.clipSize;
             pistol.remainingClip = pistol.clipSize;
             lightningGun.remainingClip = lightningGun.clipSize;
             minigun.remainingClip = minigun.clipSize;
