@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 /// <summary>
@@ -45,6 +46,10 @@ namespace HideSeek.WeaponController
         private LineRenderer laserDebug;
         private WaitForSeconds shotDuration = new WaitForSeconds(.07f);
 
+        //TempDisplayStuff
+        private Text clipDisplay;
+        private Text ammoDisplay;
+
         //networkTempVars
         //Thinking of having a lookup on the master client with all these precached so every player can access at will, but we'll see
 
@@ -60,6 +65,11 @@ namespace HideSeek.WeaponController
             weaponAnim = gameObject.transform.GetChild(3).GetComponent<Animator>();
             gunSound = gameObject.transform.GetChild(3).GetComponent<AudioSource>();
             laserDebug = GetComponent<LineRenderer>();
+
+            //Ammo display stuff
+            GameObject displayTemp = GameObject.Find("WeaponDisplay");
+            clipDisplay = displayTemp.transform.GetChild(0).gameObject.GetComponent<Text>();
+            ammoDisplay = displayTemp.transform.GetChild(1).gameObject.GetComponent<Text>();
 
             //DISABLE ALL WEAPONS INITIALLY
             unarmed.model.SetActive(true);
@@ -349,6 +359,8 @@ namespace HideSeek.WeaponController
                 c.ammo -= c.clipSize;
             }
             c.canFire = true;
+            clipDisplay.text = c.remainingClip.ToString();
+            ammoDisplay.text = c.ammo.ToString();
         }
 
         bool SubtractAmmo(Weapon c)
@@ -359,6 +371,7 @@ namespace HideSeek.WeaponController
                 return false;
             }
             c.remainingClip -= 1;
+            clipDisplay.text = c.remainingClip.ToString();
             return true;
         }
 
@@ -379,18 +392,22 @@ namespace HideSeek.WeaponController
                 case Weapon.ID.unarmed:
                     unarmed.model.SetActive(true);
                     currWeapon = unarmed;
+                    UpdateAmmoCount();
                     break;
                 case Weapon.ID.pistol:
                     pistol.model.SetActive(true);
                     currWeapon = pistol;
+                    UpdateAmmoCount();
                     break;
                 case Weapon.ID.minigun:
                     minigun.model.SetActive(true);
                     currWeapon = minigun;
+                    UpdateAmmoCount();
                     break;
                 case Weapon.ID.lightningGun:
                     lightningGun.model.SetActive(true);
                     currWeapon = lightningGun;
+                    UpdateAmmoCount();
                     break;
             }
            
@@ -402,6 +419,12 @@ namespace HideSeek.WeaponController
 
             photonView.RPC("SyncWeapon", PhotonTargets.Others, playerID, (int)currentID);
 
+        }
+
+        private void UpdateAmmoCount()
+        {
+            clipDisplay.text = currWeapon.remainingClip.ToString();
+            ammoDisplay.text = currWeapon.ammo.ToString();
         }
 
         //Note Enums cannot be serialized over network
