@@ -55,6 +55,8 @@ public class PropSwitching : MonoBehaviour
         }
 
         if (isLookingAtProp) {
+			propInfo = aimedAt.GetComponent<PropInfo>();
+			prefabName = propInfo.prefabName;
             if (Input.GetMouseButton(1))
             {
                 holdTime += Time.deltaTime;
@@ -62,8 +64,6 @@ public class PropSwitching : MonoBehaviour
                 
 
                 //Turning this off for release 1
-                propInfo = aimedAt.GetComponent<PropInfo>();
-                prefabName = propInfo.prefabName;
             }
             else holdTime = 0;
 
@@ -224,7 +224,7 @@ public class PropSwitching : MonoBehaviour
     //TODO: Miagrate to custom UI elements
 	public void OnGUI()
 	{
-        if (isLookingAtProp) GUI.Box(new Rect(140, Screen.height - 50, Screen.width - 300, 120), "Hold Right Mouse Button to transform into "+propInfo.prefabName);
+		if (isLookingAtProp) GUI.Box(new Rect(140, Screen.height - 50, Screen.width - 300, 120), "Hold Right Mouse Button to transform into "+propInfo.prefabName);
 	}
 
     //function to terminate all invoking methods
