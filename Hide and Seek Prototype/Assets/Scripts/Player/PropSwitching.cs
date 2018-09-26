@@ -1,4 +1,4 @@
-﻿using UnityEngine; 
+using UnityEngine; 
 using System.Collections; 
 
 /// <summary>
@@ -224,7 +224,7 @@ public class PropSwitching : MonoBehaviour
     //TODO: Miagrate to custom UI elements
 	public void OnGUI()
 	{
-        if (isLookingAtProp) GUI.Box(new Rect(140, Screen.height - 50, Screen.width - 300, 120), "Hold Right Mouse Button to transform into "+aimedAt.name);
+        if (isLookingAtProp) GUI.Box(new Rect(140, Screen.height - 50, Screen.width - 300, 120), "Hold Right Mouse Button to transform into "+propInfo.prefabName);
 	}
 
     //function to terminate all invoking methods
