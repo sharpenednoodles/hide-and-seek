@@ -23,6 +23,7 @@ Hugh Mohr
 
 ## External Tools and Libraries
 This is a list of the third party tools included within the Unity Project
+- [In-game Debug Console](https://assetstore.unity.com/packages/tools/gui/in-game-debug-console-68068)
 - [Photon Unity Networking](https://assetstore.unity.com/packages/tools/network/photon-unity-networking-free-1786 "Free version with 20 concurrent users") (PUN)
 - [Post Processing Stack](https://assetstore.unity.com/packages/essentials/post-processing-stack-83912 "Mmm pretty...")
 - [ProBuilder](https://assetstore.unity.com/packages/tools/modeling/probuilder-111418 "For creating meshes inside Unity")
@@ -35,4 +36,4 @@ This is a list of the third party tools included within the Unity Project
 List third party sounds, music, textures and models requiring credit here
 Parts of the sounds designed, derived or used from the BOOM Guns Designed Library
 
-Audio files will be removed from GIT after active development ceases
+Audio files from non free Libraries will be removed from GIT after active development ceases

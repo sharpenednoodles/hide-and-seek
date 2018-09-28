@@ -89,9 +89,15 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     //Time Decelerations
     float gameTimer, roundTimer;
 
-    public bool offlineMode = false, debug = true;
+    [Header("Debug Properties")]
+
+    [SerializeField] private bool debug = true;
+    [SerializeField] private bool eventToDebug = true;
+    public bool offlineMode = false;
     private bool previouslyJoined = false;
     private string roomName;
+    
+    //Deprecated
     private Text debugFeed;
 
     private static bool LOADED = false;
@@ -185,7 +191,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     }
 
     //Default state
-    private GameState currentState = GameState.warmUp;
+    private GameState globalState = GameState.warmUp;
 
     
     //Trigger Player Spawn after game end
@@ -271,7 +277,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         PhotonNetwork.playerName = PlayerPrefs.GetString("Username", "Default Name");
         GetGameState();
     
-        if (currentState == GameState.warmUp)
+        //THIS WILL NOT WORK AS WE DO NOT KNOW ANYTHING ABOUT THE SERVER YET
+        if (globalState == GameState.warmUp)
             SpawnPlayer();
         else
         {
@@ -289,7 +296,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         //if host disconnects, kick everyone back to the main menu
         if (PhotonNetwork.isMasterClient)
         {
-            photonView.RPC("SetGameState", PhotonTargets.AllViaServer, (byte)currentState, (byte)EventType.playerDisconnect, currentID);
+            photonView.RPC("SetGameState", PhotonTargets.AllViaServer, (byte)globalState, (byte)EventType.playerDisconnect, currentID);
         }
     }
 
@@ -297,9 +304,9 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     void Update()
     {
         //Debug output
-        connectText.text = PhotonNetwork.connectionStateDetailed.ToString();
+        //connectText.text = PhotonNetwork.connectionStateDetailed.ToString();
         //Remove this before final build
-        gameTimer += Time.deltaTime;
+        //gameTimer += Time.deltaTime;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -309,6 +316,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     //Populate the event feed with messages
     private void UpdateEventFeed(string eventMessage)
     {
+        if (eventToDebug)
+            Debug.Log("<color=blue> Feed: "+eventMessage +"</color>");
         GameObject listItem = Instantiate(eventListPrefab, eventContentFeed.transform);
         listItem.transform.SetAsFirstSibling();
         listItem.GetComponentInChildren<Text>().text = eventMessage;
@@ -363,13 +372,13 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
        // connectedPlayersList = (string)PhotonNetwork.playerList;
         if (PhotonNetwork.isMasterClient)
         {
-            StartCoroutine(EventTimer(warmUpTime, currentState));
+            StartCoroutine(EventTimer(warmUpTime, globalState));
             //debugFeed.color = Color.red;
-            Debug.Log("Sending Gamestate as " + currentState);
+            Debug.Log("Sending Gamestate as " + globalState);
             if (photonView == null)
                 Debug.LogError("Photon View missing on master object");
             else
-            photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, (byte)currentState, (byte)EventType.timer, currentID);
+            photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, (byte)globalState, (byte)EventType.timer, currentID);
             //StartCoroutine(EventTimer(warmUpTime, currentState));
         }
         else
@@ -382,7 +391,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     private void SetGameState(byte gameState, byte eventType, int ID)
     {
         //Cast from byte to enum
-        currentState = (GameState)gameState;
+        //WE WILL ALWAYS SET GLOBAL AS WARMUP??
+       // globalState = (GameState)gameState;
 
         switch((EventType)eventType)
         {
@@ -390,7 +400,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
             case EventType.timer:
                 if (debug)
                     Debug.Log("Set Game State: Timer");
-                SetGameStateEvent(currentState);
+                SetGameStateEvent((GameState)gameState, ID);
                 break;
 
             case EventType.playerDeath:
@@ -398,7 +408,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                     Debug.Log("Set Game State: Player Death");
 
                 //If warmup, we don't care
-                if (currentState == GameState.warmUp)
+                if (globalState == GameState.warmUp)
                 {
                     UpdateEventFeed(PhotonPlayer.Find(ID).NickName + " did a bad job");
                     GameObject temp = PhotonView.Find(local.viewID).gameObject;
@@ -415,18 +425,38 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 alivePlayers -= 1;
                 deadPlayers = +1;
                 UpdateGUI();
-                SpawnFlyCam(ID);
 
                 //Destroy Player
-                GameObject player = PhotonView.Find(local.viewID).gameObject;
-                PhotonNetwork.Destroy(player);
-
-                if (currentState != GameState.warmUp)
+                //Only perform on the dead player
+                if (currentID == ID)
                 {
-                    if (alivePlayers <= 1)
+                    if (debug)
+                        Debug.Log("Destroying Self from " + currentID);
+                    
+                    GameObject player = PhotonView.Find(local.viewID).gameObject;
+                    PhotonNetwork.Destroy(player);
+                    DisplayCanvas(currentID, "defeat");
+                    SpawnFlyCam(ID);
+                }
+                else
+                {
+                    if (debug)
                     {
-                        EndGame();
+                        Debug.Log("Recived player death but not directly contributing");
                     }
+                }
+                
+                //Logic for ending the game
+                if (PhotonNetwork.isMasterClient)
+                {
+                    if (globalState != GameState.warmUp)
+                    {
+                        if (alivePlayers <= 1)
+                        {
+                            StartCoroutine(EndGame());
+                        }
+                    }
+                    
                 }
                 break;
 
@@ -436,7 +466,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                     Debug.Log("Set Game State: Player Join");
                 }
 
-                alivePlayers = +1;
+                alivePlayers += 1;
                 UpdateGUI();
                 //player join code
                 //new player data
@@ -451,7 +481,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 UpdateEventFeed(newPlayer.name+" has joined the game");
                 //add to list item
                 players.Add(newPlayer);
-                //VerifySavedList();
+                VerifySavedList();
                 break;
 
             case EventType.playerDisconnect:
@@ -464,7 +494,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 break;
         }
 
-        Debug.Log("Recieving Gamestate from master as " + currentState);
+        Debug.Log("Recieving Gamestate from master as " + (GameState)gameState);
         //thing to call appropriate function for game states
     }
 
@@ -480,10 +510,10 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     }
 
     //Set game state from SetGameState Function
-    private void SetGameStateEvent(GameState State)
+    private void SetGameStateEvent(GameState State, int ID)
     {
         //Update our reference to current state
-        currentState = State;
+        globalState = State;
         if (debug)
             Debug.Log("Set Game State()");
         switch (State)
@@ -499,7 +529,12 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
             case GameState.roundStart:
                 //debugFeed.text = ("The game has started");
                 
-                //Respawn player
+                //Find and destroy player
+                //Respawn player afterwards
+                if (debug)
+                {
+                    Debug.Log("Round Start Respawn: destory self reference "+local.viewID +" belonging to player " +currentID);
+                }
                 GameObject player = PhotonView.Find(local.viewID).gameObject;
                 PhotonNetwork.Destroy(player);
                 SpawnPlayer();
@@ -519,6 +554,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     //RPC Callback for remote scripts attached to master
     public void SetGameStateRemote(byte gameState, byte eventType)
     {
+        //Used to call from other scripts
         photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, gameState, eventType, currentID);
     }
 
@@ -527,29 +563,17 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         if (currentID == actorID)
         {
             Debug.Log("Spawning Flycam");
+            UpdateEventFeed("Spawning Spectator Cam");
             GameObject flycam = (GameObject)Instantiate(Resources.Load("Flycam"));
         }
         else
             Debug.Log("Remote Flycam Spawn Ignored");
     }
 
-    //DEPRECATED
-    //Announce player death
-    //TODO - replace with generic event type
-    public void PlayerDeath(int playerID)
-    {
-        if (PhotonNetwork.isMasterClient)
-        {
-            
-        }
-        //debugFeed.text = ("You Died");
-        UpdateEventFeed(PhotonPlayer.Find(playerID).NickName + " died!");
-        StartCoroutine(RespawnTest());
-    }
-
     //Restart the match
     private IEnumerator EndGame()
     {
+        //Check to see which players are alive
         foreach (Players player in players)
         {
             if (player.isAlive == true)
@@ -561,7 +585,6 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         persistScore.SaveToList(players);
         yield return new WaitForSeconds(5);
         PhotonNetwork.LoadLevel(SceneManager.GetActiveScene().name);
-
     }
 
     //Local function to give player feedback
@@ -570,13 +593,19 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     {
         if (canvasName == "victory")
         {
+            if (debug)
+                Debug.Log("Creating Victory Canvas");
             victoryCanvas.SetActive(true);
+            return;
         }
-
         if (canvasName == "defeat")
         {
+            if (debug)
+                Debug.Log("Creating defeat canvas");
             defeatCanvas.SetActive(true);
+            return;
         }
+        Debug.LogWarning("Specified Canvas " + canvasName + " does not exist!");
     }
 
     //EXPERIMENTAL
@@ -596,6 +625,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         PhotonNetwork.LoadLevel(SceneManager.GetActiveScene().name);
     }
 
+    //Respawn Coroutine
     private IEnumerator Respawn()
     {
         Debug.Log("Respawn Pinged");
@@ -710,16 +740,18 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
 
     public void UpdateStatusBoard()
     {
+        //Clear Old Entries
+        if (statusContentFeed.transform.childCount != 0)
+        {
+            foreach (Transform child in statusContentFeed.transform)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
         foreach (Players player in players)
         {
-            //Clear Old Entries
-            if (statusContentFeed.transform.childCount != 0)
-            {
-                foreach (Transform child in statusContentFeed.transform)
-                {
-                    Destroy(child.gameObject);
-                }
-            }
+            
             //Create new entry
             GameObject listItem = Instantiate(statusListItem, statusContentFeed.transform);
             listItem.transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().SetText(player.name);
