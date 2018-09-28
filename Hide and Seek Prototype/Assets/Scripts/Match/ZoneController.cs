@@ -101,7 +101,7 @@ public class ZoneController : Photon.MonoBehaviour {
         if (debug)
         {
             Debug.Log("Building Zone Shutdown Order");
-            Debug.Log(orderLists[selection][0]+", "+orderLists[selection][1] + ", " + orderLists[selection][2] + ", " + orderLists[selection][3] + ", " + orderLists[selection][4]);
+            Debug.Log((Zone)orderLists[selection][0]+", "+ (Zone)orderLists[selection][1] + ", " + (Zone)orderLists[selection][2] + ", " + (Zone)orderLists[selection][3] + ", " + (Zone)orderLists[selection][4]);
         }
             
         return orderLists[selection];
@@ -116,7 +116,17 @@ public class ZoneController : Photon.MonoBehaviour {
             shutdownList = SelectOrder();
         }
 
-        ZoneToClose = (Zone)shutdownList[zonesShut];
+        //Array out of index error here after all zones have been shut
+        if (zonesShut > shutdownList.Length - 1)
+        {
+            //Don't want to read beyond array bounds
+            ZoneToClose = Zone.error;
+        }
+        else
+        {
+            ZoneToClose = (Zone)shutdownList[zonesShut];
+        }
+            
         if (debug)
         {
             Debug.Log("Shutting Down " + ZoneToClose +" next");

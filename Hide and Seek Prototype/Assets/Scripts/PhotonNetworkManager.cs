@@ -664,13 +664,18 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
 
                 ZoneController.Zone zoneToShutdownNext;
                 zoneToShutdownNext = zoneController.ZoneShutDown();
-                photonView.RPC("AnnounceNextZone", PhotonTargets.AllBuffered, (byte)zoneToShutdownNext);
-                remainingZones -= 1;
-                timeToWait = roundTime / ZONE_COUNT;
-
-                StartCoroutine(EventTimer(timeToWait, GameState.roundStart));
-                if (remainingZones == 1)
+                if (zoneToShutdownNext != ZoneController.Zone.error)
                 {
+                    photonView.RPC("AnnounceNextZone", PhotonTargets.AllBuffered, (byte)zoneToShutdownNext);
+                    timeToWait = roundTime / ZONE_COUNT;
+                    StartCoroutine(EventTimer(timeToWait, GameState.roundStart));
+                }
+                    
+                remainingZones -= 1;
+                
+                if (remainingZones < 0)
+                {
+                    Debug.Log("Remaining Zones < 0 call");
                     photonView.RPC("SetGameState", PhotonTargets.All, (byte)GameState.waitForPlayer, (byte)EventType.timer, currentID);
                     if (debug)
                         Debug.Log("All zones shut off, waiting for players");
