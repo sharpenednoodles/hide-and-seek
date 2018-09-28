@@ -126,9 +126,9 @@ public class ZoneController : Photon.MonoBehaviour {
         if (zonesShut >= 1)
         {
             if (debug)
-                Debug.Log("Shutting down previous zone");
-            ZoneToClose = (Zone)shutdownList[zonesShut-1];
-            photonView.RPC("ToggleZone", PhotonTargets.AllBufferedViaServer, true, (byte)shutdownList[zonesShut]);
+                Debug.Log("Shutting down previous zone " +(Zone)shutdownList[zonesShut-1]);
+            //ZoneToClose = (Zone)shutdownList[zonesShut-1];
+            photonView.RPC("ToggleZone", PhotonTargets.AllBufferedViaServer, true, (byte)shutdownList[zonesShut-1]);
             //ToggleZone(false, (Zone)shutdownList[zonesShut]);
         }
         zonesShut += 1;
@@ -142,7 +142,7 @@ public class ZoneController : Photon.MonoBehaviour {
     {
         if (debug)
         {
-            Debug.Log("ToggleZoneController RPC called");
+            Debug.Log("ToggleZoneController RPC called with " +(Zone)zone);
         }
         switch ((Zone)zone)
         {

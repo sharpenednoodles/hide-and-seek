@@ -164,7 +164,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     }
 
     //Default state - will update as the game progresses
-    private GameState globalState = GameState.warmUp;
+    public GameState globalState = GameState.warmUp;
 
     //Keep scoreData struct available between scene loads
     private void Awake()
@@ -289,7 +289,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         StartCoroutine(LoadMainMenu(5));
     }
 
-    private IEnumerator LoadMainMenu(float timeToWait)
+    public IEnumerator LoadMainMenu(float timeToWait)
     {
         yield return new WaitForSeconds(timeToWait);
         SceneManager.LoadScene(0);
@@ -395,10 +395,13 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 if (globalState == GameState.warmUp)
                 {
                     Debug.Log("Player " + ID +" killed during warmup");
-                    UpdateEventFeed(PhotonPlayer.Find(ID).NickName + " did a bad job");
-                    GameObject temp = PhotonView.Find(local.viewID).gameObject;
-                    PhotonNetwork.Destroy(temp);
-                    SpawnPlayer();
+                    UpdateEventFeed(PhotonPlayer.Find(ID).NickName + " died during warmup");
+                    if (currentID == ID)
+                    {
+                        GameObject temp = PhotonView.Find(local.viewID).gameObject;
+                        PhotonNetwork.Destroy(temp);
+                        SpawnPlayer();
+                    }
                     return;
                 }
             
@@ -436,8 +439,12 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 {
                     if (globalState != GameState.warmUp)
                     {
+                        if (debug)
+                            Debug.Log("Scanning to see if < 1 player remaining");
                         if (alivePlayers <= 1)
                         {
+                            if (debug)
+                                Debug.Log("Preparing to end the game");
                             StartCoroutine(EndGame());
                         }
                     }
@@ -452,6 +459,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 }
 
                 alivePlayers += 1;
+                connectedPlayers += 1;
                 UpdateGUI();
                 //player join code
                 //new player data
@@ -466,15 +474,20 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 UpdateEventFeed(newPlayer.name+" has joined the game");
                 //add to list item
                 players.Add(newPlayer);
-                VerifySavedList();
+                //VerifySavedList();
                 break;
 
             case EventType.playerDisconnect:
                 if (debug)
                     Debug.Log("Set Game State: Player Disconnect");
                 //player disconnect code
-                UpdateEventFeed("Player has disconnected");
+                UpdateEventFeed(PhotonPlayer.Find(ID).NickName +" has left the game");
+
+                //Find player by ID
+                index = GetIndexUsingActorID(ID);
+                players.RemoveAt(index);
                 deadPlayers -= 1;
+                connectedPlayers -= 1;
                 UpdateGUI();
                 break;
         }
@@ -508,12 +521,9 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 UpdateEventFeed("Zone has been shutoff");
                 break;
             case GameState.warmUp:
-                //debugFeed.text = ("Now Warming Up");
                 UpdateEventFeed("Now Warming Up");
                 break;
             case GameState.roundStart:
-                //debugFeed.text = ("The game has started");
-                
                 //Find and destroy player
                 //Respawn player afterwards
                 if (debug)
@@ -547,6 +557,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     public void SendGameKill(byte gameState, byte eventType, int targetID, int senderID)
     {
         photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, gameState, eventType, targetID);
+        //Do stuff to give players more feedback
     }
 
     private void SpawnFlyCam(int actorID)
@@ -585,14 +596,14 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         if (canvasName == "victory")
         {
             if (debug)
-                Debug.Log("Creating Victory Canvas");
+                Debug.Log("<color=yellow>Creating Victory Canvas</color>");
             victoryCanvas.SetActive(true);
             return;
         }
         if (canvasName == "defeat")
         {
             if (debug)
-                Debug.Log("Creating defeat canvas");
+                Debug.Log("<color=yellow>Creating defeat canvas</color>");
             defeatCanvas.SetActive(true);
             return;
         }

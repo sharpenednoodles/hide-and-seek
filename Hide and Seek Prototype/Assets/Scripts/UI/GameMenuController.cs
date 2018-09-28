@@ -6,13 +6,12 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// Handles switching between canvases and also pause menu buttons 
 /// (becasue I'm lazy and didn't put them in a seperate script)
+/// NEEDS REWRITING
 /// </summary>
 
 public class GameMenuController : MonoBehaviour {
 
 	public GameObject menuCanvas;
-
-
 
 	//public Transform Menu;
     //we make this static so we can access from controller(s)
@@ -28,7 +27,7 @@ public class GameMenuController : MonoBehaviour {
 		//menuGroup.blocksRaycasts = true;
 		//Menu.gameObject.SetActive (false);
 		menuCanvas.SetActive(false);
-
+        //menuGroup = gameObject.transform.GetChild(4).transform.GetChild(0).GetComponent<CanvasGroup>();
 	}
 
 	public void ShowMenu()
@@ -51,21 +50,21 @@ public class GameMenuController : MonoBehaviour {
 		Debug.Log ("Set Disable");
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        //menuGroup.blocksRaycasts = true;
     }
 
 
 	void Update () {
-		//Debug.Log ("refresh key");
 		if (Input.GetKeyDown(KeyCode.Escape))
 			if (MenuState)
 			{
 				HideMenu();
-				Debug.Log ("Call From hide");
+				Debug.Log ("Close Pause Menu");
 			} 
 			else 
 			{ 
 				ShowMenu ();
-				Debug.Log ("Call From show");
+				Debug.Log ("Open Pause Menu");
 			}
 		}
 	}

@@ -88,7 +88,6 @@ public class ServerBrowserController : Photon.MonoBehaviour {
                 listItem.GetComponent<ServerBrowserConnect>().serverName = room.Name;
                 //TODO: Update string to reflect maximum player count set in server
                 listItem.GetComponentInChildren<Text>().text = room.Name +" (" +room.PlayerCount +"/20)";
-           
             }
         }
     }

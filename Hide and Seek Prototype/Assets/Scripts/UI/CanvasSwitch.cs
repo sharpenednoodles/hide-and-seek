@@ -5,7 +5,7 @@ using UnityEngine.Audio;
 
 /// <summary>
 /// This script is used to trigger switching between different canvases.
-/// It also runs the methods for the 
+/// It also runs the methods for everything else menu related apparently
 /// </summary>
 
 public class CanvasSwitch : MonoBehaviour {
@@ -14,12 +14,13 @@ public class CanvasSwitch : MonoBehaviour {
     public GameObject priorCanvas;
     public GameObject canvasToSwich;
     public GameMenuController gameMenu;
+    private PhotonNetworkManager master;
 
 	public AudioMixer audioMixer;
 
 	void Start()
     {
-        //Debug.Log ("This code is running");
+        master = FindObjectOfType<PhotonNetworkManager>();
         /*GameObject HUDCanvas = this.transform.parent.gameObject;
         gameMenuController = HUDCanvas.GetComponent<GameMenuController>();*/
 	}
@@ -39,6 +40,16 @@ public class CanvasSwitch : MonoBehaviour {
 		Application.Quit ();
 	}
 
+    public void Disconnect()
+    {
+        //Trigger Disconnect event
+        Debug.Log("Disconnect Button");
+        master.SetGameStateRemote(0, (byte)PhotonNetworkManager.EventType.playerDisconnect);
+        StartCoroutine(master.LoadMainMenu(0));
+        PhotonNetwork.Disconnect();
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
 
 	public void SetVolume(float volume)
     {
