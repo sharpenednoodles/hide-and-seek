@@ -14,6 +14,7 @@ using TMPro;
 /// No one can currently die though lol
 /// 
 /// To do: remove this and move to new system
+/// DONE
 /// </summary>
 
 public class AlivePlayers : MonoBehaviour {

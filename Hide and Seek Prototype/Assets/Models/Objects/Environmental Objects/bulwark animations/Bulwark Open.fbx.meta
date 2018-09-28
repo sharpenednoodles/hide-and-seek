@@ -31,7 +31,7 @@ ModelImporter:
     400022: Top door_end
     2100000: Material
     4300000: Cube.002
-    7400000: Doorbone|DoorboneAction
+    7400000: Bulwark - Open State
     9500000: //RootNode
     13700000: Cube.002
   externalObjects: {}
@@ -62,7 +62,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Doorbone|DoorboneAction
+      name: Bulwark - Open State
       takeName: Doorbone|DoorboneAction
       firstFrame: 0
       lastFrame: 24

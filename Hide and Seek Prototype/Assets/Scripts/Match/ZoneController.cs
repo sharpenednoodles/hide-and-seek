@@ -128,7 +128,7 @@ public class ZoneController : Photon.MonoBehaviour {
             if (debug)
                 Debug.Log("Shutting down previous zone");
             ZoneToClose = (Zone)shutdownList[zonesShut-1];
-            photonView.RPC("ToggleZone", PhotonTargets.All, false, (byte)shutdownList[zonesShut]);
+            photonView.RPC("ToggleZone", PhotonTargets.AllBufferedViaServer, true, (byte)shutdownList[zonesShut]);
             //ToggleZone(false, (Zone)shutdownList[zonesShut]);
         }
         zonesShut += 1;
@@ -136,12 +136,13 @@ public class ZoneController : Photon.MonoBehaviour {
     }
 
     //Called from PhotonNetworkManager (master)
+    //Default state of doors being open in scene!
     [PunRPC]
-    public void ToggleZone(bool open, byte zone)
+    public void ToggleZone(bool close, byte zone)
     {
         if (debug)
         {
-            Debug.Log("ToggleZone RPC called");
+            Debug.Log("ToggleZoneController RPC called");
         }
         switch ((Zone)zone)
         {
@@ -150,12 +151,12 @@ public class ZoneController : Photon.MonoBehaviour {
                     Debug.Log("Toggling Residential Zone");
                 foreach (Animator animate in residentialZone)
                 {
-                    animate.SetBool("doorState", open);
+                    animate.SetBool("doorClose", close);
                 }
 
                 foreach (GameObject collide in residentialCollider)
                 {
-                    if (open)
+                    if (close)
                         collide.SetActive(false);
                     else
                         collide.SetActive(true);
@@ -167,12 +168,12 @@ public class ZoneController : Photon.MonoBehaviour {
                     Debug.Log("Toggling Park Zone");
                 foreach (Animator animate in parkZone)
                 {
-                    animate.SetBool("doorState", open);
+                    animate.SetBool("doorClose", close);
                 }
 
                 foreach (GameObject collide in parkCollider)
                 {
-                    if (open)
+                    if (close)
                         collide.SetActive(false);
                     else
                         collide.SetActive(true);
@@ -185,12 +186,12 @@ public class ZoneController : Photon.MonoBehaviour {
                     Debug.Log("Toggling Maintenance Zone");
                 foreach (Animator animate in maintenanceZone)
                 {
-                    animate.SetBool("doorState", open);
+                    animate.SetBool("doorClose", close);
                 }
 
                 foreach (GameObject collide in maintenanceCollider)
                 {
-                    if (open)
+                    if (close)
                         collide.SetActive(false);
                     else
                         collide.SetActive(true);
@@ -202,12 +203,12 @@ public class ZoneController : Photon.MonoBehaviour {
                     Debug.Log("Toggling Retail Zone");
                 foreach (Animator animate in retailZone)
                 {
-                    animate.SetBool("doorState", open);
+                    animate.SetBool("doorClose", close);
                 }
 
                 foreach (GameObject collide in retailCollider)
                 {
-                    if (open)
+                    if (close)
                         collide.SetActive(false);
                     else
                         collide.SetActive(true);
@@ -219,12 +220,12 @@ public class ZoneController : Photon.MonoBehaviour {
                     Debug.Log("Toggling Warehouse Zone");
                 foreach (Animator animate in warehouseZone)
                 {
-                    animate.SetBool("doorState", open);
+                    animate.SetBool("doorClose", close);
                 }
 
                 foreach (GameObject collide in warehouseCollider)
                 {
-                    if (open)
+                    if (close)
                         collide.SetActive(false);
                     else
                         collide.SetActive(true);

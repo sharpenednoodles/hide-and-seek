@@ -24,27 +24,6 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     private PlayerNetwork local;
     private PersistScore persistScore;
 
-    //experimental - NOW DEPRECATED
-    //TODO - remove this
-    //[System.Serializable]
-    /*
-    public class PlayerData
-    {
-        public string tag;
-        public int playerID;
-        public GameObject playerModel;
-        public GameObject weapons;
-        public GameObject propModel;
-        public GameObject unarmed, pistol, lightningGun, minigun;
-        public bool isProp, isAlive;
-    }
-    */
-
-    //DEPRECATED
-    //public Dictionary<int, PlayerData> playerData;
-    //DEPRECATED
-    //PlayerData playa;
-
     [SerializeField] private Text connectText;
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject joinCam;
@@ -54,9 +33,9 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     [SerializeField] [Tooltip("Event List Prefab")] private GameObject eventListPrefab;
     [SerializeField] [Tooltip("Event List Prefab, with timer of 1 second")] private GameObject eventListPrefabShort;
 
-    [Header("Spawn Points")]
-    [SerializeField] private bool useSpawnPoints = false;
     //SpawnPoints
+    [Header("Spawn Points")]
+    [SerializeField] private bool useSpawnPoints = true;
     /// <summary>
     /// /To use:
     /// Create a new entry in the inspector for your required zone
@@ -77,6 +56,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     [SerializeField] private List<SpawnPoint> spawnPoints;
     private List<Vector2> spawnList;
 
+    //For randomised spawn - don't use once spawnPoints have been set
     [Header("Coordinate Range")]
     [SerializeField] int minX = -25;
     [SerializeField] int maxX = 25;
@@ -96,15 +76,10 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     public bool offlineMode = false;
     private bool previouslyJoined = false;
     private string roomName;
-    
-    //Deprecated
-    private Text debugFeed;
-
+   
     private static bool LOADED = false;
 
     [Header("Game Stats")]
-    //Unused
-    //public string[] alivePlayersList, connectedPlayersList, deadPlayersList;
     public int alivePlayers, connectedPlayers, deadPlayers;
 
     //The PhotonView ID associated with the local client
@@ -128,13 +103,10 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     [SerializeField] private GameObject victoryCanvas;
     [SerializeField] private GameObject defeatCanvas;
 
-
     [Header("Timer Settings")]
     [Tooltip("Specify the length of events in minutes")]
     [SerializeField] private float warmUpTime;
     [SerializeField] private float roundTime;
-
-
 
     //ZoneController
     private ZoneController zoneController;
@@ -152,7 +124,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         /// </summary>
         zoneShutoff,
         /// <summary>
-        /// This occurs when a zone is shut off
+        /// This occurs when a zone is shut off. This is really a substate of roundStart
         /// </summary>
         waitForPlayer,
         /// <summary>
@@ -161,6 +133,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         roundEnd,
         /// <summary>
         /// Current score displayed, temporary state until the next round begins
+        /// Will trigger a timer across clients to reload the world
         /// </summary>
         matchEnd
         /// <summary>
@@ -190,26 +163,25 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         /// </summary>
     }
 
-    //Default state
+    //Default state - will update as the game progresses
     private GameState globalState = GameState.warmUp;
 
-    
-    //Trigger Player Spawn after game end
+    //Keep scoreData struct available between scene loads
     private void Awake()
     {
         if (!LOADED)
         {
             LOADED = true;
-            Debug.Log("Saved Network Manager on Load");
+            Debug.Log("Loaded Scene into memory");
         }
         else
         {
             StartCoroutine(Respawn());
-            Debug.Log("PhotonNetworkManager already loaded!");
+            Debug.Log("Starting Respawn Coroutine");
         }
     }
     
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Use this for initialization
     void Start()
     {
@@ -300,13 +272,27 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    //Called if client is unexpectedly disconnected from the server
+    public virtual void OnConnectionFail()
     {
-        //Debug output
-        //connectText.text = PhotonNetwork.connectionStateDetailed.ToString();
-        //Remove this before final build
-        //gameTimer += Time.deltaTime;
+        Debug.LogError("Disconnected from server!");
+        UpdateEventFeed("You have been Disconnected!");
+        StartCoroutine(LoadMainMenu(5));
+    }
+
+    //Called if no server connection could be established
+    public virtual void OnFailedToConnectToPhoton()
+    {
+        Debug.LogError("Unable to connect to Master Server!");
+        UpdateEventFeed("Please check your internet connection");
+        UpdateEventFeed("Unable to connect to Master Server!");
+        StartCoroutine(LoadMainMenu(5));
+    }
+
+    private IEnumerator LoadMainMenu(float timeToWait)
+    {
+        yield return new WaitForSeconds(timeToWait);
+        SceneManager.LoadScene(0);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -374,7 +360,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         {
             StartCoroutine(EventTimer(warmUpTime, globalState));
             //debugFeed.color = Color.red;
-            Debug.Log("Sending Gamestate as " + globalState);
+            if (debug)
+                Debug.Log("Sending current gamestate as " + globalState);
             if (photonView == null)
                 Debug.LogError("Photon View missing on master object");
             else
@@ -383,17 +370,14 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         }
         else
         {
-            Debug.Log("Recieving Gamestate from master");
+            Debug.Log("Recieving Gamestate From Master Client");
         }
     }
 
+    //Sets the game state when recieved from master
     [PunRPC]
     private void SetGameState(byte gameState, byte eventType, int ID)
     {
-        //Cast from byte to enum
-        //WE WILL ALWAYS SET GLOBAL AS WARMUP??
-       // globalState = (GameState)gameState;
-
         switch((EventType)eventType)
         {
             //Only the master will ever send these event types
@@ -410,6 +394,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 //If warmup, we don't care
                 if (globalState == GameState.warmUp)
                 {
+                    Debug.Log("Player " + ID +" killed during warmup");
                     UpdateEventFeed(PhotonPlayer.Find(ID).NickName + " did a bad job");
                     GameObject temp = PhotonView.Find(local.viewID).gameObject;
                     PhotonNetwork.Destroy(temp);
@@ -556,6 +541,12 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     {
         //Used to call from other scripts
         photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, gameState, eventType, currentID);
+    }
+
+    //RPC Callback sepcifically for death events
+    public void SendGameKill(byte gameState, byte eventType, int targetID, int senderID)
+    {
+        photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, gameState, eventType, targetID);
     }
 
     private void SpawnFlyCam(int actorID)

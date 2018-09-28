@@ -17,8 +17,7 @@ public class ServerBrowserController : Photon.MonoBehaviour {
     private RoomInfo[] roomList;
     public GameObject[] gameMenuItems;
     private bool debug = true;
-    
-
+   
 	// Use this for initialization
 	void Start ()
     {
@@ -28,6 +27,18 @@ public class ServerBrowserController : Photon.MonoBehaviour {
 	}
 
     //add function when player is offline in appropriate callback
+
+    //Called when (will never happen) the Photon Cloud is over capacity
+    public virtual void OnPhotonMaxCccuReached()
+    {
+        statusText.text = "PUN Server Over CCU Limit!";
+    }
+
+    //Called when no connection is available
+    public virtual void OnFailedToConnectToPhoton()
+    {
+        statusText.text = "Unable to connect to Master Server!";
+    }
 
     public virtual void OnConnectedToMaster()
     {
@@ -39,14 +50,15 @@ public class ServerBrowserController : Photon.MonoBehaviour {
     public virtual void OnJoinedLobby()
     {
         Debug.Log("CONNECTED TO LOBBY");
-        RefreshRoomList();
+        //RefreshRoomList();
     }
 	
-	// Update is called once per frame
-	void Update ()
+    //Called whenever the room list changes
+    public virtual void OnReceivedRoomListUpdate()
     {
-		
-	}
+        Debug.Log("Recived Room Update");
+        RefreshRoomList();
+    }
 
     public void RefreshRoomList()
     {
