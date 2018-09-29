@@ -23,8 +23,9 @@ public class PlayerNetwork : MonoBehaviour
 
     private PhotonNetworkManager master;
     private PhotonView photonView;
-    
 
+    public ZoneController.Zone currentLocation = ZoneController.Zone.error;
+    
     private void Start()
     {
         photonView = GetComponent<PhotonView>();
@@ -69,6 +70,7 @@ public class PlayerNetwork : MonoBehaviour
         }
     }
 
+    //DEPRECATE THIS SHIT
     public void HideHead()
     {
         if (debug)
@@ -77,27 +79,29 @@ public class PlayerNetwork : MonoBehaviour
         headBoneRoot.transform.localScale = new Vector3(0, 0, 0);
     }
 
-    //DEPRECATED
-    /*
-    public PhotonNetworkManager.PlayerData SendPlayerData()
+    private void OnTriggerExit(Collider triggerZoneCheck)
     {
-        
-        PhotonNetworkManager.PlayerData playerData = new PhotonNetworkManager.PlayerData
-        {
-            //Will use players name as tag eventually
-            tag = photonView.viewID.ToString(),
-            playerID = photonView.viewID,
-            playerModel = gameObject.transform.GetChild(1).gameObject,
-            weapons = gameObject.transform.GetChild(3).gameObject,
-            pistol = gameObject.transform.GetChild(3).gameObject.transform.GetChild(0).gameObject,
-            lightningGun = gameObject.transform.GetChild(3).gameObject.transform.GetChild(1).gameObject,
-            minigun = gameObject.transform.GetChild(3).gameObject.transform.GetChild(2).gameObject,
-            isAlive = true
-            
-        };
-        return playerData;
+        Debug.LogWarning("Exiting the trigger area");
+        UpdateZoneLocation();
     }
-    */
+
+    public void UpdateZoneLocation()
+    {
+        Debug.Log("Updating Zone Location");
+        Vector3 direction = new Vector3(0, -1, 0);
+        float distance = 5f;
+        RaycastHit groundRay;
+        if (Physics.Raycast(transform.position, direction, out groundRay, distance))
+        {
+            if (groundRay.collider.GetComponent<ZoneID>() != null)
+                currentLocation = groundRay.collider.GetComponent<ZoneID>().zoneID;
+        }
+        else
+        {
+            Debug.LogError("No Location Found");
+        }
+        Debug.Log("Player locaed in " + currentLocation);
+    }
 }
 
 

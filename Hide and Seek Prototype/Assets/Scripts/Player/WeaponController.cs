@@ -438,10 +438,10 @@ namespace HideSeek.WeaponController
             remotePlayer = PhotonView.Find(playerID).gameObject;
             remoteWeapon = remotePlayer.transform.GetChild(3).gameObject;
 
-            remoteUnArmed = remoteWeapon.transform.GetChild(1).gameObject;
-            remotePistol = remoteWeapon.transform.GetChild(2).gameObject;
-            remoteLightningGun = remoteWeapon.transform.GetChild(3).gameObject;
-            remoteMinigun = remoteWeapon.transform.GetChild(4).gameObject;
+            remoteUnArmed = remoteWeapon.transform.GetChild(0).gameObject;
+            remotePistol = remoteWeapon.transform.GetChild(1).gameObject;
+            remoteLightningGun = remoteWeapon.transform.GetChild(2).gameObject;
+            remoteMinigun = remoteWeapon.transform.GetChild(3).gameObject;
 
             remoteUnArmed.SetActive(false);
             remotePistol.SetActive(false);

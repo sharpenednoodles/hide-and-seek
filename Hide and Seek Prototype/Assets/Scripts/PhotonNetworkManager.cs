@@ -625,23 +625,6 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         Debug.LogWarning("Specified Canvas " + canvasName + " does not exist!");
     }
 
-    //EXPERIMENTAL
-    private IEnumerator RespawnTest()
-    {
-        //Add some test data
-        Players newPlayer = new Players
-        {
-            actorID = 69,
-            name = "TERRIBLE NAME",
-            isAlive = true,
-            score = 100,
-        };
-        players.Add(newPlayer);
-        persistScore.SaveToList(players);
-        yield return new WaitForSeconds(5);
-        PhotonNetwork.LoadLevel(SceneManager.GetActiveScene().name);
-    }
-
     //Respawn Coroutine
     private IEnumerator Respawn()
     {
@@ -778,7 +761,6 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
 
         foreach (Players player in players)
         {
-            
             //Create new entry
             GameObject listItem = Instantiate(statusListItem, statusContentFeed.transform);
             listItem.transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().SetText(player.name);
@@ -812,7 +794,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
             //TODO, add IEnumerator to check wheter spawn is handled correctly
             Debug.Log("Requesting Spawn from master");
             Debug.Log("Player View ID requesting spawn = " + currentID);
-            photonView.RPC("RequestSpawn", PhotonTargets.MasterClient, currentID);
+            photonView.RPC("RequestSpawn", PhotonTargets.MasterClient, currentID, previouslyJoined);
         }
         else
         {
@@ -831,12 +813,12 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
 
     //Call to request a player spawn
     [PunRPC]
-    public void RequestSpawn(int remoteID)
+    public void RequestSpawn(int remoteID, bool remoteSpawnState)
     {
         if (PhotonNetwork.isMasterClient)
         {
             //Disable Spawn if the server isn't in warmup, and the peer is new
-            if (globalState != GameState.warmUp && !previouslyJoined)
+            if (globalState != GameState.warmUp && !remoteSpawnState)
             {
                 if (debug)
                     Debug.Log("The Server is no longer warming up");
@@ -869,7 +851,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 //Recursively call until we generate a valid spawn area
                 if (debug)
                     Debug.Log("Coordinates in use, requesting another spawn");
-                RequestSpawn(remoteID);
+                RequestSpawn(remoteID, remoteSpawnState);
             }
         }
         else
@@ -916,6 +898,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
             Transform locationToSpawn = spawnPoints[spawnZone].SpawnPointArray[spawnArea].transform;
             GameObject playerReference = PhotonNetwork.Instantiate(player.name, locationToSpawn.position, Quaternion.Euler(0, locationToSpawn.transform.rotation.y, 0), 0);
             local = playerReference.GetComponent<PlayerNetwork>();
+            local.UpdateZoneLocation();
            
             //Debug stuff
             //UpdateEventFeed("My Photon View ID = " +currentID);
@@ -975,4 +958,3 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     }
     #endregion
 }
-

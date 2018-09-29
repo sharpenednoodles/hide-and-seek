@@ -13,36 +13,41 @@ public class FlyCam : MonoBehaviour {
 	public float mainSpeed = 100.0f, shiftAdd = 250.0f, maxShift = 1000.0f, camSens = 0.25f, totalRun= 1.0f, speedMultiplier, rotationY = 0.0f, mouseSensitivity = 5.0f; 
 	//private Vector3 lastMouse = new Vector3(255, 255, 255); //kind of in the middle of the screen, rather than at the top (play)
 
-	private bool isRotating = false, isColliding = true; // Angryboy: Can be called by other things (e.g. UI) to see if camera is rotating
+	private bool isRotating = true, isColliding = true; // Angryboy: Can be called by other things (e.g. UI) to see if camera is rotating
 
 	//micah_3d: added so camera will be able to collide with world objects if users chooses
 	//physic material added to keep camera from spinning out of control if it hits a corner or multiple colliders at the same time.  
 	PhysicMaterial myMaterial;
 
-	void Start(){
-		if (isColliding) {
-			myMaterial = new PhysicMaterial ("ZeroFriction");
-			myMaterial.dynamicFriction = myMaterial.staticFriction = myMaterial.bounciness = 0f;
-			myMaterial.frictionCombine = PhysicMaterialCombine.Multiply;
-			myMaterial.bounceCombine = PhysicMaterialCombine.Average;
-			gameObject.AddComponent <CapsuleCollider> ();
-			gameObject.GetComponent<CapsuleCollider> ().radius = 1f;
-			gameObject.GetComponent<CapsuleCollider> ().height = 1.68f;
-			gameObject.GetComponent<CapsuleCollider> ().material = myMaterial;
+    void Start()
+    {
+        if (isColliding)
+        {
+            myMaterial = new PhysicMaterial("ZeroFriction");
+            myMaterial.dynamicFriction = myMaterial.staticFriction = myMaterial.bounciness = 0f;
+            myMaterial.frictionCombine = PhysicMaterialCombine.Multiply;
+            myMaterial.bounceCombine = PhysicMaterialCombine.Average;
+            gameObject.AddComponent<CapsuleCollider>();
+            gameObject.GetComponent<CapsuleCollider>().radius = 1f;
+            gameObject.GetComponent<CapsuleCollider>().height = 1.68f;
+            gameObject.GetComponent<CapsuleCollider>().material = myMaterial;
 
-			gameObject.AddComponent <Rigidbody> ();
-			gameObject.GetComponent<Rigidbody> ().useGravity = false;
-		}
-	}
+            gameObject.AddComponent<Rigidbody>();
+            gameObject.GetComponent<Rigidbody>().useGravity = false;
+        }
+    }
 	void Update () {
 
-		// Angryboy: Hold right-mouse button to rotate
+		
+        //Disabled Nouse Hold
+        /*
 		if (Input.GetMouseButtonDown (1)) {
 			isRotating = true;
 		}
 		if (Input.GetMouseButtonUp (1)) {
 			isRotating = false;
 		}
+        */
 		if (isRotating) {
 			// Made by LookForward
 			// Angryboy: Replaced min/max Y with numbers, not sure why we had variables in the first place

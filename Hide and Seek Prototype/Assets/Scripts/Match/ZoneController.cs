@@ -16,12 +16,14 @@ public class ZoneController : Photon.MonoBehaviour {
     [SerializeField] private Animator[] warehouseZone;
     [SerializeField] private Animator[] residentialZone;
     [SerializeField] private Animator[] parkZone;
-
+    [Header("Collider Groups")]
     [SerializeField] private GameObject[] maintenanceCollider;
     [SerializeField] private GameObject[] retailCollider;
     [SerializeField] private GameObject[] warehouseCollider;
     [SerializeField] private GameObject[] residentialCollider;
     [SerializeField] private GameObject[] parkCollider;
+    [SerializeField] [Tooltip("For Triggering a Location Check")]
+    private BoxCollider[] triggerZoneCheck;
 
     List<int[]> orderLists;
 

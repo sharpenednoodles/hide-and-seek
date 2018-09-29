@@ -36,7 +36,8 @@ GameObject:
   - component: {fileID: 4270860436875072}
   - component: {fileID: 114186565316325616}
   - component: {fileID: 114085134793327570}
-  - component: {fileID: 114189194711910234}
+  - component: {fileID: 114254342543105594}
+  - component: {fileID: 114476733938405698}
   m_Layer: 0
   m_Name: Game Controller
   m_TagString: Untagged
@@ -204,23 +205,25 @@ MonoBehaviour:
   maxX: 76
   minZ: -92
   maxZ: -4
-  offlineMode: 0
   debug: 1
-  alivePlayersList: []
-  connectedPlayersList: []
-  deadPlayersList: []
+  eventToDebug: 1
+  offlineMode: 0
   alivePlayers: 0
   connectedPlayers: 0
   deadPlayers: 0
   currentID: 0
   statusBoard: {fileID: 0}
   statusContentFeed: {fileID: 0}
-  scoreListItem: {fileID: 0}
+  statusListItem: {fileID: 1733420074627278, guid: 98970c4896f2ab34080c784bff0f8021,
+    type: 2}
   aliveDisplay: {fileID: 0}
-  connectedDisplay: {fileID: 0}
-  warmUpTime: 1
-  roundTime: 1
---- !u!114 &114189194711910234
+  deadDisplay: {fileID: 0}
+  victoryCanvas: {fileID: 0}
+  defeatCanvas: {fileID: 0}
+  warmUpTime: 0.5
+  roundTime: 2
+  globalState: 0
+--- !u!114 &114254342543105594
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -246,6 +249,55 @@ MonoBehaviour:
   instantiationId: -1
   currentMasterID: -1
   isRuntimeInstantiated: 0
+--- !u!114 &114476733938405698
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1416747191704774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8aa3d547cda629e409be42d17ba8c8c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debug: 1
+  maintenanceZone:
+  - {fileID: 0}
+  - {fileID: 0}
+  retailZone:
+  - {fileID: 0}
+  - {fileID: 0}
+  warehouseZone:
+  - {fileID: 0}
+  - {fileID: 0}
+  residentialZone:
+  - {fileID: 0}
+  - {fileID: 0}
+  parkZone:
+  - {fileID: 0}
+  - {fileID: 0}
+  maintenanceCollider:
+  - {fileID: 0}
+  - {fileID: 0}
+  retailCollider:
+  - {fileID: 0}
+  - {fileID: 0}
+  warehouseCollider:
+  - {fileID: 0}
+  - {fileID: 0}
+  residentialCollider:
+  - {fileID: 0}
+  - {fileID: 0}
+  parkCollider:
+  - {fileID: 0}
+  - {fileID: 0}
+  triggerZoneCheck:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &114524407865895178
 MonoBehaviour:
   m_ObjectHideFlags: 1
