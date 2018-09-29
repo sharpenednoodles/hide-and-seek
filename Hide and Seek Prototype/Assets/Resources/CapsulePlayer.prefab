@@ -955,7 +955,6 @@ GameObject:
   - component: {fileID: 114966976889890836}
   - component: {fileID: 114028458936109596}
   - component: {fileID: 120204632294331210}
-  - component: {fileID: 114936015632529340}
   m_Layer: 0
   m_Name: CapsulePlayer
   m_TagString: Player
@@ -2319,7 +2318,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1869019861474104}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.075, z: 0}
+  m_LocalPosition: {x: 0, y: -1.252, z: -0.07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4878119573870128}
@@ -2362,7 +2361,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1532786540187302}
   m_LocalRotation: {x: -0, y: -0.99894685, z: -0, w: -0.045883648}
-  m_LocalPosition: {x: 76.33453, y: 10.097729, z: -50.97341}
+  m_LocalPosition: {x: -107.75, y: 1, z: 122}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4259262820854922}
@@ -3731,13 +3730,13 @@ MonoBehaviour:
     SynchronizeType: 1
     Name: MovementInput
   - Type: 3
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: weaponType
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: attack
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: recoil
   m_SynchronizeLayers:
   - SynchronizeType: 1
@@ -4019,7 +4018,8 @@ MonoBehaviour:
   - {fileID: 114277594435014724}
   headBoneRoot: {fileID: 1271651156128032}
   debug: 0
-  alivePlayers: {fileID: 0}
+  viewID: 0
+  currentLocation: 5
 --- !u!114 &114725445436233664
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4047,25 +4047,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profile: {fileID: 11400000, guid: fa8aeda898ee6c44bb38d115a0c8f94f, type: 2}
---- !u!114 &114936015632529340
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1532786540187302}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f3b2d3794ea28c48a7f4e0bcf7ea922, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainSpeed: 100
-  shiftAdd: 250
-  maxShift: 1000
-  camSens: 0.25
-  totalRun: 1
-  speedMultiplier: 0
-  rotationY: 0
-  mouseSensitivity: 5
 --- !u!114 &114966976889890836
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4164,6 +4145,7 @@ MonoBehaviour:
     fireFX:
     - {fileID: 8300000, guid: f8046c8a557f5e84d8e83e4edeb22bf3, type: 3}
     damageDecals: Default Bullethole
+    warmUpTime: 0
     warmUpFX: []
     coolDownFX:
     - {fileID: 8300000, guid: a06f8be12ed109443b152a6fbd6cdb45, type: 3}
@@ -4589,7 +4571,7 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 2
+  m_Height: 2.3
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.5
