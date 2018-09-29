@@ -167,9 +167,9 @@ public class ZoneController : Photon.MonoBehaviour {
                 foreach (GameObject collide in residentialCollider)
                 {
                     if (close)
-                        collide.SetActive(false);
-                    else
                         collide.SetActive(true);
+                    else
+                        collide.SetActive(false);
                 }
                 break;
 
@@ -184,9 +184,9 @@ public class ZoneController : Photon.MonoBehaviour {
                 foreach (GameObject collide in parkCollider)
                 {
                     if (close)
-                        collide.SetActive(false);
-                    else
                         collide.SetActive(true);
+                    else
+                        collide.SetActive(false);
                 }
                 break;
 
@@ -202,9 +202,9 @@ public class ZoneController : Photon.MonoBehaviour {
                 foreach (GameObject collide in maintenanceCollider)
                 {
                     if (close)
-                        collide.SetActive(false);
-                    else
                         collide.SetActive(true);
+                    else
+                        collide.SetActive(false);
                 }
                 break;
             case Zone.retail:
@@ -219,9 +219,9 @@ public class ZoneController : Photon.MonoBehaviour {
                 foreach (GameObject collide in retailCollider)
                 {
                     if (close)
-                        collide.SetActive(false);
-                    else
                         collide.SetActive(true);
+                    else
+                        collide.SetActive(false);
                 }
                 break;
             case Zone.warehouse:
@@ -236,9 +236,9 @@ public class ZoneController : Photon.MonoBehaviour {
                 foreach (GameObject collide in warehouseCollider)
                 {
                     if (close)
-                        collide.SetActive(false);
-                    else
                         collide.SetActive(true);
+                    else
+                        collide.SetActive(false);
                 }
                 break;
         }

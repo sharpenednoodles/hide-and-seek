@@ -111,6 +111,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     //ZoneController
     private ZoneController zoneController;
 
+    #region State Definitions
     public enum GameState
     {
         warmUp,
@@ -162,6 +163,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         /// A timer event, such as a round or a zone shutoff
         /// </summary>
     }
+    #endregion
 
     //Default state - will update as the game progresses
     public GameState globalState = GameState.warmUp;
@@ -181,8 +183,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         }
     }
     
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Use this for initialization
+    //Use this for initialization
     void Start()
     {
         PhotonNetwork.offlineMode = offlineMode;
@@ -214,11 +215,13 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         }
     }
 
+    #region PhotonCallbacks
     //Hook into the connection to master method
     public virtual void OnConnectedToMaster()
     {
         if (debug)
             Debug.Log("OnConnectedToMaster Hook");
+        connectText.text = "Connected to Master Server";
         //Connect to saved room name from player prefs
         //There IS  a better native way to do this
         //Stay connected between scene loads
@@ -247,6 +250,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         if (debug)
             Debug.Log("OnJoinedRoom Hook");
         PhotonNetwork.playerName = PlayerPrefs.GetString("Username", "Default Name");
+        connectText.text = "Joined Room " +roomName;
         GetGameState();
     
         //THIS WILL NOT WORK AS WE DO NOT KNOW ANYTHING ABOUT THE SERVER YET
@@ -255,6 +259,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         else
         {
             //debugFeed.text = ("Spectating mode");
+
             UpdateEventFeed("Match Already in progress");
             UpdateEventFeed("Entering Spectate mode until next round");
             //Spawn flycam
@@ -275,6 +280,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     //Called if client is unexpectedly disconnected from the server
     public virtual void OnConnectionFail()
     {
+        connectText.text = ("Connection Failed");
         Debug.LogError("Disconnected from server!");
         UpdateEventFeed("You have been Disconnected!");
         StartCoroutine(LoadMainMenu(5));
@@ -283,6 +289,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     //Called if no server connection could be established
     public virtual void OnFailedToConnectToPhoton()
     {
+        connectText.text = ("Connection Failed");
         Debug.LogError("Unable to connect to Master Server!");
         UpdateEventFeed("Please check your internet connection");
         UpdateEventFeed("Unable to connect to Master Server!");
@@ -295,8 +302,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Event Feed
+    #endregion
+    #region EventFeed
 
     //TODO - Add additional formatting and iconography to distiguish event types
     //Populate the event feed with messages
@@ -346,9 +353,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         EventCountDown(eventMessage, time);
     }
 
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Game States
+    #endregion
+    #region GameStates
 
     //Run on each client to get the current state of the game from the master
     //Currently only excecuted on the master client
@@ -440,11 +446,11 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                     if (globalState != GameState.warmUp)
                     {
                         if (debug)
-                            Debug.Log("Scanning to see if < 1 player remaining");
+                            Debug.Log("<color=red>Scanning to see if < 1 player remaining</color>");
                         if (alivePlayers <= 1)
                         {
                             if (debug)
-                                Debug.Log("Preparing to end the game");
+                                Debug.Log("<color=red>Preparing to end the game</color>");
                             StartCoroutine(EndGame());
                         }
                     }
@@ -522,6 +528,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 break;
             case GameState.warmUp:
                 UpdateEventFeed("Now Warming Up");
+                connectText.text = "Warm Up Round";
                 break;
             case GameState.roundStart:
                 //Find and destroy player
@@ -535,6 +542,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 SpawnPlayer();
 
                 UpdateEventFeed("The Game has started");
+                connectText.text = "";
+
                 break;
             case GameState.matchEnd:
                 //debugFeed.text = ("The round has now ended");
@@ -542,6 +551,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 break;
             case GameState.waitForPlayer:
                 UpdateEventFeed("Eliminate the remaining players!");
+                connectText.text = "Survive.";
                 break;
         }
     }
@@ -566,6 +576,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         {
             Debug.Log("Spawning Flycam");
             UpdateEventFeed("Spawning Spectator Cam");
+            connectText.text = "Spaectator Mode";
             GameObject flycam = (GameObject)Instantiate(Resources.Load("Flycam"));
         }
         else
@@ -575,6 +586,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     //Restart the match
     private IEnumerator EndGame()
     {
+        if (debug)
+            Debug.Log("Endgame Called");
         //Check to see which players are alive
         foreach (Players player in players)
         {
@@ -593,6 +606,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     //V basic, needs fixing and prettifying
     private void DisplayCanvas(int ID, string canvasName)
     {
+        if (debug)
+            Debug.Log("String recieved " + canvasName);
         if (canvasName == "victory")
         {
             if (debug)
@@ -701,42 +716,47 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
             case ZoneController.Zone.maintenance:
                 int timerWarning = 10;
                 float timeToWait = ((roundTime / ZONE_COUNT) * 60 - timerWarning);
-                UpdateEventFeed("Maintenance Zone shutting down");
-                EventCountDownTimerDelayNetwork(timerWarning, "Maintenance Zone Closing in", timeToWait);
+                UpdateEventFeed("Maintenance Zone shutting down soon");
+                connectText.text = ("Prepare to evacuate the Maintenance Tunnel");
+                EventCountDownTimerDelayNetwork(timerWarning, "Maintenance Zone closing in", timeToWait);
                 break;
 
             case ZoneController.Zone.park:
                 timerWarning = 10;
                 timeToWait = ((roundTime / ZONE_COUNT) * 60 - timerWarning);
-                UpdateEventFeed("Park Zone shutting down");
-                EventCountDownTimerDelayNetwork(timerWarning, "Park Zone Closing in", timeToWait);
+                UpdateEventFeed("Park Zone shutting down soon");
+                connectText.text = ("Prepare to evacuate the Park");
+                EventCountDownTimerDelayNetwork(timerWarning, "Park Zone closing in", timeToWait);
                 break;
 
             case ZoneController.Zone.residential:
                 timerWarning = 10;
                 timeToWait = ((roundTime / ZONE_COUNT) * 60 - timerWarning);
-                UpdateEventFeed("Residential Zone shutting down");
-                EventCountDownTimerDelayNetwork(timerWarning, "Residential Zone Closing in", timeToWait);
+                UpdateEventFeed("Residential Zone shutting down soon");
+                connectText.text = ("Prepare to evacuate Residential");
+                EventCountDownTimerDelayNetwork(timerWarning, "Residential Zone closing in", timeToWait);
                 break;
 
             case ZoneController.Zone.retail:
                 timerWarning = 10;
                 timeToWait = ((roundTime / ZONE_COUNT) * 60 - timerWarning);
-                UpdateEventFeed("Retail Zone shutting down");
-                EventCountDownTimerDelayNetwork(timerWarning, "Retail Zone Closing in", timeToWait);
+                UpdateEventFeed("Retail Zone shutting down soon");
+                connectText.text = ("Prepare to evacuate Retail");
+                EventCountDownTimerDelayNetwork(timerWarning, "Retail Zone closing in", timeToWait);
                 break;
 
             case ZoneController.Zone.warehouse:
                 timerWarning = 10;
                 timeToWait = ((roundTime / ZONE_COUNT) * 60 - timerWarning);
-                UpdateEventFeed("Warehouse Zone shutting down");
-                EventCountDownTimerDelayNetwork(timerWarning, "Warehouse Zone Closing in", timeToWait);
+                UpdateEventFeed("Warehouse Zone shutting down soon");
+                connectText.text = ("Prepare to evacuate the Warehouse");
+                EventCountDownTimerDelayNetwork(timerWarning, "Warehouse Zone closing in", timeToWait);
                 break;
         }
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //GUI Functions
+    #endregion
+    #region GUI Functions
 
     //Call this to update GUI indicators
     private void UpdateGUI()
@@ -775,9 +795,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
             }
         }
     }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Player Spawn Code
+    #endregion
+    #region PlayerSpawn Code
     public void SpawnPlayer()
     {
         currentID = PhotonNetwork.player.ID;
@@ -816,6 +835,14 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     {
         if (PhotonNetwork.isMasterClient)
         {
+            //Disable Spawn if the server isn't in warmup, and the peer is new
+            if (globalState != GameState.warmUp && !previouslyJoined)
+            {
+                if (debug)
+                    Debug.Log("The Server is no longer warming up");
+                photonView.RPC("RejectedSpawn", PhotonTargets.All, remoteID);
+                return;
+            }
             //Handle undefined inspector properties
             if (spawnPoints.Count == 0)
             {
@@ -910,6 +937,19 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
             Debug.Log("<color=green>Perform Spawn Ignored (not target player)</color>");
     }
 
+    [PunRPC]
+    public void RejectedSpawn(int ID)
+    {
+        if (currentID == ID)
+        {
+            if (debug)
+                Debug.Log("Spawn Rejected as server is no longer warming up");
+            UpdateEventFeed("The Game has already begun");
+            UpdateEventFeed("Joining Server as Spectator");
+            SpawnFlyCam(ID);
+        }
+    }
+
     //Clears the temporary lists
     private void ClearSpawnLists()
     {
@@ -933,5 +973,6 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         }
         return 0;
     }
+    #endregion
 }
 

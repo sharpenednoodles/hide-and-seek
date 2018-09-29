@@ -57,4 +57,5 @@ MonoBehaviour:
   - PerformSpawn
   - RequestSpawn
   - ToggleZone
+  - RejectedSpawn
   DisableAutoOpenWizard: 1
