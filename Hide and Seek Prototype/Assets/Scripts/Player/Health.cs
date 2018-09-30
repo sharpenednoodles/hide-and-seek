@@ -50,9 +50,9 @@ public class Health : Photon.MonoBehaviour {
     }
 
     //Send target taking damage across clients
-    public void SendDamage(int damage)
+    public void SendDamage(int damage, int targetID)
     {
-        photonView.RPC("TakeDamage", PhotonTargets.All, damage, (byte)playerID);
+        photonView.RPC("TakeDamage", PhotonTargets.All, damage, (byte)playerID, (byte)targetID);
     }
 
     //Call to refresh players GUI health on respawn
@@ -64,8 +64,10 @@ public class Health : Photon.MonoBehaviour {
 
     //Called to damage target over network
     //We assume target is a player to save resources
+
+    //TO DO - CLEAN THIS UP
     [PunRPC]
-    public void TakeDamage(int damage, byte senderID)
+    public void TakeDamage(int damage, byte senderID, byte targetID)
     {
         if (senderID == playerID)
         {
@@ -74,9 +76,12 @@ public class Health : Photon.MonoBehaviour {
             return;
         }
 
-        currentHealth -= damage;
-        healthBar.fillAmount -= ((float)damage / defaultHealth);
-
+        if (targetID == playerID)
+        {
+            currentHealth -= damage;
+            healthBar.fillAmount -= ((float)damage / defaultHealth);
+        }
+        
         if (debug)
         {
             Debug.Log("Target hit: current health = " + currentHealth + " Target Name" + gameObject.name);

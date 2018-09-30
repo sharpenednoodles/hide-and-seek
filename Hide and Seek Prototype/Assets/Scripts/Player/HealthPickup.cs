@@ -8,14 +8,8 @@ using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
 public class HealthPickup : MonoBehaviour {
 
-    
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    [Header("Properties")]
+    //Default amount of health to give player on pickup
+    public int healthAmount = 20;
+
 }

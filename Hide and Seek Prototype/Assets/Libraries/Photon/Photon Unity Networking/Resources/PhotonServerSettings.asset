@@ -58,4 +58,7 @@ MonoBehaviour:
   - RequestSpawn
   - ToggleZone
   - RejectedSpawn
+  - SyncShotRayCast
+  - WeaponFX
+  - WeaponSparks
   DisableAutoOpenWizard: 1

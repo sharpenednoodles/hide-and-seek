@@ -214,7 +214,7 @@ public class CFX_SpawnSystem : MonoBehaviour
 		instance = this;
 	}
 	
-	void Start()
+	public void Start()
 	{
 		allObjectsLoaded = false;
 		

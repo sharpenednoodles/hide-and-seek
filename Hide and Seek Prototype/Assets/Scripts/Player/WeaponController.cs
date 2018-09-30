@@ -50,6 +50,8 @@ namespace HideSeek.WeaponController
         private Text clipDisplay;
         private Text ammoDisplay;
 
+        private GameObject GameManager, FX;
+
         //networkTempVars
         //Thinking of having a lookup on the master client with all these precached so every player can access at will, but we'll see
 
@@ -86,6 +88,8 @@ namespace HideSeek.WeaponController
             GameObject reticle = GameObject.FindGameObjectWithTag("Reticle");
             crosshairs = reticle.GetComponent<Crosshairs>();
 
+            GameManager = GameObject.Find("Game Controller");
+            FX = GameManager.transform.GetChild(2).gameObject;
             playerID = photonView.viewID;
         }
 
@@ -187,6 +191,17 @@ namespace HideSeek.WeaponController
                 Vector3 rayDirection = Camera.main.transform.forward;
                 RaycastHit hit;
 
+                
+                GameObject instance = CFX_SpawnSystem.GetNextObject(FX.GetComponent<CFX_PrefabPool>().muzzleFX);
+                instance.transform.position = currWeapon.fireOrigin.transform.position;
+                //instance.transform.rotation = currWeapon.fireOrigin.transform.rotation;
+                //instance.transform.rotation = Quaternion.Euler(currWeapon.fireOrigin.transform.rotation.x, currWeapon.fireOrigin.transform.rotation.y, currWeapon.fireOrigin.transform.rotation.z);
+                instance.transform.SetParent(currWeapon.fireOrigin.transform);
+                
+                //Muzzle flash sync
+
+                photonView.RPC("WeaponFX", PhotonTargets.Others, currWeapon.fireOrigin.transform.position, currWeapon.fireOrigin.transform.rotation);
+
                 //Get laser origin
                 if (drawRay)
                     laserDebug.SetPosition(0, currWeapon.fireOrigin.transform.position);
@@ -203,10 +218,11 @@ namespace HideSeek.WeaponController
                     Debug.DrawRay(rayOrigin, rayDirection * currWeapon.fireRange, Color.green);
 
                     Health hitHealth = hit.collider.GetComponent<Health>();
+                    PhotonView target = hit.collider.GetComponent<PhotonView>();
 
                     //Apply damage over network
                     if (hitHealth != null)
-                        hitHealth.SendDamage(currWeapon.damage);
+                        hitHealth.SendDamage(currWeapon.damage, target.ownerId);
 
                     //Add weapon force
                     if (hit.rigidbody != null)
@@ -240,12 +256,29 @@ namespace HideSeek.WeaponController
                 Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
                 
                 //Call correct decal function
+                //Have swapped to the code below as it can be networked better
+                //May reintroduce later as parenting decals to rigidbody items looks great
+                /*
                 if (hit.rigidbody != null)
+                {
                     decal.SpawnFromPool(currWeapon.damageDecals, hit.point, rotation, hit.rigidbody.gameObject);
+                }
                 else
+                {
                     decal.SpawnFromPool(currWeapon.damageDecals, hit.point, rotation);
+                }
+                */
 
-                photonView.RPC("SyncShot", PhotonTargets.Others, rayOrigin, rayDirection, currWeapon.fireRange, currWeapon.damageDecals);
+                //New less nice looking implementation
+
+                //Rewrite later so that network aware first up
+                if (hit.rigidbody == null)
+                {
+                    decal.SpawnFromPool(currWeapon.damageDecals, hit.point, rotation);
+                    photonView.RPC("SyncShot", PhotonTargets.Others, currWeapon.damageDecals, hit.point, rotation);
+                }
+                //photonView.RPC("SyncShotRayCast", PhotonTargets.Others, rayOrigin, rayDirection, currWeapon.fireRange, currWeapon.damageDecals);
+                photonView.RPC("WeaponSparks", PhotonTargets.All, hit.point, rotation);
             }
         }
 
@@ -256,10 +289,25 @@ namespace HideSeek.WeaponController
             target.GetComponent<Rigidbody>().AddForce(direction * impactForce);
         }
 
+        [PunRPC]
+        void WeaponFX (Vector3 position, Quaternion rotation)
+        {
+            GameObject instance = CFX_SpawnSystem.GetNextObject(FX.GetComponent<CFX_PrefabPool>().muzzleFX);
+            instance.transform.position = position;
+            //instance.transform.SetParent(currWeapon.fireOrigin.transform);
+        }
+
+        [PunRPC]
+        void WeaponSparks (Vector3 position, Quaternion rotation)
+        {
+            GameObject instance = CFX_SpawnSystem.GetNextObject(FX.GetComponent<CFX_PrefabPool>().metalSparks);
+            instance.transform.position = position;
+        }
         //Draw Remote player shots in editor
         //Hit detection is currently broken, no idea why
+        //DEPRECATING AS IT DOESN'T FUNCTION
         [PunRPC]
-        void SyncShot(Vector3 start, Vector3 dir, int fireRange, string decalString)
+        void SyncShotRayCast(Vector3 start, Vector3 dir, int fireRange, string decalString)
         {
             RaycastHit hit;
             if (Physics.Raycast(start, dir, out hit, currWeapon.fireRange))
@@ -279,6 +327,13 @@ namespace HideSeek.WeaponController
                 Debug.DrawRay(start, dir * fireRange, Color.yellow);
             }
         }
+
+        [PunRPC]
+        void SyncShot(string decalString, Vector3 point, Quaternion rotation)
+        {
+            decal.SpawnFromPool(currWeapon.damageDecals, point, rotation);
+        }
+           
 
         private IEnumerator ShotEffect()
         {

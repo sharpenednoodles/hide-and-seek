@@ -9,6 +9,7 @@ namespace HideSeek.WeaponController
     {
         public GameObject model;
         public GameObject fireOrigin;
+        //public GameObject weaponFX;
         public float fireRate;
         public int fireRange;
         public int damage;
@@ -17,7 +18,7 @@ namespace HideSeek.WeaponController
         public int remainingClip;
         public int ammo;
         public float reloadTime;
-        public bool canFire = true, isEquipped = false, crosshair = true, needWarmUp = false;
+        public bool canFire = true, isEquipped = false, crosshair = true, needWarmUp = false, melee = false;
         //Audio arrays containing our related audio files
         public AudioClip[] emptyFX;
         public AudioClip[] reloadFX;
@@ -25,7 +26,7 @@ namespace HideSeek.WeaponController
         //Array of various decal damages
         public string damageDecals;
 
-        //Currently unused
+        
         public enum ID {
             unarmed,
             /// <summary>

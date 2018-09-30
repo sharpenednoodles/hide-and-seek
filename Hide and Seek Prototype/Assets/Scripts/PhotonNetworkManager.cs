@@ -14,6 +14,13 @@ using TMPro;
 /// TODO - Shift player data to photon hashtables to optimise netcode and local clientside excecution times
 /// </summary>
 
+    //TO COMPLETE
+    //Recreation of player data on new game
+    //Not start game until 2 or more players enter
+    //retart of timer on game restart
+    //death when in shut off location
+    //kill scoring
+
 public class PhotonNetworkManager : Photon.MonoBehaviour
 {
     //Enter Game version here, this is to prevent different versions from connecting to the same servers
@@ -94,6 +101,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         public int score;
     }
     private List<Players> players;
+    private CFX_SpawnSystem FX;
 
     [Header("GUI Elements")]
     [SerializeField] private GameObject statusBoard;
@@ -193,6 +201,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         players = new List<Players>();
         remainingZones = ZONE_COUNT;
         zoneController = GetComponent<ZoneController>();
+        FX = gameObject.transform.GetChild(2).gameObject.GetComponent<CFX_SpawnSystem>();
         //Synchronise Scene Loading
         PhotonNetwork.automaticallySyncScene = true;
         persistScore = FindObjectOfType<PersistScore>();
@@ -451,7 +460,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                         {
                             if (debug)
                                 Debug.Log("<color=red>Preparing to end the game</color>");
-                            StartCoroutine(EndGame());
+                            //StartCoroutine(EndGame());
+                            photonView.RPC("SetGameState", PhotonTargets.AllBuffered, (byte)GameState.matchEnd, (byte)EventType.timer, currentID);
                         }
                     }
                     
@@ -541,6 +551,10 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 PhotonNetwork.Destroy(player);
                 SpawnPlayer();
 
+                //Reset the FX pool
+                CFX_SpawnSystem.UnloadObjects(FX.GetComponent<CFX_PrefabPool>().muzzleFX);
+                FX.Start();
+
                 UpdateEventFeed("The Game has started");
                 connectText.text = "";
 
@@ -548,6 +562,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
             case GameState.matchEnd:
                 //debugFeed.text = ("The round has now ended");
                 UpdateEventFeed("The round has now ended");
+                StartCoroutine(EndGame());
                 break;
             case GameState.waitForPlayer:
                 UpdateEventFeed("Eliminate the remaining players!");
@@ -593,13 +608,16 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         {
             if (player.isAlive == true)
             {
-                DisplayCanvas(currentID, "victory");
+                //Check if we are the correct player
+                if (player.actorID == currentID)
+                    DisplayCanvas(currentID, "victory");
                 player.score += 1;
             } 
         }
         persistScore.SaveToList(players);
         yield return new WaitForSeconds(5);
-        PhotonNetwork.LoadLevel(SceneManager.GetActiveScene().name);
+        //PhotonNetwork.LoadLevel(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     //Local function to give player feedback
