@@ -31,6 +31,7 @@ This is a list of the third party tools included within the Unity Project
 - [SpaceSkiesFree](https://assetstore.unity.com/packages/2d/textures-materials/sky/spaceskies-free-80503 "Someone send me a Discord message if you see this text")
 - [TextMesh Pro](https://assetstore.unity.com/packages/essentials/beta-projects/textmesh-pro-84126 "Vector Text, hell yeah")
 - [Unity Standard Assets](https://assetstore.unity.com/packages/essentials/asset-packs/standard-assets-32351)
+- [War FX](https://assetstore.unity.com/packages/vfx/particles/war-fx-5669)
 
 ## Asset Credits
 List third party sounds, music, textures and models requiring credit here
