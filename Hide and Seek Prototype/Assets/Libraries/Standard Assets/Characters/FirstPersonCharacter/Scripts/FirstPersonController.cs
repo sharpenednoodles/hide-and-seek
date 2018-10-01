@@ -68,11 +68,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
             retAnim = reticle.GetComponent<Animator>();
         }
 
-
-
-
-
-
         // Update is called once per frame
         private void Update()
         {
@@ -99,9 +94,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
             if (GameMenuController.MenuState == true)
             {
                 m_PauseMult = 0f;
+                m_MouseLook.SetCursorLock(false);
             }
-            else m_PauseMult = 1.0f;
-
+            else
+            {
+                m_PauseMult = 1.0f;
+                m_MouseLook.SetCursorLock(true);
+            }
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
         }
 

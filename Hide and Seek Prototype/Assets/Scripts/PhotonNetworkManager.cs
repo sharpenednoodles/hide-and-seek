@@ -24,7 +24,7 @@ using TMPro;
 public class PhotonNetworkManager : Photon.MonoBehaviour
 {
     //Enter Game version here, this is to prevent different versions from connecting to the same servers
-    static public string gameVersion = "Week 10 Testing build";
+    static public string gameVersion = "Week 11 Testing Build";
 
     private bool isSpawnable = true;
     const int ZONE_COUNT = 5;
@@ -110,6 +110,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     [SerializeField] private TextMeshProUGUI aliveDisplay, deadDisplay;
     [SerializeField] private GameObject victoryCanvas;
     [SerializeField] private GameObject defeatCanvas;
+    [SerializeField] private GameObject[] HUDCanvas;
 
     [Header("Timer Settings")]
     [Tooltip("Specify the length of events in minutes")]
@@ -438,6 +439,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                     
                     GameObject player = PhotonView.Find(local.viewID).gameObject;
                     PhotonNetwork.Destroy(player);
+                    ToggleHUD(false);
                     DisplayCanvas(currentID, "defeat");
                     SpawnFlyCam(ID);
                 }
@@ -759,6 +761,25 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     #endregion
     #region GUI Functions
 
+    //Call this to activate/deactivate player related HUD items
+    private void ToggleHUD(bool enabled)
+    {
+        if (enabled)
+        {
+            foreach (GameObject HUD in HUDCanvas)
+            {
+                HUD.SetActive(true);
+            }
+        }
+        else
+        {
+            foreach (GameObject HUD in HUDCanvas)
+            {
+                HUD.SetActive(false);
+            }
+        }
+    }
+
     //Call this to update GUI indicators
     private void UpdateGUI()
     {
@@ -917,6 +938,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
             GameObject playerReference = PhotonNetwork.Instantiate(player.name, locationToSpawn.position, Quaternion.Euler(0, locationToSpawn.transform.rotation.y, 0), 0);
             local = playerReference.GetComponent<PlayerNetwork>();
             local.UpdateZoneLocation();
+            ToggleHUD(true);
            
             //Debug stuff
             //UpdateEventFeed("My Photon View ID = " +currentID);
@@ -975,4 +997,12 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         return 0;
     }
     #endregion
+
+    //I don't have an interface to transfer across so doing it here - doesn't make sense, but no time for that
+    public void TransferDamage(int senderID, int recieverID, int damage)
+    {
+        Debug.Log("Master.Transfer senderID:" + senderID + " recieverID: " + recieverID);
+        //Debug.LogWarning("Transfer Damage senderID" +senderID +" recieverID " +currentID); 
+        local.TransferDamage(senderID, recieverID, damage);
+    }
 }

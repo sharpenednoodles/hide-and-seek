@@ -41,8 +41,9 @@ namespace HideSeek.WeaponController
         [SerializeField] private Animator playerAnim;
         public Weapon currWeapon;
         public bool drawRay;
+        public bool isProp = false;
 
-        private int playerID;
+        private int playerID, actorID;
         private LineRenderer laserDebug;
         private WaitForSeconds shotDuration = new WaitForSeconds(.07f);
 
@@ -57,6 +58,7 @@ namespace HideSeek.WeaponController
 
         private GameObject remotePlayer, remoteWeapon, remoteUnArmed, remotePistol, remoteLightningGun, remoteMinigun;
 
+        
         void Start()
         {
             decal = GameObject.Find("Game Controller").GetComponent<DecalManager>();
@@ -74,7 +76,7 @@ namespace HideSeek.WeaponController
             ammoDisplay = displayTemp.transform.GetChild(1).gameObject.GetComponent<Text>();
 
             //DISABLE ALL WEAPONS INITIALLY
-            unarmed.model.SetActive(true);
+            unarmed.model.SetActive(false);
             minigun.model.SetActive(false);
             lightningGun.model.SetActive(false);
             pistol.model.SetActive(false);
@@ -91,9 +93,12 @@ namespace HideSeek.WeaponController
             GameManager = GameObject.Find("Game Controller");
             FX = GameManager.transform.GetChild(2).gameObject;
             playerID = photonView.viewID;
+            actorID = photonView.ownerId;
+            //Switch to unarmed weapon as default
+            SwitchWeapon(Weapon.ID.unarmed);
         }
 
-
+        #region Player Input
         void Update()
         {
             cooldown -= Time.deltaTime;
@@ -141,10 +146,13 @@ namespace HideSeek.WeaponController
                 //Get fire input
                 if (Input.GetButton("Fire1"))
                 {
-                    Shoot();
-                    fireHeld = true;
-                    weaponAnim.SetBool("attack", true);
-                    playerAnim.SetBool("attack", true);
+                    if (!isProp && !GameMenuController.MenuState)
+                    {
+                        Shoot();
+                        fireHeld = true;
+                        weaponAnim.SetBool("attack", true);
+                        playerAnim.SetBool("attack", true);
+                    }
                 }
                 //Player releasing trigger
                 if (Input.GetButtonUp("Fire1"))
@@ -161,6 +169,7 @@ namespace HideSeek.WeaponController
                 }
             }
         }
+        #endregion
 
         void LateUpdate()
         {
@@ -168,6 +177,7 @@ namespace HideSeek.WeaponController
             //Currently removed again
         }
 
+        #region Shooting Logic
         //Handles Player Shooting
         void Shoot()
         {
@@ -216,14 +226,28 @@ namespace HideSeek.WeaponController
                     //Shot info
                     Debug.Log("Player " + photonView.viewID + " hit" + hit.transform.name);
                     Debug.DrawRay(rayOrigin, rayDirection * currWeapon.fireRange, Color.green);
-
                     Health hitHealth = hit.collider.GetComponent<Health>();
                     PhotonView target = hit.collider.GetComponent<PhotonView>();
 
-                    //Apply damage over network
-                    if (hitHealth != null)
-                        hitHealth.SendDamage(currWeapon.damage, target.ownerId);
+                    //Set health item to the pointer location if component has one
+                    if (hit.collider.GetComponent<HealthPointer>() != null)
+                    {
+                        Debug.Log("Found a Health Pointer!");
+                        HealthPointer HP = hit.collider.GetComponent<HealthPointer>();
+                        int reciverID = HP.GetComponent<PhotonView>().ownerId;
+                        Debug.Log(reciverID +" " +HP.GetComponent<PhotonView>().ownerId +" "+actorID);
 
+                        HP.RecieveHit(actorID, reciverID, currWeapon.damage);
+                        //hitHealth.SendDamage(currWeapon.damage, targetID);
+                    }
+
+        
+
+                    if (hitHealth != null)
+                    {
+                        hitHealth.SendDamage(currWeapon.damage, target.viewID);
+                    }
+                    
                     //Add weapon force
                     if (hit.rigidbody != null)
                     {
@@ -272,6 +296,7 @@ namespace HideSeek.WeaponController
                 //New less nice looking implementation
 
                 //Rewrite later so that network aware first up
+
                 if (hit.rigidbody == null)
                 {
                     decal.SpawnFromPool(currWeapon.damageDecals, hit.point, rotation);
@@ -347,6 +372,8 @@ namespace HideSeek.WeaponController
             playerAnim.ResetTrigger("recoil");
         }
 
+        #endregion
+        #region Weapon SFX
         void PlayFireSound(Weapon c)
         {
             if (c.fireFX.Length != 0)
@@ -383,6 +410,7 @@ namespace HideSeek.WeaponController
             else gunSound.clip = null;
             gunSound.Play();
         }
+        #endregion
 
         void TriggerReload(Weapon c)
         {
@@ -517,6 +545,21 @@ namespace HideSeek.WeaponController
                 case Weapon.ID.lightningGun:
                     remoteLightningGun.SetActive(true);
                     break;
+            }
+        }
+
+        //Used for switching player into prop
+        public void PropMode(bool isProp)
+        {
+            if (isProp)
+            {
+                isProp = false;
+                crosshairs.ToggleCrossHairs(true);
+            }
+            else
+            {
+                isProp = true;
+                crosshairs.ToggleCrossHairs(false);
             }
         }
     }

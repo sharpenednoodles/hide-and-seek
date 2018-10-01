@@ -10,7 +10,7 @@ using UnityEngine;
 ///TODO - Add offline mode
 /// </summary>
 
-public class PlayerNetwork : MonoBehaviour
+public class PlayerNetwork : Photon.MonoBehaviour
 {
     [SerializeField] private GameObject playerCamera;
     [SerializeField] private GameObject mapCamera;
@@ -18,19 +18,22 @@ public class PlayerNetwork : MonoBehaviour
     [SerializeField] private MonoBehaviour[] playerControlScripts;
     //Head bone is connected to then, neck bone
     [SerializeField] private GameObject headBoneRoot;
-    [SerializeField] private bool debug = false;
+    [SerializeField] private bool debug = true;
     public int viewID;
+    private int actorID;
 
     private PhotonNetworkManager master;
-    private PhotonView photonView;
+    private Health health;
 
     public ZoneController.Zone currentLocation = ZoneController.Zone.error;
     
     private void Start()
     {
-        photonView = GetComponent<PhotonView>();
+        //photonView = GetComponent<PhotonView>();
         master = FindObjectOfType<PhotonNetworkManager>();
-        
+        health = GetComponent<Health>();
+        actorID = photonView.ownerId;
+        Debug.LogWarning("actor id of playerNetwork: " + actorID);
         Initialise();
     }
 
@@ -100,7 +103,37 @@ public class PlayerNetwork : MonoBehaviour
         {
             Debug.LogError("No Location Found");
         }
-        Debug.Log("Player locaed in " + currentLocation);
+        Debug.Log("Player located in " + currentLocation);
+    }
+
+    //I don't have an interface to transfer across so doing it here - doesn't make sense, but no time for that
+    public void TransferDamage(int senderID, int recieverID, int damage)
+    {
+        Debug.Log("Local.Transfer senderID:" + senderID + " recieverID: " + recieverID);
+        photonView.RPC("SendDamage", PhotonTargets.AllBuffered, senderID, recieverID, damage);
+    }
+
+    [PunRPC]
+    public void SendDamage(int senderID, int recieverID, int damage)
+    {
+        Debug.Log("Local.Send senderID:" + senderID + " recieverID: " + recieverID +" actorID on player: " +actorID +" photonview ID" + photonView.ownerId);
+
+        if (senderID == recieverID)
+        {
+            Debug.Log("Player " + senderID + " hit Player " + recieverID + " for " + damage + " damage");
+            Debug.Log("Player Hitting self");
+            return;
+        }
+        
+        //Do the damage
+        if (photonView.ownerId == recieverID)
+        {
+            if (debug)
+                Debug.Log("Player " + senderID + " hit Player " + recieverID + " for " + damage + " damage");
+            health.TakeDamage(damage, senderID);
+        }
+
+
     }
 }
 

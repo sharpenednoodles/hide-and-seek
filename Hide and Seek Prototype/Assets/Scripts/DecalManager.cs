@@ -41,6 +41,7 @@ namespace HideSeek.WeaponController
                 {
                     GameObject obj = Instantiate(pool.prefab, new Vector3(0,0,0), Quaternion.Euler(0, Random.Range(0, 360), 0), gameObject.transform.GetChild(1));
                     obj.SetActive(false);
+                    //NEED TO SET AS AN OCCLUDER
                     objectPool.Enqueue(obj);
                 }
                 poolDictionary.Add(pool.tag, objectPool);

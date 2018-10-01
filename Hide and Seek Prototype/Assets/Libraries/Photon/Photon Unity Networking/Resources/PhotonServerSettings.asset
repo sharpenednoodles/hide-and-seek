@@ -61,4 +61,6 @@ MonoBehaviour:
   - SyncShotRayCast
   - WeaponFX
   - WeaponSparks
+  - SendDamage
+  - TakeDamageOld
   DisableAutoOpenWizard: 1
