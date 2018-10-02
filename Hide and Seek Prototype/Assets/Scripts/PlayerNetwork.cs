@@ -128,9 +128,9 @@ public class PlayerNetwork : Photon.MonoBehaviour
 
     }
 
-    public void SendDamageLocal(int senderID, int recieverID, int damage)
+    private void SendDamageLocal(int senderID, int recieverID, int damage)
     {
-        Debug.Log("Local.SendLocal senderID:" + senderID + " recieverID: " + recieverID + " actorID on player: " + actorID + " photonview ID" + photonView.ownerId);
+        Debug.Log("Local.SendLocal senderID:" + senderID + " recieverID: " + recieverID + " actorID on player: " + actorID + " photonview ID" + photonView.ownerId +" masterRef" + master.currentID);
 
         if (senderID == recieverID)
         {
@@ -141,7 +141,7 @@ public class PlayerNetwork : Photon.MonoBehaviour
 
 
         //Do the damage
-        if (photonView.ownerId == recieverID)
+        if (master.currentID == recieverID)
         {
             if (debug)
                 Debug.Log("Player " + senderID + " hit Player " + recieverID + " for " + damage + " damage");
