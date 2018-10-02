@@ -236,7 +236,8 @@ namespace HideSeek.WeaponController
                         HealthPointer HP = hit.collider.GetComponent<HealthPointer>();
                         int reciverID = HP.GetComponent<PhotonView>().ownerId;
                         Debug.Log(reciverID +" " +HP.GetComponent<PhotonView>().ownerId +" "+actorID);
-
+                        
+                        //temp variable switch
                         HP.RecieveHit(actorID, reciverID, currWeapon.damage);
                         //hitHealth.SendDamage(currWeapon.damage, targetID);
                     }

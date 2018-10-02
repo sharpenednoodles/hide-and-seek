@@ -116,7 +116,21 @@ public class PlayerNetwork : Photon.MonoBehaviour
     [PunRPC]
     public void SendDamage(int senderID, int recieverID, int damage)
     {
+        if (photonView.isMine)
+        {
+            Debug.LogWarning("MY ID IS " + photonView.ownerId);
+        }
+        
         Debug.Log("Local.Send senderID:" + senderID + " recieverID: " + recieverID +" actorID on player: " +actorID +" photonview ID" + photonView.ownerId);
+
+        SendDamageLocal(senderID, recieverID, damage);
+
+
+    }
+
+    public void SendDamageLocal(int senderID, int recieverID, int damage)
+    {
+        Debug.Log("Local.SendLocal senderID:" + senderID + " recieverID: " + recieverID + " actorID on player: " + actorID + " photonview ID" + photonView.ownerId);
 
         if (senderID == recieverID)
         {
@@ -124,7 +138,8 @@ public class PlayerNetwork : Photon.MonoBehaviour
             Debug.Log("Player Hitting self");
             return;
         }
-        
+
+
         //Do the damage
         if (photonView.ownerId == recieverID)
         {
@@ -132,7 +147,6 @@ public class PlayerNetwork : Photon.MonoBehaviour
                 Debug.Log("Player " + senderID + " hit Player " + recieverID + " for " + damage + " damage");
             health.TakeDamage(damage, senderID);
         }
-
 
     }
 }
