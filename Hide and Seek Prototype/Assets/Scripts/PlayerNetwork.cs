@@ -33,7 +33,6 @@ public class PlayerNetwork : Photon.MonoBehaviour
         master = FindObjectOfType<PhotonNetworkManager>();
         health = GetComponent<Health>();
         actorID = photonView.ownerId;
-        Debug.LogWarning("actor id of playerNetwork: " + actorID);
         Initialise();
     }
 

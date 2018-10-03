@@ -102,7 +102,8 @@ public class Health : Photon.MonoBehaviour
         if (debug)
         {
             Debug.Log("Target hit: current health = " + currentHealth + " Target Name " + gameObject.name);
-            Debug.Log("Health bar fillamount = " + healthBar.fillAmount);
+            if (photonView.isMine)
+                Debug.Log("Health bar fillamount = " + healthBar.fillAmount);
         }
 
         if (currentHealth <= 0 && !deathCalled)
