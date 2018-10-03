@@ -49,7 +49,7 @@ public class PlayerNetwork : Photon.MonoBehaviour
             //TODO - Switch to selective renderer
 
             //Set local player to ignore raycasts
-            gameObject.layer = 2;
+            SetLayerRecursively(gameObject, 2);
             HideHead();
             //if (debug)
                     //Debug.Log("Local Hello World from " +photonView.viewID);
@@ -75,7 +75,7 @@ public class PlayerNetwork : Photon.MonoBehaviour
         }
     }
 
-    //DEPRECATE THIS SHIT
+    //DEPRECATE THIS when you have time
     public void HideHead()
     {
         if (debug)
@@ -106,6 +106,15 @@ public class PlayerNetwork : Photon.MonoBehaviour
             Debug.LogError("No Location Found");
         }
         Debug.Log("Player located in " + currentLocation);
+    }
+
+    private void SetLayerRecursively(GameObject g, int layerNumber)
+    {
+        if (g == null) return;
+        foreach (Transform t in g.GetComponentsInChildren<Transform>(true))
+        {
+            t.gameObject.layer = layerNumber;
+        }
     }
 }
 

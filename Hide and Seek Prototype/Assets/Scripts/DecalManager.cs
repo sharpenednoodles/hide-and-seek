@@ -69,6 +69,8 @@ namespace HideSeek.WeaponController
         //overload for decal spawn for no parent
         public void SpawnFromPool(string tag, Vector3 position, Quaternion rotation)
         {
+            if (poolDictionary.ContainsKey("NULL"))
+                return;
             if (!poolDictionary.ContainsKey(tag))
             {
                 Debug.LogWarning("tag " + tag + " does not exist in current dictionary");

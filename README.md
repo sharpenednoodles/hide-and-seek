@@ -38,3 +38,7 @@ List third party sounds, music, textures and models requiring credit here
 Parts of the sounds designed, derived or used from the BOOM Guns Designed Library
 
 Audio files from non free Libraries will be removed from GIT after active development ceases
+
+"Industrial Cinematic" Kevin MacLeod (incompetech.com)
+Licensed under Creative Commons: By Attribution 3.0 License
+http://creativecommons.org/licenses/by/3.0/

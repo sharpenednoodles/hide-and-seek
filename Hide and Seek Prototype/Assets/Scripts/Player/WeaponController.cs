@@ -148,8 +148,14 @@ namespace HideSeek.WeaponController
                 {
                     if (!isProp)
                     {
-                        Shoot();
                         fireHeld = true;
+                        if (currWeapon.needWarmUp)
+                        {
+                            WarmUp();
+                        }
+                        else
+                            Shoot();
+                        
                         weaponAnim.SetBool("attack", true);
                         playerAnim.SetBool("attack", true);
                     }
@@ -160,6 +166,10 @@ namespace HideSeek.WeaponController
                     weaponAnim.SetBool("attack", true);
                     playerAnim.SetBool("attack", false);
                     fireHeld = false;
+                    if (currWeapon.needWarmUp)
+                    {
+
+                    }
                 }
 
                 //Reload the shit
@@ -178,6 +188,12 @@ namespace HideSeek.WeaponController
         }
 
         #region Shooting Logic
+
+        void WarmUp()
+        {
+
+        }
+
         //Handles Player Shooting
         void Shoot()
         {
@@ -190,7 +206,7 @@ namespace HideSeek.WeaponController
                 }
 
                 //Prevent us from firing if our current clip is empty
-                if (!SubtractAmmo(currWeapon))
+                if (!SubtractAmmo(currWeapon) && !currWeapon.melee)
                 {
                     if (!soundPlay)
                         StartCoroutine(PlayEmptySound(currWeapon));
@@ -342,6 +358,7 @@ namespace HideSeek.WeaponController
         }
         //Draw Remote player shots in editor
         //Hit detection is currently broken, no idea why
+
         //DEPRECATING AS IT DOESN'T FUNCTION
         [PunRPC]
         void SyncShotRayCast(Vector3 start, Vector3 dir, int fireRange, string decalString)
@@ -371,7 +388,6 @@ namespace HideSeek.WeaponController
             decal.SpawnFromPool(currWeapon.damageDecals, point, rotation);
         }
            
-
         private IEnumerator ShotEffect()
         {
             PlayFireSound(currWeapon);

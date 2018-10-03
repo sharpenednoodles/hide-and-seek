@@ -15,7 +15,7 @@ public class CameraControl : MonoBehaviour
 {
     //public GameObject PropSwitchingReference;
 
-    private const float Y_ANGLE_MIN = 0.0f;
+    private const float Y_ANGLE_MIN = 5.0f;
     private const float Y_ANGLE_MAX = 50.0f;
 
     [SerializeField] private Transform lookAt;

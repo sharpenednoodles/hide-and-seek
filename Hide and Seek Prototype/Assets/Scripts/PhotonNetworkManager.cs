@@ -306,6 +306,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         StartCoroutine(LoadMainMenu(5));
     }
 
+
+
     public IEnumerator LoadMainMenu(float timeToWait)
     {
         yield return new WaitForSeconds(timeToWait);
