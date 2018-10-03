@@ -35,15 +35,18 @@ public class PropSwitching : MonoBehaviour
         //Get game objects
         photonView = GetComponent<PhotonView>();
         isProp = false;
-		InvokeRepeating ("Raycast", 0.1f, 0.1f);
-        playerModel = this.gameObject.transform.GetChild(1).gameObject;
-        weapons = this.gameObject.transform.GetChild(3).gameObject;
-        playerCollider = this.GetComponent<CharacterController>();
+        //Only want this on our local player
+        if (photonView.isMine)
+		    InvokeRepeating ("Raycast", 0.1f, 0.1f);
+
+        playerModel = gameObject.transform.GetChild(1).gameObject;
+        weapons = gameObject.transform.GetChild(3).gameObject;
+        playerCollider = GetComponent<CharacterController>();
         firstPersonController = GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
-        thirdPersonController = this.GetComponent<ThirdPersonController>();
-        followCam = this.GetComponent<CameraControl>();
+        thirdPersonController = GetComponent<ThirdPersonController>();
+        followCam = GetComponent<CameraControl>();
         camControl = GetComponent<CameraControl>();
-        playerNetwork = this.GetComponent<PlayerNetwork>();
+        playerNetwork = GetComponent<PlayerNetwork>();
     }
 
 	public void Update()
