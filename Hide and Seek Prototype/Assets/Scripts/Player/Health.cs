@@ -32,13 +32,12 @@ public class Health : Photon.MonoBehaviour
     private void Start()
     {
         currentHealth = defaultHealth;
-        if (gameObject.tag == "Player")
+        if (gameObject.tag == "Player" &&photonView.isMine)
         {
             //Find the players health item
             master = FindObjectOfType<PhotonNetworkManager>();
             //healthBar = GameObject.Find("Health Bar").GetComponent<Image>();
-            while (healthBar == null)
-                healthBar = GameObject.Find("Health Bar").GetComponent<Image>();
+            healthBar = GameObject.Find("Health Bar").GetComponent<Image>();
             if (photonView.isMine)
                 playerID = photonView.ownerId;
             deathCalled = false;
