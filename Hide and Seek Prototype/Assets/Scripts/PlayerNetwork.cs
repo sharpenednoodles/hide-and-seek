@@ -47,6 +47,9 @@ public class PlayerNetwork : Photon.MonoBehaviour
             viewID = photonView.viewID;
             //Shrink our head bone so we don't see it
             //TODO - Switch to selective renderer
+
+            //Set local player to ignore raycasts
+            gameObject.layer = 2;
             HideHead();
             //if (debug)
                     //Debug.Log("Local Hello World from " +photonView.viewID);
@@ -103,50 +106,6 @@ public class PlayerNetwork : Photon.MonoBehaviour
             Debug.LogError("No Location Found");
         }
         Debug.Log("Player located in " + currentLocation);
-    }
-
-    //I don't have an interface to transfer across so doing it here - doesn't make sense, but no time for that
-    public void TransferDamage(int senderID, int recieverID, int damage)
-    {
-        Debug.Log("Local.Transfer senderID:" + senderID + " recieverID: " + recieverID);
-        photonView.RPC("SendDamage", PhotonTargets.AllBuffered, senderID, recieverID, damage);
-    }
-
-    [PunRPC]
-    public void SendDamage(int senderID, int recieverID, int damage)
-    {
-        if (photonView.isMine)
-        {
-            Debug.LogWarning("MY ID IS " + photonView.ownerId);
-        }
-        
-        Debug.Log("Local.Send senderID:" + senderID + " recieverID: " + recieverID +" actorID on player: " +actorID +" photonview ID" + photonView.ownerId);
-
-        SendDamageLocal(senderID, recieverID, damage);
-
-
-    }
-
-    private void SendDamageLocal(int senderID, int recieverID, int damage)
-    {
-        Debug.Log("Local.SendLocal senderID:" + senderID + " recieverID: " + recieverID + " actorID on player: " + actorID + " photonview ID" + photonView.ownerId +" masterRef" + master.currentID);
-
-        if (senderID == recieverID)
-        {
-            Debug.Log("Player " + senderID + " hit Player " + recieverID + " for " + damage + " damage");
-            Debug.Log("Player Hitting self");
-            return;
-        }
-
-
-        //Do the damage
-        if (master.currentID == recieverID)
-        {
-            if (debug)
-                Debug.Log("Player " + senderID + " hit Player " + recieverID + " for " + damage + " damage");
-            //health.TakeDamage(damage, senderID);
-        }
-
     }
 }
 

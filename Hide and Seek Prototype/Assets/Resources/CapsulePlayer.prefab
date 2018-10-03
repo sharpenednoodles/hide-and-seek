@@ -3923,8 +3923,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 114266920355762830}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 64
+  instantiationId: 64
   currentMasterID: -1
   isRuntimeInstantiated: 0
 --- !u!114 &114346616239812606
@@ -3949,8 +3949,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 0}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 63
+  instantiationId: 63
   currentMasterID: -1
   isRuntimeInstantiated: 0
 --- !u!114 &114384491738737532
@@ -4064,8 +4064,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 114384491738737532}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 186
+  instantiationId: 186
   currentMasterID: -1
   isRuntimeInstantiated: 0
 --- !u!114 &114567852822383176
@@ -4114,6 +4114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerHealth: {fileID: 0}
   actorID: 0
+  debug: 1
 --- !u!114 &114725445436233664
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4158,22 +4159,22 @@ MonoBehaviour:
     fireRate: 1
     fireRange: 3
     damage: 15
-    impactForce: 500
-    clipSize: 10000
+    impactForce: 5000
+    clipSize: 0
     remainingClip: 0
-    ammo: 10000
+    ammo: 0
     reloadTime: 0
     canFire: 1
     isEquipped: 1
     crosshair: 0
     needWarmUp: 0
-    melee: 0
+    melee: 1
     emptyFX:
     - {fileID: 8300000, guid: b760809e959114c4cbc5c47ef9036abf, type: 3}
     reloadFX: []
     fireFX:
     - {fileID: 8300000, guid: a078921276259d2429a82e99f5e208d9, type: 3}
-    damageDecals: 
+    damageDecals: NULL
   pistol:
     model: {fileID: 1965825449304838}
     fireOrigin: {fileID: 1500277326589812}
@@ -4234,7 +4235,7 @@ MonoBehaviour:
     canFire: 1
     isEquipped: 0
     crosshair: 1
-    needWarmUp: 0
+    needWarmUp: 1
     melee: 0
     emptyFX:
     - {fileID: 8300000, guid: 4c6aef64f25bcca4fa99c1e641523f44, type: 3}
@@ -4243,7 +4244,7 @@ MonoBehaviour:
     fireFX:
     - {fileID: 8300000, guid: f8046c8a557f5e84d8e83e4edeb22bf3, type: 3}
     damageDecals: Default Bullethole
-    warmUpTime: 0
+    warmUpTime: 2
     warmUpFX: []
     coolDownFX:
     - {fileID: 8300000, guid: a06f8be12ed109443b152a6fbd6cdb45, type: 3}

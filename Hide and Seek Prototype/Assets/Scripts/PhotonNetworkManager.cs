@@ -998,11 +998,4 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     }
     #endregion
 
-    //I don't have an interface to transfer across so doing it here - doesn't make sense, but no time for that
-    public void TransferDamage(int senderID, int recieverID, int damage)
-    {
-        Debug.Log("Master.Transfer senderID:" + senderID + " recieverID: " + recieverID);
-        //Debug.LogWarning("Transfer Damage senderID" +senderID +" recieverID " +currentID); 
-        local.TransferDamage(senderID, recieverID, damage);
-    }
 }

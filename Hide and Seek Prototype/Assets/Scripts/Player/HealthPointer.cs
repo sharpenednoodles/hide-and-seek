@@ -23,13 +23,6 @@ public class HealthPointer : Photon.MonoBehaviour {
         GetHealthComponent();
     }
 
-
-    public void RecieveHit(int senderID, int recieverID, int damage)
-    {
-        Debug.Log("HP.RecieveHit senderID:" + senderID + " recieverID: " + recieverID);
-        master.TransferDamage(senderID, recieverID, damage);
-    }
-
     private void GetHealthComponent()
     {
         //Recursively search in parent for health object on player - in theory
@@ -42,6 +35,8 @@ public class HealthPointer : Photon.MonoBehaviour {
             
     }
 
+
+    //DEPRECATED
     private void FindHealthObjects()
     {
         //Want to find the health script on our own player

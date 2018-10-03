@@ -121,27 +121,6 @@ public class Health : Photon.MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage, int senderID)
-    {
-        Debug.Log("Taking Damage from player " + senderID);
-        currentHealth -= damage;
-        healthBar.fillAmount -= ((float)damage / defaultHealth);
-
-        if (currentHealth <= 0 && !deathCalled)
-        {
-            deathCalled = true;
-            if (gameObject.tag == "Player")
-                Death(playerID, senderID);
-            else
-            {
-                Destroy(gameObject);
-                if (debug)
-                    Debug.Log(transform.name + " destroyed");
-            }
-
-        }
-    }
-
     void Death(int targetID, int senderID)
     {
         //Instantiate Call to create a ragdoll
@@ -151,11 +130,5 @@ public class Health : Photon.MonoBehaviour
             master.SendGameKill(0, (byte)PhotonNetworkManager.EventType.playerDeath, targetID, senderID);
             //Do photon instantiate of ragdoll he
         }
-    }
-
-    //hopefully not needed if this implementation works
-    public void SetHitBox(GameObject propModel)
-    {
-
     }
 }
