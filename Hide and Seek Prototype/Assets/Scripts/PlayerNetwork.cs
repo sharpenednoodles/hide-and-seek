@@ -145,7 +145,7 @@ public class PlayerNetwork : Photon.MonoBehaviour
         {
             if (debug)
                 Debug.Log("Player " + senderID + " hit Player " + recieverID + " for " + damage + " damage");
-            health.TakeDamage(damage, senderID);
+            //health.TakeDamage(damage, senderID);
         }
 
     }

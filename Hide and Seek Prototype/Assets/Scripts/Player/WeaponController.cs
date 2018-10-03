@@ -104,7 +104,7 @@ namespace HideSeek.WeaponController
             cooldown -= Time.deltaTime;
             //Switching Weapons, need to validate if a player has weapon
 
-            if (photonView.isMine)
+            if (photonView.isMine && !GameMenuController.MenuState)
             {
                 if (Input.GetKeyUp("0"))
                 {
@@ -146,7 +146,7 @@ namespace HideSeek.WeaponController
                 //Get fire input
                 if (Input.GetButton("Fire1"))
                 {
-                    if (!isProp && !GameMenuController.MenuState)
+                    if (!isProp)
                     {
                         Shoot();
                         fireHeld = true;
@@ -197,11 +197,12 @@ namespace HideSeek.WeaponController
                     return;
                 }
 
+                //To do, vary origin based upon movement speed
                 Vector3 rayOrigin = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
                 Vector3 rayDirection = Camera.main.transform.forward;
                 RaycastHit hit;
 
-                
+                //Issues with this on respawn
                 GameObject instance = CFX_SpawnSystem.GetNextObject(FX.GetComponent<CFX_PrefabPool>().muzzleFX);
                 instance.transform.position = currWeapon.fireOrigin.transform.position;
                 //instance.transform.rotation = currWeapon.fireOrigin.transform.rotation;
@@ -209,7 +210,6 @@ namespace HideSeek.WeaponController
                 instance.transform.SetParent(currWeapon.fireOrigin.transform);
                 
                 //Muzzle flash sync
-
                 photonView.RPC("WeaponFX", PhotonTargets.Others, currWeapon.fireOrigin.transform.position, currWeapon.fireOrigin.transform.rotation);
 
                 //Get laser origin
@@ -227,9 +227,13 @@ namespace HideSeek.WeaponController
                     Debug.Log("Player " + photonView.viewID + " hit" + hit.transform.name);
                     Debug.DrawRay(rayOrigin, rayDirection * currWeapon.fireRange, Color.green);
                     Health hitHealth = hit.collider.GetComponent<Health>();
+                    HealthPointer HP = hit.collider.GetComponent<HealthPointer>();
                     PhotonView target = hit.collider.GetComponent<PhotonView>();
 
                     //Set health item to the pointer location if component has one
+                    //FAKE AND GAY
+                    //DELETE THIS
+                    /*
                     if (hit.collider.GetComponent<HealthPointer>() != null)
                     {
                         Debug.Log("Found a Health Pointer!");
@@ -240,13 +244,20 @@ namespace HideSeek.WeaponController
                         //temp variable switch
                         HP.RecieveHit(actorID, reciverID, currWeapon.damage);
                         //hitHealth.SendDamage(currWeapon.damage, targetID);
-                    }
+                    }*/
 
+                    if (HP != null)
+                    {
+                        Debug.Log("Found a Health Pointer!");
+                        hitHealth = HP.playerHealth;
+                    }
         
 
                     if (hitHealth != null)
                     {
-                        hitHealth.SendDamage(currWeapon.damage, target.viewID);
+                        Debug.Log("Sending Damage");
+                        hitHealth.SendDamage(currWeapon.damage, target.ownerId, actorID);
+                        //hitHealth.SendDamage(currWeapon.damage);
                     }
                     
                     //Add weapon force
