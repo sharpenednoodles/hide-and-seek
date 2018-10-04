@@ -23,9 +23,11 @@ namespace HideSeek.WeaponController
         [SerializeField] private Pistol pistol;
         [SerializeField] private LightningGun lightningGun;
         [SerializeField] private Minigun minigun;
+        [SerializeField] private bool allEnabled = true;
 
         private Animator weaponAnim;
         private Crosshairs crosshairs;
+        private InventoryController inventoryController;
 
         //Audio
         private AudioSource gunSound;
@@ -48,6 +50,7 @@ namespace HideSeek.WeaponController
         private WaitForSeconds shotDuration = new WaitForSeconds(.07f);
 
         //TempDisplayStuff
+        GameObject displayTemp;
         private Text clipDisplay;
         private Text ammoDisplay;
 
@@ -61,8 +64,7 @@ namespace HideSeek.WeaponController
         
         void Start()
         {
-            decal = GameObject.Find("Game Controller").GetComponent<DecalManager>();
-            Debug.Log("<color=red>All Weapons enabled</color>");
+            decal = GameObject.Find("Game Controller").GetComponent<DecalManager>();        
             if (drawRay)
                 Debug.Log("<color=green>Weapon Raycast Debug Enabled</color>");
             //GET VARS
@@ -71,7 +73,7 @@ namespace HideSeek.WeaponController
             laserDebug = GetComponent<LineRenderer>();
 
             //Ammo display stuff
-            GameObject displayTemp = GameObject.Find("WeaponDisplay");
+            displayTemp = GameObject.Find("WeaponDisplay");
             clipDisplay = displayTemp.transform.GetChild(0).gameObject.GetComponent<Text>();
             ammoDisplay = displayTemp.transform.GetChild(1).gameObject.GetComponent<Text>();
 
@@ -90,12 +92,25 @@ namespace HideSeek.WeaponController
             GameObject reticle = GameObject.FindGameObjectWithTag("Reticle");
             crosshairs = reticle.GetComponent<Crosshairs>();
 
+            //Get controllers
+            inventoryController = GameObject.Find("InventoryHolder").GetComponent<InventoryController>();
             GameManager = GameObject.Find("Game Controller");
             FX = GameManager.transform.GetChild(2).gameObject;
             playerID = photonView.viewID;
             actorID = photonView.ownerId;
             //Switch to unarmed weapon as default
+
+            if (allEnabled)
+            {
+                Debug.Log("<color=red>All Weapons enabled</color>");
+                inventoryController.FillInventory();
+            }
+            else
+            {
+                inventoryController.GiveUnarmed();
+            }
             SwitchWeapon(Weapon.ID.unarmed);
+
         }
 
         #region Player Input
@@ -104,42 +119,47 @@ namespace HideSeek.WeaponController
             cooldown -= Time.deltaTime;
             //Switching Weapons, need to validate if a player has weapon
 
-            if (photonView.isMine && !GameMenuController.MenuState)
+            if (photonView.isMine && !GameMenuController.MenuState && !isProp)
             {
-                if (Input.GetKeyUp("0"))
-                {
-                    currentID = Weapon.ID.unarmed;
-                    SwitchWeapon(currentID);
-                }
                 if (Input.GetKeyUp("1"))
                 {
-                    currentID = Weapon.ID.pistol;
+                    inventoryController.currentSlot = 0;
+                    inventoryController.RefreshUI();
+                    currentID = inventoryController.GetIDFromSlot();
                     SwitchWeapon(currentID);
                 }
                 if (Input.GetKeyUp("2"))
                 {
-                    currentID = Weapon.ID.lightningGun;
+                    inventoryController.currentSlot = 1;
+                    inventoryController.RefreshUI();
+                    currentID = inventoryController.GetIDFromSlot();
                     SwitchWeapon(currentID);
                 }
                 if (Input.GetKeyUp("3"))
                 {
-                    currentID = Weapon.ID.minigun;
+                    inventoryController.currentSlot = 2;
+                    inventoryController.RefreshUI();
+                    currentID = inventoryController.GetIDFromSlot();
+                    SwitchWeapon(currentID);
+                }
+                if (Input.GetKeyUp("4"))
+                {
+                    inventoryController.currentSlot = 3;
+                    inventoryController.RefreshUI();
+                    currentID = inventoryController.GetIDFromSlot();
                     SwitchWeapon(currentID);
                 }
                 //Scroll wheel
                 if (Input.GetAxis("Mouse ScrollWheel") > 0f)
                 {
-                    currentID += 1;
-                    if ((int)currentID > WEAPON_COUNT - 1)
-                        currentID = 0;
+                    inventoryController.ScrollUpInput();
+                    currentID = inventoryController.GetIDFromSlot();
                     SwitchWeapon(currentID);
-
                 }
                 if (Input.GetAxis("Mouse ScrollWheel") < 0f)
                 {
-                    currentID -= (1);
-                    if ((int)currentID < 0)
-                        currentID = (Weapon.ID)WEAPON_COUNT - 1;
+                    inventoryController.ScrollDownInput();
+                    currentID = inventoryController.GetIDFromSlot();
                     SwitchWeapon(currentID);
                 }
 
@@ -219,15 +239,15 @@ namespace HideSeek.WeaponController
                 RaycastHit hit;
 
                 //Issues with this on respawn
-                GameObject instance = CFX_SpawnSystem.GetNextObject(FX.GetComponent<CFX_PrefabPool>().muzzleFX);
-                instance.transform.position = currWeapon.fireOrigin.transform.position;
-                //instance.transform.rotation = currWeapon.fireOrigin.transform.rotation;
-                //instance.transform.rotation = Quaternion.Euler(currWeapon.fireOrigin.transform.rotation.x, currWeapon.fireOrigin.transform.rotation.y, currWeapon.fireOrigin.transform.rotation.z);
-                instance.transform.SetParent(currWeapon.fireOrigin.transform);
-                
-                //Muzzle flash sync
-                photonView.RPC("WeaponFX", PhotonTargets.Others, currWeapon.fireOrigin.transform.position, currWeapon.fireOrigin.transform.rotation);
+                if (!currWeapon.melee)
+                {
+                    GameObject instance = CFX_SpawnSystem.GetNextObject(FX.GetComponent<CFX_PrefabPool>().muzzleFX);
+                    instance.transform.position = currWeapon.fireOrigin.transform.position;
+                    instance.transform.SetParent(currWeapon.fireOrigin.transform);
 
+                    //Muzzle flash sync
+                    photonView.RPC("WeaponFX", PhotonTargets.Others, currWeapon.fireOrigin.transform.position, currWeapon.fireOrigin.transform.rotation);
+                }
                 //Get laser origin
                 if (drawRay)
                     laserDebug.SetPosition(0, currWeapon.fireOrigin.transform.position);
@@ -503,21 +523,25 @@ namespace HideSeek.WeaponController
                 case Weapon.ID.unarmed:
                     unarmed.model.SetActive(true);
                     currWeapon = unarmed;
-                    UpdateAmmoCount();
+                    displayTemp.SetActive(false);
+                    //UpdateAmmoCount();
                     break;
                 case Weapon.ID.pistol:
                     pistol.model.SetActive(true);
                     currWeapon = pistol;
+                    displayTemp.SetActive(true);
                     UpdateAmmoCount();
                     break;
                 case Weapon.ID.minigun:
                     minigun.model.SetActive(true);
                     currWeapon = minigun;
+                    displayTemp.SetActive(true);
                     UpdateAmmoCount();
                     break;
                 case Weapon.ID.lightningGun:
                     lightningGun.model.SetActive(true);
                     currWeapon = lightningGun;
+                    displayTemp.SetActive(true);
                     UpdateAmmoCount();
                     break;
             }
@@ -577,15 +601,18 @@ namespace HideSeek.WeaponController
         }
 
         //Used for switching player into prop
-        public void PropMode(bool isProp)
+        public void PropMode(bool isAProp)
         {
-            if (isProp)
+            
+            if (!isAProp)
             {
+                Debug.LogWarning("PropMode Disabled");
                 isProp = false;
                 crosshairs.ToggleCrossHairs(true);
             }
-            else
+            if(isAProp)
             {
+                Debug.LogWarning("PropMode Enabled");
                 isProp = true;
                 crosshairs.ToggleCrossHairs(false);
             }

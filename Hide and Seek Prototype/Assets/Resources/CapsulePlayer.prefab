@@ -4235,7 +4235,7 @@ MonoBehaviour:
     canFire: 1
     isEquipped: 0
     crosshair: 1
-    needWarmUp: 1
+    needWarmUp: 0
     melee: 0
     emptyFX:
     - {fileID: 8300000, guid: 4c6aef64f25bcca4fa99c1e641523f44, type: 3}
@@ -4248,6 +4248,7 @@ MonoBehaviour:
     warmUpFX: []
     coolDownFX:
     - {fileID: 8300000, guid: a06f8be12ed109443b152a6fbd6cdb45, type: 3}
+  allEnabled: 1
   currentID: 0
   playerAnim: {fileID: 95617955400933568}
   currWeapon:

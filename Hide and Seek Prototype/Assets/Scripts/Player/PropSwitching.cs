@@ -15,7 +15,7 @@ public class PropSwitching : MonoBehaviour
     private CharacterController playerCollider;
     private MonoBehaviour firstPersonController, thirdPersonController, followCam;
     private PlayerNetwork playerNetwork;
-    
+    private HideSeek.WeaponController.WeaponController weaponController;
 
     private GameObject aimedAt, newItem, weapons;
     private bool isLookingAtProp, debug = true;
@@ -47,35 +47,40 @@ public class PropSwitching : MonoBehaviour
         followCam = GetComponent<CameraControl>();
         camControl = GetComponent<CameraControl>();
         playerNetwork = GetComponent<PlayerNetwork>();
+        weaponController = GetComponent<HideSeek.WeaponController.WeaponController>();
     }
 
-	public void Update()
-	{
+    public void Update()
+    {
         //Read input
         if (Input.GetMouseButtonDown(1) && isProp)
         {
             RevertToPlayer();
         }
 
-        if (isLookingAtProp) {
-			propInfo = aimedAt.GetComponent<PropInfo>();
-			prefabName = propInfo.prefabName;
-            if (Input.GetMouseButton(1))
+        if (isLookingAtProp)
+        {
+            propInfo = aimedAt.GetComponent<PropInfo>();
+            if (propInfo != null)
             {
-                holdTime += Time.deltaTime;
-                playerID = photonView.viewID;
-                
+                prefabName = propInfo.prefabName;
+                if (Input.GetMouseButton(1))
+                {
+                    holdTime += Time.deltaTime;
+                    playerID = photonView.viewID;
 
-                //Turning this off for release 1
+
+                    //Turning this off for release 1
+                }
+                else holdTime = 0;
+
+                if (holdTime >= timeHold)
+                {
+                    //Call propswitch after timeHold has passed
+                    PropSwitch(playerID);
+                }
             }
-            else holdTime = 0;
-
-            if (holdTime >= timeHold)
-            {
-                //Call propswitch after timeHold has passed
-                PropSwitch(playerID);
-			}
-		}
+        }
     }
 
     //Use this to call remote client
@@ -95,7 +100,7 @@ public class PropSwitching : MonoBehaviour
             GameObject weaponRemote = remotePlayerModel.transform.GetChild(3).gameObject;
             robotModel.SetActive(false);
             weaponRemote.SetActive(false);
-
+            
 
             newRemoteItem.transform.parent = transform;
             //If no rigidbody, add one
@@ -148,6 +153,7 @@ public class PropSwitching : MonoBehaviour
             
             rb.isKinematic = true;
             newItem.name = "PropModel";
+            weaponController.PropMode(true);
             camControl.SwitchTarget();
 
             //Call RPC Function for remote players
@@ -178,6 +184,7 @@ public class PropSwitching : MonoBehaviour
             prop = newItem;
             newItem.name = "PropModel";
             isProp = true;
+            weaponController.PropMode(true);
 
             followCam.enabled = true;
             camControl.SwitchTarget();
@@ -202,6 +209,7 @@ public class PropSwitching : MonoBehaviour
             thirdPersonController.enabled = false;
             firstPersonController.enabled = true;
             isProp = false;
+            weaponController.PropMode(false);
             playerNetwork.HideHead();
   
             //Call RPC Function for remote players
