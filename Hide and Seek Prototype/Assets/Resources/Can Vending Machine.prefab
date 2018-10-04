@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 114003414652539312}
   - component: {fileID: 114741667091893304}
   - component: {fileID: 65863383947269264}
+  - component: {fileID: 82141110816047744}
   m_Layer: 0
   m_Name: Can Vending Machine
   m_TagString: Prop
@@ -38,9 +39,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1178878443021322}
-  m_LocalRotation: {x: 0, y: 0.7072302, z: 0.7069834, w: 0}
-  m_LocalPosition: {x: -1.609, y: 0.06, z: -93.04938}
-  m_LocalScale: {x: 54.99376, y: 90.39325, z: 159.54497}
+  m_LocalRotation: {x: -0.7071071, y: -0.0000009573968, z: 0.0000011271279, w: 0.70710653}
+  m_LocalPosition: {x: -102.48555, y: 0.06958115, z: -18.57749}
+  m_LocalScale: {x: 54.99376, y: 90.39328, z: 159.54503}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -113,6 +114,87 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.020000014, y: 0.02000002, z: 0.020568233}
   m_Center: {x: -4.6566145e-10, y: -0.0000000041778363, z: 0.010286736}
+--- !u!82 &82141110816047744
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1178878443021322}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 37bdf972f3d4b42d0916fc755dd2d90c,
+    type: 2}
+  m_audioClip: {fileID: 8300000, guid: 582a87cf48d3b0044af56178690c605c, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 0
+  MinDistance: 5
+  MaxDistance: 8
+  Pan2D: 0
+  rolloffMode: 1
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!114 &114003414652539312
 MonoBehaviour:
   m_ObjectHideFlags: 1

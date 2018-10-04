@@ -11,6 +11,7 @@ public class Crosshairs : MonoBehaviour {
 
     //Used for setting colour of reticle, not implemented yet
     [SerializeField] private Color colorCross;
+    [SerializeField] private bool debug = true;
     public GameObject[] reticle;
    
 	
@@ -27,12 +28,14 @@ public class Crosshairs : MonoBehaviour {
             if (enable)
             {
                 g.SetActive(true);
-                Debug.Log("Toggle Cross Hairs ON");
+                if (debug)
+                    Debug.Log("Toggle Cross Hairs ON");
             }   
             else
             {
                 g.SetActive(false);
-                Debug.Log("Toggle Cross Hairs OFF");
+                if (debug)
+                    Debug.Log("Toggle Cross Hairs OFF");
             }
                 
         }

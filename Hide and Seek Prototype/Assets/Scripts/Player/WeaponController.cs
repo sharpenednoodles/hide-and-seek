@@ -23,9 +23,11 @@ namespace HideSeek.WeaponController
         [SerializeField] private Pistol pistol;
         [SerializeField] private LightningGun lightningGun;
         [SerializeField] private Minigun minigun;
+        [SerializeField] private bool allEnabled = true;
 
         private Animator weaponAnim;
         private Crosshairs crosshairs;
+        private InventoryController inventoryController;
 
         //Audio
         private AudioSource gunSound;
@@ -41,12 +43,14 @@ namespace HideSeek.WeaponController
         [SerializeField] private Animator playerAnim;
         public Weapon currWeapon;
         public bool drawRay;
+        public bool isProp = false;
 
-        private int playerID;
+        private int playerID, actorID;
         private LineRenderer laserDebug;
         private WaitForSeconds shotDuration = new WaitForSeconds(.07f);
 
         //TempDisplayStuff
+        GameObject displayTemp;
         private Text clipDisplay;
         private Text ammoDisplay;
 
@@ -57,10 +61,10 @@ namespace HideSeek.WeaponController
 
         private GameObject remotePlayer, remoteWeapon, remoteUnArmed, remotePistol, remoteLightningGun, remoteMinigun;
 
+        
         void Start()
         {
-            decal = GameObject.Find("Game Controller").GetComponent<DecalManager>();
-            Debug.Log("<color=red>All Weapons enabled</color>");
+            decal = GameObject.Find("Game Controller").GetComponent<DecalManager>();        
             if (drawRay)
                 Debug.Log("<color=green>Weapon Raycast Debug Enabled</color>");
             //GET VARS
@@ -69,12 +73,12 @@ namespace HideSeek.WeaponController
             laserDebug = GetComponent<LineRenderer>();
 
             //Ammo display stuff
-            GameObject displayTemp = GameObject.Find("WeaponDisplay");
+            displayTemp = GameObject.Find("WeaponDisplay");
             clipDisplay = displayTemp.transform.GetChild(0).gameObject.GetComponent<Text>();
             ammoDisplay = displayTemp.transform.GetChild(1).gameObject.GetComponent<Text>();
 
             //DISABLE ALL WEAPONS INITIALLY
-            unarmed.model.SetActive(true);
+            unarmed.model.SetActive(false);
             minigun.model.SetActive(false);
             lightningGun.model.SetActive(false);
             pistol.model.SetActive(false);
@@ -88,63 +92,93 @@ namespace HideSeek.WeaponController
             GameObject reticle = GameObject.FindGameObjectWithTag("Reticle");
             crosshairs = reticle.GetComponent<Crosshairs>();
 
+            //Get controllers
+            inventoryController = GameObject.Find("InventoryHolder").GetComponent<InventoryController>();
             GameManager = GameObject.Find("Game Controller");
             FX = GameManager.transform.GetChild(2).gameObject;
             playerID = photonView.viewID;
+            actorID = photonView.ownerId;
+            //Switch to unarmed weapon as default
+
+            if (allEnabled)
+            {
+                Debug.Log("<color=red>All Weapons enabled</color>");
+                inventoryController.FillInventory();
+            }
+            else
+            {
+                inventoryController.GiveUnarmed();
+            }
+            SwitchWeapon(Weapon.ID.unarmed);
+
         }
 
-
+        #region Player Input
         void Update()
         {
             cooldown -= Time.deltaTime;
             //Switching Weapons, need to validate if a player has weapon
 
-            if (photonView.isMine)
+            if (photonView.isMine && !GameMenuController.MenuState && !isProp)
             {
-                if (Input.GetKeyUp("0"))
-                {
-                    currentID = Weapon.ID.unarmed;
-                    SwitchWeapon(currentID);
-                }
                 if (Input.GetKeyUp("1"))
                 {
-                    currentID = Weapon.ID.pistol;
+                    inventoryController.currentSlot = 0;
+                    inventoryController.RefreshUI();
+                    currentID = inventoryController.GetIDFromSlot();
                     SwitchWeapon(currentID);
                 }
                 if (Input.GetKeyUp("2"))
                 {
-                    currentID = Weapon.ID.lightningGun;
+                    inventoryController.currentSlot = 1;
+                    inventoryController.RefreshUI();
+                    currentID = inventoryController.GetIDFromSlot();
                     SwitchWeapon(currentID);
                 }
                 if (Input.GetKeyUp("3"))
                 {
-                    currentID = Weapon.ID.minigun;
+                    inventoryController.currentSlot = 2;
+                    inventoryController.RefreshUI();
+                    currentID = inventoryController.GetIDFromSlot();
+                    SwitchWeapon(currentID);
+                }
+                if (Input.GetKeyUp("4"))
+                {
+                    inventoryController.currentSlot = 3;
+                    inventoryController.RefreshUI();
+                    currentID = inventoryController.GetIDFromSlot();
                     SwitchWeapon(currentID);
                 }
                 //Scroll wheel
                 if (Input.GetAxis("Mouse ScrollWheel") > 0f)
                 {
-                    currentID += 1;
-                    if ((int)currentID > WEAPON_COUNT - 1)
-                        currentID = 0;
+                    inventoryController.ScrollUpInput();
+                    currentID = inventoryController.GetIDFromSlot();
                     SwitchWeapon(currentID);
-
                 }
                 if (Input.GetAxis("Mouse ScrollWheel") < 0f)
                 {
-                    currentID -= (1);
-                    if ((int)currentID < 0)
-                        currentID = (Weapon.ID)WEAPON_COUNT - 1;
+                    inventoryController.ScrollDownInput();
+                    currentID = inventoryController.GetIDFromSlot();
                     SwitchWeapon(currentID);
                 }
 
                 //Get fire input
                 if (Input.GetButton("Fire1"))
                 {
-                    Shoot();
-                    fireHeld = true;
-                    weaponAnim.SetBool("attack", true);
-                    playerAnim.SetBool("attack", true);
+                    if (!isProp)
+                    {
+                        fireHeld = true;
+                        if (currWeapon.needWarmUp)
+                        {
+                            WarmUp();
+                        }
+                        else
+                            Shoot();
+                        
+                        weaponAnim.SetBool("attack", true);
+                        playerAnim.SetBool("attack", true);
+                    }
                 }
                 //Player releasing trigger
                 if (Input.GetButtonUp("Fire1"))
@@ -152,6 +186,10 @@ namespace HideSeek.WeaponController
                     weaponAnim.SetBool("attack", true);
                     playerAnim.SetBool("attack", false);
                     fireHeld = false;
+                    if (currWeapon.needWarmUp)
+                    {
+
+                    }
                 }
 
                 //Reload the shit
@@ -161,11 +199,19 @@ namespace HideSeek.WeaponController
                 }
             }
         }
+        #endregion
 
         void LateUpdate()
         {
             //Apply secondary hit calculations here
             //Currently removed again
+        }
+
+        #region Shooting Logic
+
+        void WarmUp()
+        {
+
         }
 
         //Handles Player Shooting
@@ -180,28 +226,28 @@ namespace HideSeek.WeaponController
                 }
 
                 //Prevent us from firing if our current clip is empty
-                if (!SubtractAmmo(currWeapon))
+                if (!SubtractAmmo(currWeapon) && !currWeapon.melee)
                 {
                     if (!soundPlay)
                         StartCoroutine(PlayEmptySound(currWeapon));
                     return;
                 }
 
+                //To do, vary origin based upon movement speed
                 Vector3 rayOrigin = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
                 Vector3 rayDirection = Camera.main.transform.forward;
                 RaycastHit hit;
 
-                
-                GameObject instance = CFX_SpawnSystem.GetNextObject(FX.GetComponent<CFX_PrefabPool>().muzzleFX);
-                instance.transform.position = currWeapon.fireOrigin.transform.position;
-                //instance.transform.rotation = currWeapon.fireOrigin.transform.rotation;
-                //instance.transform.rotation = Quaternion.Euler(currWeapon.fireOrigin.transform.rotation.x, currWeapon.fireOrigin.transform.rotation.y, currWeapon.fireOrigin.transform.rotation.z);
-                instance.transform.SetParent(currWeapon.fireOrigin.transform);
-                
-                //Muzzle flash sync
+                //Issues with this on respawn
+                if (!currWeapon.melee)
+                {
+                    GameObject instance = CFX_SpawnSystem.GetNextObject(FX.GetComponent<CFX_PrefabPool>().muzzleFX);
+                    instance.transform.position = currWeapon.fireOrigin.transform.position;
+                    instance.transform.SetParent(currWeapon.fireOrigin.transform);
 
-                photonView.RPC("WeaponFX", PhotonTargets.Others, currWeapon.fireOrigin.transform.position, currWeapon.fireOrigin.transform.rotation);
-
+                    //Muzzle flash sync
+                    photonView.RPC("WeaponFX", PhotonTargets.Others, currWeapon.fireOrigin.transform.position, currWeapon.fireOrigin.transform.rotation);
+                }
                 //Get laser origin
                 if (drawRay)
                     laserDebug.SetPosition(0, currWeapon.fireOrigin.transform.position);
@@ -216,14 +262,40 @@ namespace HideSeek.WeaponController
                     //Shot info
                     Debug.Log("Player " + photonView.viewID + " hit" + hit.transform.name);
                     Debug.DrawRay(rayOrigin, rayDirection * currWeapon.fireRange, Color.green);
-
                     Health hitHealth = hit.collider.GetComponent<Health>();
+                    HealthPointer HP = hit.collider.GetComponent<HealthPointer>();
                     PhotonView target = hit.collider.GetComponent<PhotonView>();
 
-                    //Apply damage over network
-                    if (hitHealth != null)
-                        hitHealth.SendDamage(currWeapon.damage, target.ownerId);
+                    //Set health item to the pointer location if component has one
+                    //FAKE AND GAY
+                    //DELETE THIS
+                    /*
+                    if (hit.collider.GetComponent<HealthPointer>() != null)
+                    {
+                        Debug.Log("Found a Health Pointer!");
+                        HealthPointer HP = hit.collider.GetComponent<HealthPointer>();
+                        int reciverID = HP.GetComponent<PhotonView>().ownerId;
+                        Debug.Log(reciverID +" " +HP.GetComponent<PhotonView>().ownerId +" "+actorID);
+                        
+                        //temp variable switch
+                        HP.RecieveHit(actorID, reciverID, currWeapon.damage);
+                        //hitHealth.SendDamage(currWeapon.damage, targetID);
+                    }*/
 
+                    if (HP != null)
+                    {
+                        Debug.Log("Found a Health Pointer!");
+                        hitHealth = HP.playerHealth;
+                    }
+        
+
+                    if (hitHealth != null)
+                    {
+                        Debug.Log("Sending Damage");
+                        hitHealth.SendDamage(currWeapon.damage, target.ownerId, actorID);
+                        //hitHealth.SendDamage(currWeapon.damage);
+                    }
+                    
                     //Add weapon force
                     if (hit.rigidbody != null)
                     {
@@ -272,6 +344,7 @@ namespace HideSeek.WeaponController
                 //New less nice looking implementation
 
                 //Rewrite later so that network aware first up
+
                 if (hit.rigidbody == null)
                 {
                     decal.SpawnFromPool(currWeapon.damageDecals, hit.point, rotation);
@@ -305,6 +378,7 @@ namespace HideSeek.WeaponController
         }
         //Draw Remote player shots in editor
         //Hit detection is currently broken, no idea why
+
         //DEPRECATING AS IT DOESN'T FUNCTION
         [PunRPC]
         void SyncShotRayCast(Vector3 start, Vector3 dir, int fireRange, string decalString)
@@ -334,7 +408,6 @@ namespace HideSeek.WeaponController
             decal.SpawnFromPool(currWeapon.damageDecals, point, rotation);
         }
            
-
         private IEnumerator ShotEffect()
         {
             PlayFireSound(currWeapon);
@@ -347,6 +420,8 @@ namespace HideSeek.WeaponController
             playerAnim.ResetTrigger("recoil");
         }
 
+        #endregion
+        #region Weapon SFX
         void PlayFireSound(Weapon c)
         {
             if (c.fireFX.Length != 0)
@@ -383,6 +458,7 @@ namespace HideSeek.WeaponController
             else gunSound.clip = null;
             gunSound.Play();
         }
+        #endregion
 
         void TriggerReload(Weapon c)
         {
@@ -447,21 +523,25 @@ namespace HideSeek.WeaponController
                 case Weapon.ID.unarmed:
                     unarmed.model.SetActive(true);
                     currWeapon = unarmed;
-                    UpdateAmmoCount();
+                    displayTemp.SetActive(false);
+                    //UpdateAmmoCount();
                     break;
                 case Weapon.ID.pistol:
                     pistol.model.SetActive(true);
                     currWeapon = pistol;
+                    displayTemp.SetActive(true);
                     UpdateAmmoCount();
                     break;
                 case Weapon.ID.minigun:
                     minigun.model.SetActive(true);
                     currWeapon = minigun;
+                    displayTemp.SetActive(true);
                     UpdateAmmoCount();
                     break;
                 case Weapon.ID.lightningGun:
                     lightningGun.model.SetActive(true);
                     currWeapon = lightningGun;
+                    displayTemp.SetActive(true);
                     UpdateAmmoCount();
                     break;
             }
@@ -517,6 +597,24 @@ namespace HideSeek.WeaponController
                 case Weapon.ID.lightningGun:
                     remoteLightningGun.SetActive(true);
                     break;
+            }
+        }
+
+        //Used for switching player into prop
+        public void PropMode(bool isAProp)
+        {
+            
+            if (!isAProp)
+            {
+                Debug.LogWarning("PropMode Disabled");
+                isProp = false;
+                crosshairs.ToggleCrossHairs(true);
+            }
+            if(isAProp)
+            {
+                Debug.LogWarning("PropMode Enabled");
+                isProp = true;
+                crosshairs.ToggleCrossHairs(false);
             }
         }
     }

@@ -10,10 +10,10 @@ using System.Collections;
 using UnityEngine;
 
 public class FlyCam : MonoBehaviour {
-	public float mainSpeed = 10.0f, shiftAdd = 250.0f, maxShift = 100.0f, camSens = 0.25f, totalRun= 1.0f, speedMultiplier, rotationY = 0.0f, mouseSensitivity = 5.0f; 
+	public float mainSpeed = 5.0f, shiftAdd = 25.0f, maxShift = 100.0f, camSens = 0.25f, totalRun= 1.0f, speedMultiplier, rotationY = 0.0f, mouseSensitivity = 3.0f; 
 	//private Vector3 lastMouse = new Vector3(255, 255, 255); //kind of in the middle of the screen, rather than at the top (play)
 
-	private bool isRotating = true, isColliding = true; // Angryboy: Can be called by other things (e.g. UI) to see if camera is rotating
+	private bool isRotating = true, isColliding = false; // Angryboy: Can be called by other things (e.g. UI) to see if camera is rotating
 
 	//micah_3d: added so camera will be able to collide with world objects if users chooses
 	//physic material added to keep camera from spinning out of control if it hits a corner or multiple colliders at the same time.  

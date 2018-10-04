@@ -10,7 +10,8 @@ using UnityEngine.UI;
 /// //Todo - replace health bar with something better looking if we get the time
 /// </summary>
 [RequireComponent(typeof(PhotonView))]
-public class Health : Photon.MonoBehaviour {
+public class Health : Photon.MonoBehaviour
+{
 
     [SerializeField]
     [Tooltip("Set the default health of this object")]
@@ -18,24 +19,30 @@ public class Health : Photon.MonoBehaviour {
     [SerializeField]
     [Tooltip("Enables debug messages from this script")]
     private bool debug = true;
+    [SerializeField]
+    [Tooltip("Array of player box colliders")]
+    GameObject playerHitbox;
+    private GameObject propHitbox;
     private PhotonNetworkManager master;
     private Image healthBar;
     private float currentHealth;
-    private int playerID;
+    private int playerID = 69;
     private bool deathCalled;
 
     private void Start()
     {
         currentHealth = defaultHealth;
-        if (gameObject.tag == "Player")
+        if (gameObject.tag == "Player" &&photonView.isMine)
         {
             //Find the players health item
             master = FindObjectOfType<PhotonNetworkManager>();
+            //healthBar = GameObject.Find("Health Bar").GetComponent<Image>();
             healthBar = GameObject.Find("Health Bar").GetComponent<Image>();
-            playerID = master.currentID;
+            if (photonView.isMine)
+                playerID = photonView.ownerId;
             deathCalled = false;
             healthBar.fillAmount = 100;
-        } 
+        }
     }
 
     //Scales players health with a given scale upon transformation into a prop, and returns scale after reverting
@@ -50,9 +57,9 @@ public class Health : Photon.MonoBehaviour {
     }
 
     //Send target taking damage across clients
-    public void SendDamage(int damage, int targetID)
+    public void SendDamage(int damage, int targetID, int senderID)
     {
-        photonView.RPC("TakeDamage", PhotonTargets.All, damage, (byte)playerID, (byte)targetID);
+        photonView.RPC("TakeDamageOld", PhotonTargets.All, damage, (byte)senderID, (byte)targetID);
     }
 
     //Call to refresh players GUI health on respawn
@@ -62,13 +69,23 @@ public class Health : Photon.MonoBehaviour {
         healthBar.fillAmount = 100;
     }
 
+    public void AddHealth(int healthToAdd)
+    {
+        currentHealth += healthToAdd;
+        healthBar.fillAmount += ((float)healthToAdd / defaultHealth);
+        //Prevent Player from excedding maximum health
+        Mathf.Clamp(currentHealth, 0, 100);
+    }
+
     //Called to damage target over network
     //We assume target is a player to save resources
 
     //TO DO - CLEAN THIS UP
     [PunRPC]
-    public void TakeDamage(int damage, byte senderID, byte targetID)
+    public void TakeDamageOld(int damage, byte senderID, byte targetID)
     {
+        if (debug)
+            Debug.Log("dmg: " + damage + " sender ID: " + senderID + " targetID: " + targetID + "Cur Player ID: " + playerID);
         if (senderID == playerID)
         {
             if (debug)
@@ -81,11 +98,12 @@ public class Health : Photon.MonoBehaviour {
             currentHealth -= damage;
             healthBar.fillAmount -= ((float)damage / defaultHealth);
         }
-        
+
         if (debug)
         {
-            Debug.Log("Target hit: current health = " + currentHealth + " Target Name" + gameObject.name);
-            Debug.Log("Health bar fillamount = " + healthBar.fillAmount);
+            Debug.Log("Target hit: current health = " + currentHealth + " Target Name " + gameObject.name);
+            if (photonView.isMine)
+                Debug.Log("Health bar fillamount = " + healthBar.fillAmount);
         }
 
         if (currentHealth <= 0 && !deathCalled)
@@ -99,7 +117,7 @@ public class Health : Photon.MonoBehaviour {
                 if (debug)
                     Debug.Log(transform.name + " destroyed");
             }
-                
+
         }
     }
 

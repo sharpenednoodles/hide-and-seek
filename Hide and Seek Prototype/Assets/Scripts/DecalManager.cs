@@ -41,6 +41,7 @@ namespace HideSeek.WeaponController
                 {
                     GameObject obj = Instantiate(pool.prefab, new Vector3(0,0,0), Quaternion.Euler(0, Random.Range(0, 360), 0), gameObject.transform.GetChild(1));
                     obj.SetActive(false);
+                    //NEED TO SET AS AN OCCLUDER
                     objectPool.Enqueue(obj);
                 }
                 poolDictionary.Add(pool.tag, objectPool);
@@ -68,6 +69,8 @@ namespace HideSeek.WeaponController
         //overload for decal spawn for no parent
         public void SpawnFromPool(string tag, Vector3 position, Quaternion rotation)
         {
+            if (poolDictionary.ContainsKey("NULL"))
+                return;
             if (!poolDictionary.ContainsKey(tag))
             {
                 Debug.LogWarning("tag " + tag + " does not exist in current dictionary");

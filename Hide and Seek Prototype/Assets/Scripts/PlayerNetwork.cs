@@ -10,7 +10,7 @@ using UnityEngine;
 ///TODO - Add offline mode
 /// </summary>
 
-public class PlayerNetwork : MonoBehaviour
+public class PlayerNetwork : Photon.MonoBehaviour
 {
     [SerializeField] private GameObject playerCamera;
     [SerializeField] private GameObject mapCamera;
@@ -18,19 +18,21 @@ public class PlayerNetwork : MonoBehaviour
     [SerializeField] private MonoBehaviour[] playerControlScripts;
     //Head bone is connected to then, neck bone
     [SerializeField] private GameObject headBoneRoot;
-    [SerializeField] private bool debug = false;
+    [SerializeField] private bool debug = true;
     public int viewID;
+    private int actorID;
 
     private PhotonNetworkManager master;
-    private PhotonView photonView;
+    private Health health;
 
     public ZoneController.Zone currentLocation = ZoneController.Zone.error;
     
     private void Start()
     {
-        photonView = GetComponent<PhotonView>();
+        //photonView = GetComponent<PhotonView>();
         master = FindObjectOfType<PhotonNetworkManager>();
-        
+        health = GetComponent<Health>();
+        actorID = photonView.ownerId;
         Initialise();
     }
 
@@ -45,6 +47,9 @@ public class PlayerNetwork : MonoBehaviour
             viewID = photonView.viewID;
             //Shrink our head bone so we don't see it
             //TODO - Switch to selective renderer
+
+            //Set local player to ignore raycasts
+            SetLayerRecursively(gameObject, 2);
             HideHead();
             //if (debug)
                     //Debug.Log("Local Hello World from " +photonView.viewID);
@@ -70,7 +75,7 @@ public class PlayerNetwork : MonoBehaviour
         }
     }
 
-    //DEPRECATE THIS SHIT
+    //DEPRECATE THIS when you have time
     public void HideHead()
     {
         if (debug)
@@ -100,7 +105,16 @@ public class PlayerNetwork : MonoBehaviour
         {
             Debug.LogError("No Location Found");
         }
-        Debug.Log("Player locaed in " + currentLocation);
+        Debug.Log("Player located in " + currentLocation);
+    }
+
+    private void SetLayerRecursively(GameObject g, int layerNumber)
+    {
+        if (g == null) return;
+        foreach (Transform t in g.GetComponentsInChildren<Transform>(true))
+        {
+            t.gameObject.layer = layerNumber;
+        }
     }
 }
 

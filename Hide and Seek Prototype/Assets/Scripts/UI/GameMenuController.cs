@@ -12,34 +12,26 @@ using UnityEngine.SceneManagement;
 public class GameMenuController : MonoBehaviour {
 
 	public GameObject menuCanvas;
-
-	//public Transform Menu;
+    [SerializeField] private bool debug = true;
     //we make this static so we can access from controller(s)
 	public static bool MenuState = false;
-    //public CanvasGroup menuGroup;
-
-	//public GameObject Menu;
+   
 
 	// Use this for initialization
 	void Start ()
     {
-		//menuGroup.alpha = 1f;
-		//menuGroup.blocksRaycasts = true;
-		//Menu.gameObject.SetActive (false);
+		//Disable Menu on Game start
 		menuCanvas.SetActive(false);
-        //menuGroup = gameObject.transform.GetChild(4).transform.GetChild(0).GetComponent<CanvasGroup>();
 	}
 
 	public void ShowMenu()
 	{
 		menuCanvas.SetActive(true);
-        //menuGroup.alpha = 1f;
-        //menuGroup.blocksRaycasts = true;
-        Debug.Log ("Set Active");
+        if(debug)
+            Debug.Log ("Set Active");
 		MenuState = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-
     }
 
 
@@ -47,7 +39,8 @@ public class GameMenuController : MonoBehaviour {
 	{
 		menuCanvas.gameObject.SetActive (false);
         MenuState = false;
-		Debug.Log ("Set Disable");
+        if (debug)
+		    Debug.Log ("Set Disable");
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         //menuGroup.blocksRaycasts = true;
@@ -59,12 +52,14 @@ public class GameMenuController : MonoBehaviour {
 			if (MenuState)
 			{
 				HideMenu();
-				Debug.Log ("Close Pause Menu");
+                if (debug)
+				    Debug.Log ("Close Pause Menu");
 			} 
 			else 
 			{ 
 				ShowMenu ();
-				Debug.Log ("Open Pause Menu");
+                if (debug)
+				    Debug.Log ("Open Pause Menu");
 			}
 		}
 	}
