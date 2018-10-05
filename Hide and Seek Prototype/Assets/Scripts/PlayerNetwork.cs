@@ -41,6 +41,7 @@ public class PlayerNetwork : Photon.MonoBehaviour
     {
         if (photonView.isMine)
         {
+            Debug.Log("View is mine");
             //Functionality for player
             this.name = "Local Player";
             PhotonNetwork.playerName = PlayerPrefs.GetString("Username", "Default Name");
@@ -86,13 +87,15 @@ public class PlayerNetwork : Photon.MonoBehaviour
 
     private void OnTriggerExit(Collider triggerZoneCheck)
     {
-        Debug.LogWarning("Exiting the trigger area");
+        if (debug)
+            Debug.Log("<color = yellow>>Exiting the trigger area</color>");
         UpdateZoneLocation();
     }
 
     public void UpdateZoneLocation()
     {
-        Debug.Log("Updating Zone Location");
+        if (debug)
+            Debug.Log("Updating Zone Location");
         Vector3 direction = new Vector3(0, -1, 0);
         float distance = 5f;
         RaycastHit groundRay;
@@ -106,6 +109,12 @@ public class PlayerNetwork : Photon.MonoBehaviour
             Debug.LogError("No Location Found");
         }
         Debug.Log("Player located in " + currentLocation);
+
+        if (currentLocation == ZoneController.Zone.error)
+        {
+            Debug.Log("Checking Player Location again");
+            //UpdateZoneLocation();
+        }
     }
 
     private void SetLayerRecursively(GameObject g, int layerNumber)

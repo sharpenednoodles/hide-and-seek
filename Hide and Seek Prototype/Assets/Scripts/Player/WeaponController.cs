@@ -50,7 +50,7 @@ namespace HideSeek.WeaponController
         private WaitForSeconds shotDuration = new WaitForSeconds(.07f);
 
         //TempDisplayStuff
-        GameObject displayTemp;
+        GameObject ammoCanvas;
         private Text clipDisplay;
         private Text ammoDisplay;
 
@@ -73,9 +73,10 @@ namespace HideSeek.WeaponController
             laserDebug = GetComponent<LineRenderer>();
 
             //Ammo display stuff
-            displayTemp = GameObject.Find("WeaponDisplay");
-            clipDisplay = displayTemp.transform.GetChild(0).gameObject.GetComponent<Text>();
-            ammoDisplay = displayTemp.transform.GetChild(1).gameObject.GetComponent<Text>();
+            GameObject weaponDisplay = GameObject.Find("WeaponDisplay");
+            ammoCanvas = weaponDisplay.transform.GetChild(0).gameObject;
+            clipDisplay = ammoCanvas.transform.GetChild(0).gameObject.GetComponent<Text>();
+            ammoDisplay = ammoCanvas.transform.GetChild(1).gameObject.GetComponent<Text>();
 
             //DISABLE ALL WEAPONS INITIALLY
             unarmed.model.SetActive(false);
@@ -96,6 +97,7 @@ namespace HideSeek.WeaponController
             inventoryController = GameObject.Find("InventoryHolder").GetComponent<InventoryController>();
             GameManager = GameObject.Find("Game Controller");
             FX = GameManager.transform.GetChild(2).gameObject;
+            inventoryController.ClearPlayerInventory();
             playerID = photonView.viewID;
             actorID = photonView.ownerId;
             //Switch to unarmed weapon as default
@@ -266,22 +268,6 @@ namespace HideSeek.WeaponController
                     HealthPointer HP = hit.collider.GetComponent<HealthPointer>();
                     PhotonView target = hit.collider.GetComponent<PhotonView>();
 
-                    //Set health item to the pointer location if component has one
-                    //FAKE AND GAY
-                    //DELETE THIS
-                    /*
-                    if (hit.collider.GetComponent<HealthPointer>() != null)
-                    {
-                        Debug.Log("Found a Health Pointer!");
-                        HealthPointer HP = hit.collider.GetComponent<HealthPointer>();
-                        int reciverID = HP.GetComponent<PhotonView>().ownerId;
-                        Debug.Log(reciverID +" " +HP.GetComponent<PhotonView>().ownerId +" "+actorID);
-                        
-                        //temp variable switch
-                        HP.RecieveHit(actorID, reciverID, currWeapon.damage);
-                        //hitHealth.SendDamage(currWeapon.damage, targetID);
-                    }*/
-
                     if (HP != null)
                     {
                         Debug.Log("Found a Health Pointer!");
@@ -349,6 +335,7 @@ namespace HideSeek.WeaponController
                 {
                     decal.SpawnFromPool(currWeapon.damageDecals, hit.point, rotation);
                     photonView.RPC("SyncShot", PhotonTargets.Others, currWeapon.damageDecals, hit.point, rotation);
+                    Debug.LogWarning("Sending: "+currWeapon.damageDecals);
                 }
                 //photonView.RPC("SyncShotRayCast", PhotonTargets.Others, rayOrigin, rayDirection, currWeapon.fireRange, currWeapon.damageDecals);
                 photonView.RPC("WeaponSparks", PhotonTargets.All, hit.point, rotation);
@@ -405,6 +392,7 @@ namespace HideSeek.WeaponController
         [PunRPC]
         void SyncShot(string decalString, Vector3 point, Quaternion rotation)
         {
+            Debug.LogWarning("Recieving: " + decalString);
             decal.SpawnFromPool(currWeapon.damageDecals, point, rotation);
         }
            
@@ -523,25 +511,25 @@ namespace HideSeek.WeaponController
                 case Weapon.ID.unarmed:
                     unarmed.model.SetActive(true);
                     currWeapon = unarmed;
-                    displayTemp.SetActive(false);
+                    ammoCanvas.SetActive(false);
                     //UpdateAmmoCount();
                     break;
                 case Weapon.ID.pistol:
                     pistol.model.SetActive(true);
                     currWeapon = pistol;
-                    displayTemp.SetActive(true);
+                    ammoCanvas.SetActive(true);
                     UpdateAmmoCount();
                     break;
                 case Weapon.ID.minigun:
                     minigun.model.SetActive(true);
                     currWeapon = minigun;
-                    displayTemp.SetActive(true);
+                    ammoCanvas.SetActive(true);
                     UpdateAmmoCount();
                     break;
                 case Weapon.ID.lightningGun:
                     lightningGun.model.SetActive(true);
                     currWeapon = lightningGun;
-                    displayTemp.SetActive(true);
+                    ammoCanvas.SetActive(true);
                     UpdateAmmoCount();
                     break;
             }

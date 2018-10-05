@@ -842,7 +842,6 @@ GameObject:
   - component: {fileID: 81923615578238832}
   - component: {fileID: 124174730472901608}
   - component: {fileID: 114861819377683830}
-  - component: {fileID: 114203027999465798}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -967,7 +966,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1534975876664816
 GameObject:
   m_ObjectHideFlags: 1
@@ -3743,18 +3742,6 @@ MonoBehaviour:
   defaultHealth: 100
   debug: 1
   playerHitbox: {fileID: 0}
---- !u!114 &114203027999465798
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1489794405599428}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b678c4407b6fc424cb27368ee463994b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pickUpKey: 101
 --- !u!114 &114266920355762830
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3923,8 +3910,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 114266920355762830}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 186
+  instantiationId: 186
   currentMasterID: -1
   isRuntimeInstantiated: 0
 --- !u!114 &114346616239812606
@@ -3949,8 +3936,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 0}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 64
+  instantiationId: 64
   currentMasterID: -1
   isRuntimeInstantiated: 0
 --- !u!114 &114384491738737532
@@ -4064,8 +4051,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 114384491738737532}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 217
+  instantiationId: 217
   currentMasterID: -1
   isRuntimeInstantiated: 0
 --- !u!114 &114567852822383176
@@ -4174,7 +4161,7 @@ MonoBehaviour:
     reloadFX: []
     fireFX:
     - {fileID: 8300000, guid: a078921276259d2429a82e99f5e208d9, type: 3}
-    damageDecals: NULL
+    damageDecals: EMPTY
   pistol:
     model: {fileID: 1965825449304838}
     fireOrigin: {fileID: 1500277326589812}

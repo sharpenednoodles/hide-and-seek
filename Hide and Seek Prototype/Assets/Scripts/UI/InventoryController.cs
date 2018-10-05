@@ -37,64 +37,20 @@ public class InventoryController : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        //Initialise the players inventory object
         currentInventory = new List<InventoryItem>();
-        InitialiseInventory();
 
-        //Give the player an unarmed weapon by default
-        //AddItem(HideSeek.WeaponController.Weapon.ID.unarmed, true);
-
-        //FillInventory();
+        //unused now
+        if (currentInventory.Count > 0)
+        {
+            if (debug)
+                Debug.Log("Inventory Already exists, refreshing");
+            //ClearPlayerInventory();
+        }
+        //Initialise the players inventory object
+        //InitialiseInventory();
 	}
 
-    // Update is called once per frame
-    /*
-    void Update ()
-    {
-        if (Input.GetKeyUp("1"))
-        {
-            currentSlot = 0;
-            RefreshUI();
-        }
-        if (Input.GetKeyUp("2"))
-        {
-            currentSlot = 1;
-            RefreshUI();
-        }
-        if (Input.GetKeyUp("3"))
-        {
-            currentSlot = 2;
-            RefreshUI();
-        }
-        if (Input.GetKeyUp("4"))
-        {
-            currentSlot = 3;
-            RefreshUI();
-        }
-        if (Input.GetKeyUp("5"))
-        {
-            currentSlot = 4;
-            RefreshUI();
-        }
-
-        //Scroll wheel
-        if (Input.GetAxis("Mouse ScrollWheel") < 0f)
-        {
-            currentSlot += 1;
-            if ((int)currentSlot > MAX_SLOTS - 1)
-                currentSlot = 0;
-            RefreshUI();
-        }
-        if (Input.GetAxis("Mouse ScrollWheel") > 0f)
-        {
-            currentSlot -= (1);
-            if ((int)currentSlot < 0)
-                currentSlot = MAX_SLOTS - 1;
-            RefreshUI();
-        }
-
-    }
-    */
+    //Called from Weapon Controller
     public void ScrollDownInput()
     {
         currentSlot += 1;
@@ -102,7 +58,8 @@ public class InventoryController : MonoBehaviour {
             currentSlot = 0;
         RefreshUI();
     }
-
+    
+    //Called from Weapon Controller
     public void ScrollUpInput()
     {
         currentSlot -= (1);
@@ -131,6 +88,13 @@ public class InventoryController : MonoBehaviour {
         }
     }
 
+    public void ClearPlayerInventory()
+    {
+        nextSlot = 0;
+        currentInventory.Clear();
+        InitialiseInventory();
+    }
+
     //Refreshes whole UI
     public void RefreshUI()
     {
@@ -149,14 +113,13 @@ public class InventoryController : MonoBehaviour {
             }
             else
             {
-                Debug.Log("Slot unactive");
+                if(debug)
+                    Debug.Log("Slot unactive");
                 invent.highlight.SetActive(false);
                 invent.nonSelectedSlot.SetActive(true);
                 invent.selectedSlot.SetActive(false);
             }
         }
-
-     
     }
 
     public void AddItem(HideSeek.WeaponController.Weapon.ID ID, bool refresh)
@@ -185,7 +148,7 @@ public class InventoryController : MonoBehaviour {
     //unimplemented
     public void DropItem()
     {
-
+        //Can't just remove list entry
     }
 
     //Gives us every weapon

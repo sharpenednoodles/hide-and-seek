@@ -112,6 +112,7 @@ public class PropSwitching : MonoBehaviour
             Rigidbody rb = newRemoteItem.GetComponent<Rigidbody>();
             rb.isKinematic = true;
             newRemoteItem.name = "PropModel";
+            newItem.AddComponent<HealthPointer>();
         }
 
         if (!remoteIsProp && !photonView.isMine)
@@ -153,6 +154,7 @@ public class PropSwitching : MonoBehaviour
             
             rb.isKinematic = true;
             newItem.name = "PropModel";
+            newItem.AddComponent<HealthPointer>();
             weaponController.PropMode(true);
             camControl.SwitchTarget();
 
@@ -175,6 +177,11 @@ public class PropSwitching : MonoBehaviour
             
             newItem.transform.parent = transform;
 
+            //if no rigidbody, add one
+            if (newItem.GetComponent<Rigidbody>() == null)
+            {
+                newItem.AddComponent<Rigidbody>();
+            }
             Rigidbody rb = newItem.GetComponent<Rigidbody>();
             rb.isKinematic = true;
 
@@ -183,6 +190,7 @@ public class PropSwitching : MonoBehaviour
 
             prop = newItem;
             newItem.name = "PropModel";
+            newItem.AddComponent<HealthPointer>();
             isProp = true;
             weaponController.PropMode(true);
 
