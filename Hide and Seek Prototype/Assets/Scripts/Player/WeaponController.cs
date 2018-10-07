@@ -23,6 +23,7 @@ namespace HideSeek.WeaponController
         [SerializeField] private Pistol pistol;
         [SerializeField] private LightningGun lightningGun;
         [SerializeField] private Minigun minigun;
+        [SerializeField] private LaserRifle laserRifle;
         [SerializeField] private bool allEnabled = true;
 
         private Animator weaponAnim;
@@ -31,7 +32,7 @@ namespace HideSeek.WeaponController
 
         //Audio
         private AudioSource gunSound;
-        const int WEAPON_COUNT = 4;
+        const int WEAPON_COUNT = 5;
 
         //move this stuff to beffer location
         private float cooldown = 0;
@@ -59,7 +60,7 @@ namespace HideSeek.WeaponController
         //networkTempVars
         //Thinking of having a lookup on the master client with all these precached so every player can access at will, but we'll see
 
-        private GameObject remotePlayer, remoteWeapon, remoteUnArmed, remotePistol, remoteLightningGun, remoteMinigun;
+        private GameObject remotePlayer, remoteWeapon, remoteUnArmed, remotePistol, remoteLightningGun, remoteMinigun, remoteLaserRifle;
 
         
         void Start()
@@ -82,11 +83,13 @@ namespace HideSeek.WeaponController
             minigun.model.SetActive(false);
             lightningGun.model.SetActive(false);
             pistol.model.SetActive(false);
+            laserRifle.model.SetActive(false);
 
             unarmed.remainingClip = unarmed.clipSize;
             pistol.remainingClip = pistol.clipSize;
             lightningGun.remainingClip = lightningGun.clipSize;
             minigun.remainingClip = minigun.clipSize;
+            laserRifle.remainingClip = laserRifle.clipSize;
 
             //link crosshair component
             GameObject reticle = GameObject.FindGameObjectWithTag("Reticle");
@@ -516,6 +519,7 @@ namespace HideSeek.WeaponController
             minigun.model.SetActive(false);
             lightningGun.model.SetActive(false);
             pistol.model.SetActive(false);
+            laserRifle.model.SetActive(false);
             cooldown = 0;
 
             switch (currentID)
@@ -541,6 +545,12 @@ namespace HideSeek.WeaponController
                 case Weapon.ID.lightningGun:
                     lightningGun.model.SetActive(true);
                     currWeapon = lightningGun;
+                    displayTemp.SetActive(true);
+                    UpdateAmmoCount();
+                    break;
+                case Weapon.ID.laserRifle:
+                    laserRifle.model.SetActive(true);
+                    currWeapon = laserRifle;
                     displayTemp.SetActive(true);
                     UpdateAmmoCount();
                     break;
@@ -577,11 +587,13 @@ namespace HideSeek.WeaponController
             remotePistol = remoteWeapon.transform.GetChild(1).gameObject;
             remoteLightningGun = remoteWeapon.transform.GetChild(2).gameObject;
             remoteMinigun = remoteWeapon.transform.GetChild(3).gameObject;
+            remoteLaserRifle = remoteWeapon.transform.GetChild(4).gameObject;
 
             remoteUnArmed.SetActive(false);
             remotePistol.SetActive(false);
             remoteLightningGun.SetActive(false);
             remoteMinigun.SetActive(false);
+            remoteLaserRifle.SetActive(false);
 
             switch (currentID)
             {
@@ -596,6 +608,9 @@ namespace HideSeek.WeaponController
                     break;
                 case Weapon.ID.lightningGun:
                     remoteLightningGun.SetActive(true);
+                    break;
+                case Weapon.ID.laserRifle:
+                    remoteLaserRifle.SetActive(true);
                     break;
             }
         }

@@ -40,9 +40,13 @@ namespace HideSeek.WeaponController
             /// <summary>
             /// Player armed with a lightning gun
             /// </summary>
-            minigun
+            minigun,
             /// <summary>
             /// Player armed with the minigun
+            /// </summary>
+            laserRifle
+            /// <summary>
+            /// Player armed with the laser rifle
             /// </summary>
         }
 
