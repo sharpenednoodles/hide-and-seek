@@ -32,7 +32,11 @@ public class InventoryController : MonoBehaviour {
     const int MAX_SLOTS = 5;
     public int currentSlot = 0;
     private int nextSlot = 0;
-    
+    private int usedSlots = 0;
+
+    [Header("Additional Parameters")]
+    [SerializeField] private Sprite blankNonSelected;
+    [SerializeField] private Sprite blankSelected;
 
     // Use this for initialization
     void Start ()
@@ -85,12 +89,15 @@ public class InventoryController : MonoBehaviour {
                 slotNumber = i,
             };
             currentInventory.Add(itemToAdd);
+            currentInventory[i].nonSelectedSlot.GetComponent<Image>().sprite = blankNonSelected;
+            currentInventory[i].selectedSlot.GetComponent<Image>().sprite = blankSelected;
         }
     }
 
     public void ClearPlayerInventory()
     {
         nextSlot = 0;
+        usedSlots = 0;
         currentInventory.Clear();
         InitialiseInventory();
     }
@@ -128,7 +135,7 @@ public class InventoryController : MonoBehaviour {
         {
             Debug.Log("Adding "+ID +" to player inventory");
         }
-        if (currentInventory.Count > MAX_SLOTS)
+        if (usedSlots >= MAX_SLOTS)
         {
             Debug.Log("Inventory Full");
             return;
@@ -143,6 +150,7 @@ public class InventoryController : MonoBehaviour {
         if (refresh)
             RefreshUI();
         nextSlot += 1;
+        usedSlots += 1;
     }
 
     //unimplemented

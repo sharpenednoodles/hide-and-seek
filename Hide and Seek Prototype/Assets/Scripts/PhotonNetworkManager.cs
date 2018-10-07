@@ -25,7 +25,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
 {
     //Enter Game version here, this is to prevent different versions from connecting to the same servers
     static public string gameVersion = "Week 11 Testing Build";
-
+    [HideInInspector] public bool AllWeapons = true;
     private bool isSpawnable = true;
     const int ZONE_COUNT = 5;
     private PlayerNetwork local;
@@ -559,6 +559,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 }
                 GameObject player = PhotonView.Find(local.viewID).gameObject;
                 PhotonNetwork.Destroy(player);
+                //Disable weapons on actual round
+                AllWeapons = false;
                 SpawnPlayer();
 
                 //Reset the FX pool

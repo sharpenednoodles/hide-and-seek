@@ -29,6 +29,7 @@ namespace HideSeek.WeaponController
         private Animator weaponAnim;
         private Crosshairs crosshairs;
         private InventoryController inventoryController;
+        private PhotonNetworkManager master;
 
         //Audio
         private AudioSource gunSound;
@@ -97,14 +98,14 @@ namespace HideSeek.WeaponController
             crosshairs = reticle.GetComponent<Crosshairs>();
 
             //Get controllers
+            master = FindObjectOfType<PhotonNetworkManager>();
             inventoryController = GameObject.Find("InventoryHolder").GetComponent<InventoryController>();
             GameManager = GameObject.Find("Game Controller");
             FX = GameManager.transform.GetChild(2).gameObject;
             inventoryController.ClearPlayerInventory();
             playerID = photonView.viewID;
             actorID = photonView.ownerId;
-            //Switch to unarmed weapon as default
-
+            allEnabled = master.AllWeapons;
             if (allEnabled)
             {
                 Debug.Log("<color=red>All Weapons enabled</color>");
@@ -114,6 +115,7 @@ namespace HideSeek.WeaponController
             {
                 inventoryController.GiveUnarmed();
             }
+            //Switch to unarmed weapon as default
             SwitchWeapon(Weapon.ID.unarmed);
 
         }

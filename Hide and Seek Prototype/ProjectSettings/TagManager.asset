@@ -8,6 +8,8 @@ TagManager:
   - Prop
   - Boundary
   - Reticle
+  - WeaponPickup
+  - HealthPickup
   layers:
   - Default
   - TransparentFX

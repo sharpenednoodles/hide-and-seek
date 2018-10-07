@@ -74,7 +74,8 @@ public class Health : Photon.MonoBehaviour
         currentHealth += healthToAdd;
         healthBar.fillAmount += ((float)healthToAdd / defaultHealth);
         //Prevent Player from excedding maximum health
-        Mathf.Clamp(currentHealth, 0, 100);
+        if (currentHealth > defaultHealth)
+            currentHealth = defaultHealth;
     }
 
     //Called to damage target over network

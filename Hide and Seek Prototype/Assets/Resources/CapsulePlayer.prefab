@@ -991,6 +991,7 @@ GameObject:
   - component: {fileID: 114966976889890836}
   - component: {fileID: 114028458936109596}
   - component: {fileID: 120204632294331210}
+  - component: {fileID: 114028135560949998}
   m_Layer: 2
   m_Name: CapsulePlayer
   m_TagString: Player
@@ -3921,6 +3922,25 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114028135560949998
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1532786540187302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b69d1602a6920441939304e0f48886d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debug: 1
+  propTimeToHold: 1
+  healthTimeToHold: 2
+  HealthPickup: 0
+  PropSwitch: 0
+  WeaponPickup: 0
+  Interaction: 0
+  LookingAt: 0
 --- !u!114 &114028458936109596
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4261,7 +4281,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prop: {fileID: 0}
   timeHold: 1
-  prefabName: 
 --- !u!114 &114612856497053996
 MonoBehaviour:
   m_ObjectHideFlags: 1

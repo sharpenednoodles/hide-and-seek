@@ -63,4 +63,5 @@ MonoBehaviour:
   - WeaponSparks
   - SendDamage
   - TakeDamageOld
+  - UseObject
   DisableAutoOpenWizard: 1

@@ -16,6 +16,7 @@ public class PropSwitching : MonoBehaviour
     private MonoBehaviour firstPersonController, thirdPersonController, followCam;
     private PlayerNetwork playerNetwork;
     private HideSeek.WeaponController.WeaponController weaponController;
+    private InteractionController interactionController;
 
     private GameObject aimedAt, newItem, weapons;
     private bool isLookingAtProp, debug = true;
@@ -23,10 +24,11 @@ public class PropSwitching : MonoBehaviour
 	private float startTime = 0, holdTime = 0;
     public int timeHold = 1;
     private PhotonView photonView;
+    
 
     CameraControl camControl;
-    PropInfo propInfo;
-    public string prefabName;
+    //PropInfo propInfo;
+    //public string prefabName;
 
     private int playerID, newPropID;
 
@@ -36,9 +38,10 @@ public class PropSwitching : MonoBehaviour
         photonView = GetComponent<PhotonView>();
         isProp = false;
         //Only want this on our local player
+        /*
         if (photonView.isMine)
 		    InvokeRepeating ("Raycast", 0.1f, 0.1f);
-
+        */
         playerModel = gameObject.transform.GetChild(1).gameObject;
         weapons = gameObject.transform.GetChild(3).gameObject;
         playerCollider = GetComponent<CharacterController>();
@@ -47,41 +50,21 @@ public class PropSwitching : MonoBehaviour
         followCam = GetComponent<CameraControl>();
         camControl = GetComponent<CameraControl>();
         playerNetwork = GetComponent<PlayerNetwork>();
+        interactionController = GetComponent<InteractionController>();
         weaponController = GetComponent<HideSeek.WeaponController.WeaponController>();
     }
 
     public void Update()
     {
-        //Read input
+        //Exit Prop Form
         if (Input.GetMouseButtonDown(1) && isProp)
         {
+            playerID = photonView.viewID;
             RevertToPlayer();
         }
-
-        if (isLookingAtProp)
-        {
-            propInfo = aimedAt.GetComponent<PropInfo>();
-            if (propInfo != null)
-            {
-                prefabName = propInfo.prefabName;
-                if (Input.GetMouseButton(1))
-                {
-                    holdTime += Time.deltaTime;
-                    playerID = photonView.viewID;
-
-
-                    //Turning this off for release 1
-                }
-                else holdTime = 0;
-
-                if (holdTime >= timeHold)
-                {
-                    //Call propswitch after timeHold has passed
-                    PropSwitch(playerID);
-                }
-            }
-        }
     }
+
+  
 
     //Use this to call remote client
     [PunRPC]
@@ -131,9 +114,10 @@ public class PropSwitching : MonoBehaviour
     }
 
     //Handle Player Prop Switching
-    public void PropSwitch(int playerID)
+    public void PropSwitch(int playerID, string prefabName, float aimedAtYRot)
     {
-        holdTime = 0;
+        //holdTime = 0;
+ 
    
         //Switch from Prop to Prop - CURRENTLY NOT IN USE
         if (isProp && photonView.isMine)
@@ -142,7 +126,7 @@ public class PropSwitching : MonoBehaviour
                 Debug.Log("Local Player is transforming into another prop from " +photonView.viewID);
 
             PhotonNetwork.Destroy(prop);
-            newItem = Instantiate(aimedAt, playerModel.transform.position, Quaternion.Euler(-90, aimedAt.transform.rotation.y, 0));
+            newItem = Instantiate(aimedAt, playerModel.transform.position, Quaternion.Euler(-90, aimedAtYRot, 0));
 
             newItem.transform.parent = transform;
             //If no rigidbody, add one
@@ -174,7 +158,8 @@ public class PropSwitching : MonoBehaviour
             
             //newItem = PhotonNetwork.Instantiate(aimedAt.name, playerModel.transform.position, aimedAt.transform.rotation, 0);
             //Todo - Calculate appropriate y height vaule here (or just read in from a script)
-            newItem = PhotonNetwork.Instantiate(prefabName, playerModel.transform.position, Quaternion.Euler(-90, aimedAt.transform.rotation.y, 0), 0);
+            newItem = PhotonNetwork.Instantiate(prefabName, playerModel.transform.position, Quaternion.Euler(-90, aimedAtYRot, 0), 0);
+           
             newPropID = newItem.GetComponent<PhotonView>().viewID;
             
             newItem.transform.parent = transform;
@@ -227,30 +212,5 @@ public class PropSwitching : MonoBehaviour
         }
     }
 
-    //raycast every second to check for objects to switch to
-    //TODO: remove invoke and only check when physics objects enter boundary
-    public void Raycast()
-	{
-		RaycastHit hit;
-		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-		if (Physics.Raycast(ray, out hit)){
-			aimedAt = hit.collider.gameObject;
-			if (hit.collider.tag == "Prop" && hit.distance <= 2)
-				isLookingAtProp = true;
-			else
-				isLookingAtProp = false;
-		}
-	}
 
-    //TODO: Miagrate to custom UI elements
-	public void OnGUI()
-	{
-		if (isLookingAtProp) GUI.Box(new Rect(140, Screen.height - 50, Screen.width - 300, 120), "Hold Right Mouse Button to transform into "+propInfo.prefabName);
-	}
-
-    //function to terminate all invoking methods
-    public void Death()
-    {
-        CancelInvoke();
-    }
 }
