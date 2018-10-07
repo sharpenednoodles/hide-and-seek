@@ -539,7 +539,7 @@ namespace HideSeek.WeaponController
                 case Weapon.ID.laserRifle:
                     laserRifle.model.SetActive(true);
                     currWeapon = laserRifle;
-                    displayTemp.SetActive(true);
+                    ammoCanvas.SetActive(true);
                     UpdateAmmoCount();
                     break;
             }
