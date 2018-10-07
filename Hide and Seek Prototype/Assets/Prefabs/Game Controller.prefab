@@ -11,6 +11,23 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1416747191704774}
   m_IsPrefabParent: 1
+--- !u!1 &1405925547412546
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4276095827583294}
+  - component: {fileID: 114787085949143180}
+  - component: {fileID: 114973282526178668}
+  m_Layer: 0
+  m_Name: Particles
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1412500389856504
 GameObject:
   m_ObjectHideFlags: 0
@@ -24,7 +41,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2
   m_IsActive: 1
 --- !u!1 &1416747191704774
 GameObject:
@@ -38,6 +55,7 @@ GameObject:
   - component: {fileID: 114085134793327570}
   - component: {fileID: 114254342543105594}
   - component: {fileID: 114476733938405698}
+  - component: {fileID: 82186485065151620}
   m_Layer: 0
   m_Name: Game Controller
   m_TagString: Untagged
@@ -76,8 +94,22 @@ Transform:
   m_Children:
   - {fileID: 4487297695619270}
   - {fileID: 4474640715763768}
+  - {fileID: 4276095827583294}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4276095827583294
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1405925547412546}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4270860436875072}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4474640715763768
 Transform:
@@ -148,6 +180,87 @@ AudioListener:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1873005461207618}
   m_Enabled: 1
+--- !u!82 &82186485065151620
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1416747191704774}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 37bdf972f3d4b42d0916fc755dd2d90c,
+    type: 2}
+  m_audioClip: {fileID: 8300000, guid: ed4daeb1dc72b7841bc62964ca7aaceb, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!114 &114085134793327570
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -175,6 +288,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectText: {fileID: 0}
+  spectateText: {fileID: 0}
   player: {fileID: 1532786540187302, guid: 84e28e3982107094d9b7558a8a4ca9d6, type: 2}
   joinCam: {fileID: 1873005461207618}
   eventContentFeed: {fileID: 0}
@@ -188,18 +302,26 @@ MonoBehaviour:
     SpawnPointArray:
     - {fileID: 0}
     - {fileID: 0}
+    - {fileID: 0}
   - tag: Warehouse
     SpawnPointArray:
+    - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
   - tag: Residential
     SpawnPointArray:
     - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   - tag: Park
     SpawnPointArray:
     - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   - tag: Maintenance
     SpawnPointArray:
+    - {fileID: 0}
+    - {fileID: 0}
     - {fileID: 0}
   minX: 2
   maxX: 76
@@ -220,8 +342,12 @@ MonoBehaviour:
   deadDisplay: {fileID: 0}
   victoryCanvas: {fileID: 0}
   defeatCanvas: {fileID: 0}
+  HUDCanvas:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   warmUpTime: 0.5
-  roundTime: 2
+  roundTime: 10
   globalState: 0
 --- !u!114 &114254342543105594
 MonoBehaviour:
@@ -310,6 +436,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profile: {fileID: 11400000, guid: fa8aeda898ee6c44bb38d115a0c8f94f, type: 2}
+--- !u!114 &114787085949143180
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1405925547412546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec1683be71e02f548b9023d92d51ac31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectsToPreload:
+  - {fileID: 100002, guid: 00fedc70b62a31e448e8ccc298257b56, type: 2}
+  - {fileID: 100002, guid: eb553b67921c92649ac7dbbc561e2047, type: 2}
+  objectsToPreloadTimes: 1400000014000000
+  hideObjectsInHierarchy: 1
+  spawnAsChildren: 1
+  onlyGetInactiveObjects: 0
+  instantiateIfNeeded: 0
+--- !u!114 &114973282526178668
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1405925547412546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6b5107aa586f0f48ae11fa9810eaa93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  muzzleFX: {fileID: 100002, guid: eb553b67921c92649ac7dbbc561e2047, type: 2}
+  metalSparks: {fileID: 100002, guid: 00fedc70b62a31e448e8ccc298257b56, type: 2}
 --- !u!124 &124955668774110114
 Behaviour:
   m_ObjectHideFlags: 1

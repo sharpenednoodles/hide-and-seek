@@ -112,7 +112,7 @@ public class PropSwitching : MonoBehaviour
             Rigidbody rb = newRemoteItem.GetComponent<Rigidbody>();
             rb.isKinematic = true;
             newRemoteItem.name = "PropModel";
-            newItem.AddComponent<HealthPointer>();
+            newRemoteItem.AddComponent<HealthPointer>();
         }
 
         if (!remoteIsProp && !photonView.isMine)
@@ -159,7 +159,9 @@ public class PropSwitching : MonoBehaviour
             camControl.SwitchTarget();
 
             //Call RPC Function for remote players
-            photonView.RPC("RemoteSwitch", PhotonTargets.AllBufferedViaServer, playerID, newPropID, isProp);
+            //KNOWN ISSUES
+            //When a player joins a game in progress, and a player has turned into a prop, the prop will spawn on the new players machine where the player originally transformed
+            photonView.RPC("RemoteSwitch", PhotonTargets.AllBuffered, playerID, newPropID, isProp);
         }
 
         //Switch from Robot to Prop

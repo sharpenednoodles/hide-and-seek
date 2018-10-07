@@ -21,6 +21,8 @@ GameObject:
   - component: {fileID: 4797477880552350}
   - component: {fileID: 114055554007140308}
   - component: {fileID: 20692316282450388}
+  - component: {fileID: 114104305703732058}
+  - component: {fileID: 81879970267090358}
   m_Layer: 0
   m_Name: Flycam
   m_TagString: MainCamera
@@ -34,8 +36,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1296972943998150}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.21996622, y: 0.6163301, z: 0.18490788, w: -0.7331856}
+  m_LocalPosition: {x: -103.084564, y: 2.8333218, z: 121.88866}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -77,6 +79,13 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!81 &81879970267090358
+AudioListener:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1296972943998150}
+  m_Enabled: 1
 --- !u!114 &114055554007140308
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -88,11 +97,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f3b2d3794ea28c48a7f4e0bcf7ea922, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainSpeed: 100
-  shiftAdd: 250
-  maxShift: 1000
+  mainSpeed: 20
+  shiftAdd: 10
+  maxShift: 50
   camSens: 0.25
   totalRun: 1
-  speedMultiplier: 0
-  rotationY: 0
-  mouseSensitivity: 5
+  speedMultiplier: 1.6914486
+  rotationY: 33.4
+  mouseSensitivity: 2
+--- !u!114 &114104305703732058
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1296972943998150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 11400000, guid: fa8aeda898ee6c44bb38d115a0c8f94f, type: 2}

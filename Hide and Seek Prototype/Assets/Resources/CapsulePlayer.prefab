@@ -966,7 +966,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1534975876664816
 GameObject:
   m_ObjectHideFlags: 1
@@ -3910,8 +3910,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 114266920355762830}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 186
-  instantiationId: 186
+  viewIdField: 0
+  instantiationId: -1
   currentMasterID: -1
   isRuntimeInstantiated: 0
 --- !u!114 &114346616239812606
@@ -3936,8 +3936,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 0}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 64
-  instantiationId: 64
+  viewIdField: 0
+  instantiationId: -1
   currentMasterID: -1
   isRuntimeInstantiated: 0
 --- !u!114 &114384491738737532
@@ -4051,8 +4051,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 114384491738737532}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 217
-  instantiationId: 217
+  viewIdField: 0
+  instantiationId: -1
   currentMasterID: -1
   isRuntimeInstantiated: 0
 --- !u!114 &114567852822383176

@@ -61,6 +61,7 @@ public class ZoneController : Photon.MonoBehaviour {
         /// </summary>
     }
 
+    //Currently this reference is unused
     private PhotonNetworkManager master;
 
     void Start ()

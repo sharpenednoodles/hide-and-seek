@@ -23,7 +23,7 @@ public class PlayerNetwork : Photon.MonoBehaviour
     private int actorID;
 
     private PhotonNetworkManager master;
-    private Health health;
+    //private Health health;
 
     public ZoneController.Zone currentLocation = ZoneController.Zone.error;
     
@@ -31,7 +31,7 @@ public class PlayerNetwork : Photon.MonoBehaviour
     {
         //photonView = GetComponent<PhotonView>();
         master = FindObjectOfType<PhotonNetworkManager>();
-        health = GetComponent<Health>();
+        //health = GetComponent<Health>();
         actorID = photonView.ownerId;
         Initialise();
     }
@@ -112,8 +112,7 @@ public class PlayerNetwork : Photon.MonoBehaviour
 
         if (currentLocation == ZoneController.Zone.error)
         {
-            Debug.Log("Checking Player Location again");
-            //UpdateZoneLocation();
+            Debug.LogWarning("Player Location Unknown");
         }
     }
 

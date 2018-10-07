@@ -393,7 +393,7 @@ namespace HideSeek.WeaponController
         void SyncShot(string decalString, Vector3 point, Quaternion rotation)
         {
             Debug.LogWarning("Recieving: " + decalString);
-            decal.SpawnFromPool(currWeapon.damageDecals, point, rotation);
+            decal.SpawnFromPool(decalString, point, rotation);
         }
            
         private IEnumerator ShotEffect()
