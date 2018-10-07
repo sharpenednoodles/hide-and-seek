@@ -32,6 +32,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     private PersistScore persistScore;
 
     [SerializeField] private Text connectText;
+    [SerializeField] private Text spectateText;
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject joinCam;
 
@@ -196,13 +197,12 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     void Start()
     {
         PhotonNetwork.offlineMode = offlineMode;
-        //debugFeed = GameObject.Find("Debug Feed").GetComponent<Text>();
-        //playerData = new Dictionary<int, PlayerData>();
         spawnList = new List<Vector2>();
         players = new List<Players>();
         remainingZones = ZONE_COUNT;
         zoneController = GetComponent<ZoneController>();
         FX = gameObject.transform.GetChild(2).gameObject.GetComponent<CFX_SpawnSystem>();
+        
         //Synchronise Scene Loading
         PhotonNetwork.automaticallySyncScene = true;
         persistScore = FindObjectOfType<PersistScore>();
@@ -280,7 +280,6 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     public virtual void OnDisconnect()
     {
         //Send disconnect message
-        //if host disconnects, kick everyone back to the main menu
         if (PhotonNetwork.isMasterClient)
         {
             photonView.RPC("SetGameState", PhotonTargets.AllViaServer, (byte)globalState, (byte)EventType.playerDisconnect, currentID);
@@ -306,10 +305,17 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         StartCoroutine(LoadMainMenu(5));
     }
 
-
+    //Called when the host leaves the game
+    public virtual void OnMasterClientSwitched()
+    {
+        UpdateEventFeed("The Host has left the game");
+        StartCoroutine(LoadMainMenu(5));
+    }
 
     public IEnumerator LoadMainMenu(float timeToWait)
     {
+        //Unlock the mouse
+        GameMenuController.MenuState = true;
         yield return new WaitForSeconds(timeToWait);
         SceneManager.LoadScene(0);
     }
@@ -595,7 +601,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         {
             Debug.Log("Spawning Flycam");
             UpdateEventFeed("Spawning Spectator Cam");
-            connectText.text = "Spaectator Mode";
+            //connectText.text = "Spectator Mode";
+            spectateText.text = "Spectator Mode";
             GameObject flycam = (GameObject)Instantiate(Resources.Load("Flycam"));
         }
         else
@@ -971,6 +978,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 Debug.Log("Spawn Rejected as server is no longer warming up");
             UpdateEventFeed("The Game has already begun");
             UpdateEventFeed("Joining Server as Spectator");
+            joinCam.SetActive(false);
             SpawnFlyCam(ID);
         }
     }
