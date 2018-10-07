@@ -154,6 +154,13 @@ namespace HideSeek.WeaponController
                     currentID = inventoryController.GetIDFromSlot();
                     SwitchWeapon(currentID);
                 }
+                if (Input.GetKeyUp("5"))
+                {
+                    inventoryController.currentSlot = 4;
+                    inventoryController.RefreshUI();
+                    currentID = inventoryController.GetIDFromSlot();
+                    SwitchWeapon(currentID);
+                }
                 //Scroll wheel
                 if (Input.GetAxis("Mouse ScrollWheel") > 0f)
                 {
@@ -539,7 +546,7 @@ namespace HideSeek.WeaponController
                 case Weapon.ID.laserRifle:
                     laserRifle.model.SetActive(true);
                     currWeapon = laserRifle;
-                    displayTemp.SetActive(true);
+                    ammoCanvas.SetActive(true);
                     UpdateAmmoCount();
                     break;
             }
