@@ -2148,7 +2148,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1168134875993176}
   m_LocalRotation: {x: 0.99999017, y: -0.00073708914, z: -0.000737089, w: 0.0043107206}
-  m_LocalPosition: {x: -0.0002765658, y: 1.1345862, z: 0.0016246582}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 5.000003, y: 5.0000067, z: 5.000003}
   m_Children: []
   m_Father: {fileID: 4465473680325262}
@@ -2484,7 +2484,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1532786540187302}
   m_LocalRotation: {x: -0, y: -0.99894685, z: -0, w: -0.045883648}
-  m_LocalPosition: {x: 76.48697, y: 12.09773, z: -41.781303}
+  m_LocalPosition: {x: 73.18821, y: 10.097729, z: -17.12287}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4259262820854922}
@@ -2700,7 +2700,7 @@ Transform:
   m_Children:
   - {fileID: 4166236074913124}
   m_Father: {fileID: 4574471470536550}
-  m_RootOrder: 0
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4495585582944272
 Transform:
@@ -2820,11 +2820,11 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4465473680325262}
   - {fileID: 4792912573930268}
   - {fileID: 4603515127152252}
   - {fileID: 4700546885153850}
   - {fileID: 4911808182381242}
+  - {fileID: 4465473680325262}
   m_Father: {fileID: 4380786517725852}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2894,7 +2894,7 @@ Transform:
   m_Children:
   - {fileID: 4341238696227902}
   m_Father: {fileID: 4574471470536550}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4609004123802494
 Transform:
@@ -3006,7 +3006,7 @@ Transform:
   m_Children:
   - {fileID: 4846142610795880}
   m_Father: {fileID: 4574471470536550}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!4 &4709629177798642
 Transform:
@@ -3099,7 +3099,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1021592206215564}
   m_LocalRotation: {x: 0.0000015368042, y: -0.7131768, z: 0.0000011436097, w: 0.70098424}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.008, z: 0}
   m_LocalScale: {x: 20, y: 19.999985, z: 20}
   m_Children:
   - {fileID: 4416510598330198}
@@ -3175,7 +3175,7 @@ Transform:
   m_Children:
   - {fileID: 4957583631828842}
   m_Father: {fileID: 4574471470536550}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4800568884181362
 Transform:
@@ -3360,7 +3360,7 @@ Transform:
   m_Children:
   - {fileID: 4110688280556520}
   m_Father: {fileID: 4574471470536550}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4912335262999808
 Transform:
@@ -4384,22 +4384,25 @@ MonoBehaviour:
   lightningGun:
     model: {fileID: 1734299762059036}
     fireOrigin: {fileID: 1621157763706790}
-    fireRate: 0.1
+    fireRate: 0.2
     fireRange: 10
-    damage: 1
+    damage: 20
     impactForce: 1000
-    clipSize: 10
+    clipSize: 6
     remainingClip: 0
-    ammo: 0
-    reloadTime: 5
+    ammo: 48
+    reloadTime: 3
     canFire: 1
     isEquipped: 0
     crosshair: 1
     needWarmUp: 0
     melee: 0
-    emptyFX: []
-    reloadFX: []
-    fireFX: []
+    emptyFX:
+    - {fileID: 8300000, guid: a9fa6802d73ad6940925c21a8d83f9cd, type: 3}
+    reloadFX:
+    - {fileID: 8300000, guid: d3254cdde5adb8f4387292a9256d64f7, type: 3}
+    fireFX:
+    - {fileID: 8300000, guid: f56968e961cd5cb4ca7d641637e9dc66, type: 3}
     damageDecals: Default Bullethole
   minigun:
     model: {fileID: 1968096950733248}
@@ -4435,7 +4438,7 @@ MonoBehaviour:
     fireRange: 60
     damage: 35
     impactForce: 300
-    clipSize: 1
+    clipSize: 4
     remainingClip: 0
     ammo: 30
     reloadTime: 3
@@ -4444,9 +4447,12 @@ MonoBehaviour:
     crosshair: 1
     needWarmUp: 0
     melee: 0
-    emptyFX: []
-    reloadFX: []
-    fireFX: []
+    emptyFX:
+    - {fileID: 8300000, guid: 393233b3640749845bdb076a1f404a38, type: 3}
+    reloadFX:
+    - {fileID: 8300000, guid: 841ff26fb47e8cd4885be242667f737c, type: 3}
+    fireFX:
+    - {fileID: 8300000, guid: 1802fe6c60c9eaf438df8501b48d9a6e, type: 3}
     damageDecals: 
   allEnabled: 1
   currentID: 0
