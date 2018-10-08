@@ -84,6 +84,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     public bool offlineMode = false;
     private bool previouslyJoined = false;
     private string roomName;
+    private Transform deathLocation;
    
     private static bool LOADED = false;
 
@@ -446,7 +447,9 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                         Debug.Log("Destroying Self from " + currentID);
                     
                     GameObject player = PhotonView.Find(local.viewID).gameObject;
+                    deathLocation = player.transform;
                     PhotonNetwork.Destroy(player);
+                    PhotonNetwork.Instantiate("Ragdoll", deathLocation.position, deathLocation.rotation, 0);
                     ToggleHUD(false);
                     DisplayCanvas(currentID, "defeat");
                     SpawnFlyCam(ID);
