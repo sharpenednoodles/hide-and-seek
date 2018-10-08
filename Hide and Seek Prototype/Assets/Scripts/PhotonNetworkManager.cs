@@ -609,6 +609,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
             //connectText.text = "Spectator Mode";
             spectateText.text = "Spectator Mode";
             GameObject flycam = (GameObject)Instantiate(Resources.Load("Flycam"));
+            flycam.transform.position = deathLocation.position;
+            flycam.transform.rotation = deathLocation.rotation;
         }
         else
             Debug.Log("Remote Flycam Spawn Ignored");
@@ -666,6 +668,13 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         yield return new WaitForSeconds(3);
         ClearSpawnLists();
         SpawnPlayer();
+
+        if (PhotonNetwork.isMasterClient)
+        {
+            //Restart game timers
+            warmUpTime = 0.1f;
+            photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, (byte)GameState.warmUp, (byte)EventType.playerJoin, currentID);
+        }
 
         players = persistScore.LoadFromList();
         persistScore.VerifySavedList();
@@ -769,6 +778,29 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 connectText.text = ("Prepare to evacuate the Warehouse");
                 EventCountDownTimerDelayNetwork(timerWarning, "Warehouse Zone closing in", timeToWait);
                 break;
+        }
+    }
+
+    public void CallRemoteZoneDeath(ZoneController.Zone zoneShut)
+    {
+        photonView.RPC("ZoneDeath", PhotonTargets.All, (byte)zoneShut);
+    }
+
+    [PunRPC]
+    private void ZoneDeath(byte zoneShut)
+    {
+        if (debug)
+            Debug.Log("Zone " +(ZoneController.Zone)zoneShut + " shut event received");
+        if (local.currentLocation == (ZoneController.Zone) zoneShut)
+        {
+            if (debug)
+                Debug.Log("Player " + currentID + " located in " + (ZoneController.Zone)zoneShut + " being elimiated");
+            photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, (byte)0, (byte)EventType.playerDeath, currentID);
+        }
+        else
+        {
+            if (debug)
+                Debug.Log("Recieved Elimination, but not in the area");
         }
     }
 

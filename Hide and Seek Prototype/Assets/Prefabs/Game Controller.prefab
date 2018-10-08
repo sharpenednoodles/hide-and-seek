@@ -287,6 +287,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75fbe1bacf5117d43b4d1eb5201e22f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AllWeapons: 1
   connectText: {fileID: 0}
   spectateText: {fileID: 0}
   player: {fileID: 1532786540187302, guid: 84e28e3982107094d9b7558a8a4ca9d6, type: 2}
@@ -390,6 +391,8 @@ MonoBehaviour:
   maintenanceZone:
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   retailZone:
   - {fileID: 0}
   - {fileID: 0}
@@ -403,6 +406,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   maintenanceCollider:
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   retailCollider:

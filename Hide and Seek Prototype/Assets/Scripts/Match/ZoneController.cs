@@ -228,7 +228,6 @@ public class ZoneController : Photon.MonoBehaviour {
                 }
                 break;
             case Zone.warehouse:
-
                 if (debug)
                     Debug.Log("Toggling Warehouse Zone");
                 foreach (Animator animate in warehouseZone)
@@ -245,5 +244,6 @@ public class ZoneController : Photon.MonoBehaviour {
                 }
                 break;
         }
+        master.CallRemoteZoneDeath((Zone)zone);
     }
 }

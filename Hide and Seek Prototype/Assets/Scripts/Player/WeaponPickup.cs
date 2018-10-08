@@ -16,11 +16,11 @@ public class WeaponPickup : Photon.MonoBehaviour {
     //Destory the object on network
     public void DestroyObject()
     {
-        photonView.RPC("UseObject", PhotonTargets.AllBuffered, photonView.viewID);
+        photonView.RPC("DisableWeapon", PhotonTargets.AllBuffered, photonView.viewID);
     }
 
     [PunRPC]
-    private void UseObject(int viewID)
+    private void DisableWeapon(int viewID)
     {
         GameObject disable = PhotonView.Find(viewID).gameObject;
         gameObject.SetActive(false);

@@ -15,11 +15,11 @@ public class HealthPickup : Photon.MonoBehaviour {
     //Destory the object on network
     public void DestroyObject()
     {
-        photonView.RPC("UseObject", PhotonTargets.AllBuffered, photonView.viewID);
+        photonView.RPC("DisableHealth", PhotonTargets.AllBuffered, photonView.viewID);
     }
 
     [PunRPC]
-    private void UseObject(int viewID)
+    private void DisableHealth(int viewID)
     {
         GameObject disable = PhotonView.Find(viewID).gameObject;
         gameObject.SetActive(false);
