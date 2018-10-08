@@ -186,6 +186,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         {
             LOADED = true;
             Debug.Log("Loaded Scene into memory");
+
         }
         else
         {

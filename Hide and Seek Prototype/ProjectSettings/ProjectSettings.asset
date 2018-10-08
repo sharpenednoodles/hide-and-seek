@@ -20,7 +20,7 @@ PlayerSettings:
   m_ShowUnitySplashLogo: 1
   m_SplashScreenOverlayOpacity: 1
   m_SplashScreenAnimation: 1
-  m_SplashScreenLogoStyle: 0
+  m_SplashScreenLogoStyle: 1
   m_SplashScreenDrawMode: 1
   m_SplashScreenBackgroundAnimationZoom: 0.509
   m_SplashScreenLogoAnimationZoom: 1
@@ -256,7 +256,7 @@ PlayerSettings:
     height: 180
     banner: {fileID: 0}
   androidGamepadSupportLevel: 0
-  resolutionDialogBanner: {fileID: 2800000, guid: 8070f7dac3dd1614fb559b014755ecd1,
+  resolutionDialogBanner: {fileID: 2800000, guid: 1d0ed14dde429274386913e7433e6ad6,
     type: 3}
   m_BuildTargetIcons:
   - m_BuildTarget: 
