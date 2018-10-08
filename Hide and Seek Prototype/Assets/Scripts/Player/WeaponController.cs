@@ -347,7 +347,7 @@ namespace HideSeek.WeaponController
                 {
                     decal.SpawnFromPool(currWeapon.damageDecals, hit.point, rotation);
                     photonView.RPC("SyncShot", PhotonTargets.Others, currWeapon.damageDecals, hit.point, rotation);
-                    Debug.LogWarning("Sending: "+currWeapon.damageDecals);
+                    //Debug.LogWarning("Sending: "+currWeapon.damageDecals);
                 }
                 //photonView.RPC("SyncShotRayCast", PhotonTargets.Others, rayOrigin, rayDirection, currWeapon.fireRange, currWeapon.damageDecals);
                 photonView.RPC("WeaponSparks", PhotonTargets.All, hit.point, rotation);
@@ -404,7 +404,7 @@ namespace HideSeek.WeaponController
         [PunRPC]
         void SyncShot(string decalString, Vector3 point, Quaternion rotation)
         {
-            Debug.LogWarning("Recieving: " + decalString);
+            //Debug.LogWarning("Recieving: " + decalString);
             decal.SpawnFromPool(decalString, point, rotation);
         }
            
@@ -629,5 +629,33 @@ namespace HideSeek.WeaponController
                 crosshairs.ToggleCrossHairs(false);
             }
         }
+
+        public void AddAmmo(Weapon.ID ammoType, int amount)
+        {
+            Debug.Log("Ammo " + amount + "for " + ammoType);
+            //case for adding ammo
+            switch (ammoType)
+            {
+                case Weapon.ID.pistol:
+                    pistol.ammo += amount;
+                    UpdateAmmoCount();
+                    break;
+                case Weapon.ID.minigun:
+                    minigun.ammo += amount;
+                    UpdateAmmoCount();
+                    break;
+                case Weapon.ID.lightningGun:
+                    lightningGun.ammo += amount;
+                    UpdateAmmoCount();
+                    break;
+                case Weapon.ID.laserRifle:
+                    laserRifle.ammo += amount;
+                    UpdateAmmoCount();
+                    break;
+            }
+
+        }
     }
+
+
 }

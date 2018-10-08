@@ -67,4 +67,5 @@ MonoBehaviour:
   - DisableHealth
   - DisableWeapon
   - ZoneDeath
+  - DisableAmmo
   DisableAutoOpenWizard: 1

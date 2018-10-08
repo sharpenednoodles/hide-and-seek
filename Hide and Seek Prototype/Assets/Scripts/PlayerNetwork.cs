@@ -19,6 +19,7 @@ public class PlayerNetwork : Photon.MonoBehaviour
     //Head bone is connected to then, neck bone
     [SerializeField] private GameObject headBoneRoot;
     [SerializeField] private bool debug = true;
+    private bool searchStarted = false;
     public int viewID;
     private int actorID;
 
@@ -110,10 +111,23 @@ public class PlayerNetwork : Photon.MonoBehaviour
         }
         Debug.Log("Player located in " + currentLocation);
 
-        if (currentLocation == ZoneController.Zone.error)
+        if (currentLocation == ZoneController.Zone.error && !searchStarted)
         {
+            searchStarted = true;
             Debug.LogWarning("Player Location Unknown");
+            InvokeRepeating("SearchForPlayer", 0.5f, 0.5f);
         }
+    }
+
+    private void SearchForPlayer()
+    {
+        UpdateZoneLocation();
+        if (currentLocation != ZoneController.Zone.error)
+        {
+            CancelInvoke();
+            searchStarted = false;
+        }
+            
     }
 
     private void SetLayerRecursively(GameObject g, int layerNumber)

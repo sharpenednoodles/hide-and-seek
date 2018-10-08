@@ -10,6 +10,8 @@ TagManager:
   - Reticle
   - WeaponPickup
   - HealthPickup
+  - DoorControl
+  - AmmoPickup
   layers:
   - Default
   - TransparentFX

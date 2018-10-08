@@ -19,6 +19,7 @@ public class ServerNameInput : MonoBehaviour {
 
         string playerName = PlayerPrefs.GetString("Username", "Default Name");
         serverNameInput.text = PlayerPrefs.GetString("Servername", playerName +"'s Server");
+        serverNameInput.characterLimit = 16;
     }
 
     private void OnGUI()

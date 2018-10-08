@@ -13,8 +13,10 @@ public class GameJoinMenu : MonoBehaviour {
 
     public TMP_InputField playerName;
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
         PhotonNetwork.playerName = PlayerPrefs.GetString("Username", "Default Name");
+        playerName.characterLimit = 16;
 	}
 	
 	// Update is called once per frame

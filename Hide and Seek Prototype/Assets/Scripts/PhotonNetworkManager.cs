@@ -30,6 +30,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     const int ZONE_COUNT = 5;
     private PlayerNetwork local;
     private PersistScore persistScore;
+    private GameObject scoreManager;
+    private PickUpSpawner pickUpSpawner;
 
     [SerializeField] private Text connectText;
     [SerializeField] private Text spectateText;
@@ -184,7 +186,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     {
         if (!LOADED)
         {
-            LOADED = true;
+            
             Debug.Log("Loaded Scene into memory");
 
         }
@@ -199,10 +201,12 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     void Start()
     {
         PhotonNetwork.offlineMode = offlineMode;
+        scoreManager = GameObject.Find("ScoreManager");
         spawnList = new List<Vector2>();
         players = new List<Players>();
         remainingZones = ZONE_COUNT;
         zoneController = GetComponent<ZoneController>();
+        pickUpSpawner = GetComponent<PickUpSpawner>();
         FX = gameObject.transform.GetChild(2).gameObject.GetComponent<CFX_SpawnSystem>();
         
         //Synchronise Scene Loading
@@ -211,19 +215,23 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
 
         if (persistScore == null)
         {
-            gameObject.AddComponent<PersistScore>();
+            scoreManager.AddComponent<PersistScore>();
             persistScore = FindObjectOfType<PersistScore>();
         }
 
-        if (PhotonNetwork.offlineMode == true)
+        if (!LOADED)
         {
-            Debug.Log("Offline Mode");
-            //OnJoinedRoom();
-        }
-        else
-        {
-            //Specify game build verison
-            PhotonNetwork.ConnectUsingSettings(gameVersion);
+            LOADED = true;
+            if (PhotonNetwork.offlineMode == true)
+            {
+                Debug.Log("Offline Mode");
+                //OnJoinedRoom();
+            }
+            else
+            {
+                //Specify game build verison
+                PhotonNetwork.ConnectUsingSettings(gameVersion);
+            }
         }
     }
 
@@ -565,6 +573,10 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 PhotonNetwork.Destroy(player);
                 //Disable weapons on actual round
                 AllWeapons = false;
+                if (PhotonNetwork.isMasterClient)
+                {
+                    pickUpSpawner.SpawnPickups(connectedPlayers);
+                }
                 SpawnPlayer();
 
                 //Reset the FX pool
@@ -666,17 +678,19 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     private IEnumerator Respawn()
     {
         Debug.Log("Respawn Pinged");
+
+
         yield return new WaitForSeconds(3);
         ClearSpawnLists();
         SpawnPlayer();
 
-        if (PhotonNetwork.isMasterClient)
-        {
-            //Restart game timers
-            warmUpTime = 0.1f;
-            photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, (byte)GameState.warmUp, (byte)EventType.playerJoin, currentID);
-        }
 
+
+        //Restart game timers
+        warmUpTime = 0.1f;
+        photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, (byte)GameState.warmUp, (byte)EventType.playerJoin, currentID);
+
+        
         players = persistScore.LoadFromList();
         persistScore.VerifySavedList();
     }

@@ -23,12 +23,14 @@ public class InteractionController : Photon.MonoBehaviour {
 
     private Health health;
     private InventoryController inventoryController;
+    private HideSeek.WeaponController.WeaponController weaponController;
     private PropSwitching propController;
     //GUI Elements
     private GameObject interactCanvasParent;
     private GameObject weaponCanvas;
     private GameObject propCanvas;
     private GameObject healthCanvas;
+    private GameObject ammoCanvas;
     private Image propTimer;
     private Image healthTimer;
 
@@ -41,9 +43,10 @@ public class InteractionController : Photon.MonoBehaviour {
     PropInfo propInfo;
     WeaponPickup weaponPickup;
     HealthPickup healthPickup;
+    AmmoPickup ammoPickup;
 
     //Bool variables where we have a bool for each tpye, as well as na interation in general
-    public bool HealthPickup, PropSwitch, WeaponPickup, Interaction, LookingAt;
+    public bool HealthPickup, PropSwitch, WeaponPickup, AmmoPickup, Interaction, LookingAt;
 
 
 	// Use this for initialization
@@ -51,12 +54,14 @@ public class InteractionController : Photon.MonoBehaviour {
     {
         health = GetComponent<Health>();
         propController = GetComponent<PropSwitching>();
+        weaponController = GetComponent<HideSeek.WeaponController.WeaponController>();
         inventoryController = GameObject.Find("InventoryHolder").GetComponent<InventoryController>();
         //Fetch GUI
         interactCanvasParent = GameObject.Find("InteractionCanvas");
         propCanvas = interactCanvasParent.transform.GetChild(0).gameObject;
         weaponCanvas = interactCanvasParent.transform.GetChild(1).gameObject;
         healthCanvas = interactCanvasParent.transform.GetChild(2).gameObject;
+        ammoCanvas = interactCanvasParent.transform.GetChild(3).gameObject;
 
         propTimer = propCanvas.transform.GetChild(2).gameObject.GetComponent<Image>();
         healthTimer = healthCanvas.transform.GetChild(2).gameObject.GetComponent<Image>();
@@ -123,6 +128,17 @@ public class InteractionController : Photon.MonoBehaviour {
                 holdTime = 0;
             }
         }
+
+        //Ammo Pickup
+        if (AmmoPickup)
+        {
+            if (Input.GetKeyUp(KeyCode.E))
+            {
+                weaponController.AddAmmo(ammoPickup.weaponID, ammoPickup.amount);
+                ResetInterationState();
+                ammoPickup.DestroyObject();
+            }
+        }
     }
 
     //Disable UI states
@@ -134,6 +150,8 @@ public class InteractionController : Photon.MonoBehaviour {
         weaponCanvas.SetActive(false);
         HealthPickup = false;
         healthCanvas.SetActive(false);
+        AmmoPickup = false;
+        ammoCanvas.SetActive(false);
         ClearColor();
         clearedColour = true;
     }
@@ -162,6 +180,8 @@ public class InteractionController : Photon.MonoBehaviour {
                 WeaponInteraction(aimedAt);
             if (hit.collider.tag == "HealthPickup")
                 HealthInteraction(aimedAt);
+            if (hit.collider.tag == "AmmoPickup")
+                AmmoInteraction(aimedAt);
         }
         else
             LookingAt = false;
@@ -206,12 +226,30 @@ public class InteractionController : Photon.MonoBehaviour {
         //Check if Weapon Pickup
         if (weaponPickup != null)
         {
-            WeaponPickup = true;
+          
             //Do GUI things
             weaponCanvas.SetActive(true);
 
             SetHighLightColour(interact);
             WeaponPickup = true;
+        }
+    }
+
+    //Ammo Pickup
+    private void AmmoInteraction(GameObject interact)
+    {
+        if (debug)
+            Debug.Log("Looking at Ammo Pickup");
+        ammoPickup = interact.GetComponent<AmmoPickup>();
+        //Check if Weapon Pickup
+        if (ammoPickup != null)
+        {
+           
+            //Do GUI things
+            ammoCanvas.SetActive(true);
+
+            SetHighLightColour(interact);
+            AmmoPickup = true;
         }
     }
 
@@ -224,7 +262,7 @@ public class InteractionController : Photon.MonoBehaviour {
         //Check if health pickup
         if (healthPickup != null)
         {
-            HealthPickup = true;
+           
             //Do GUI things
             healthCanvas.SetActive(true);
             SetHighLightColour(interact);
