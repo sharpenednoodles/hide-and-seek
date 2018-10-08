@@ -49,31 +49,25 @@ public class PickUpSpawner : Photon.MonoBehaviour {
     List<Vector2> generated;
     List<Vector2> previous;
 
-    // Use this for initialization
-    void Start ()
-    {
-		
-	}
-	
     //Spawn all the things
     private void SpawnFromGeneration()
     {
         //Spawn weapon pickups
         for (int i = 0; i < numberOfWeapons; i ++)
         {
-            Debug.Log("Weapon " +i);
+            //Debug.Log("Weapon " +i);
             PhotonNetwork.Instantiate(weapons[Random.Range(0, weapons.Count)].model.name, GetValue(generated[i]).position, GetValue(generated[i]).rotation, 0);
         }
         //spawn ammo pickups
         for (int i = numberOfWeapons; i < numberOfWeapons+numberOfAmmo; i++)
         {
-            Debug.Log("Ammo " + i);
+            //Debug.Log("Ammo " + i);
             PhotonNetwork.Instantiate(ammoBoxes[Random.Range(0, ammoBoxes.Count)].model.name, GetValue(generated[i]).position, GetValue(generated[i]).rotation, 0);
         }
         //spawnPoints health pickps
         for (int i = numberOfWeapons+numberOfAmmo; i < numberOfWeapons+numberOfAmmo+numberOfHealth; i++)
         {
-            Debug.Log("Health Box " + i);
+            //Debug.Log("Health Box " + i);
             PhotonNetwork.Instantiate(healthCrate.name, GetValue(generated[i]).position, GetValue(generated[i]).rotation, 0);
         }
     }

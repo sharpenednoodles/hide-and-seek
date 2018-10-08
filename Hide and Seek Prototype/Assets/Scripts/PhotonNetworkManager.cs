@@ -24,7 +24,7 @@ using TMPro;
 public class PhotonNetworkManager : Photon.MonoBehaviour
 {
     //Enter Game version here, this is to prevent different versions from connecting to the same servers
-    static public string gameVersion = "Week 11 Testing Build";
+    static public string gameVersion = "Week 12 Presentation Build";
     [HideInInspector] public bool AllWeapons = true;
     private bool isSpawnable = true;
     const int ZONE_COUNT = 5;
