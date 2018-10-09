@@ -618,13 +618,13 @@ namespace HideSeek.WeaponController
             
             if (!isAProp)
             {
-                Debug.LogWarning("PropMode Disabled");
+                //Debug.LogWarning("PropMode Disabled");
                 isProp = false;
                 crosshairs.ToggleCrossHairs(true);
             }
             if(isAProp)
             {
-                Debug.LogWarning("PropMode Enabled");
+                //Debug.LogWarning("PropMode Enabled");
                 isProp = true;
                 crosshairs.ToggleCrossHairs(false);
             }

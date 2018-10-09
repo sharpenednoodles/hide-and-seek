@@ -182,6 +182,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     public GameState globalState = GameState.warmUp;
 
     //Keep scoreData struct available between scene loads
+
+    //DEPRECATED
     private void Awake()
     {
         if (!LOADED)
@@ -219,6 +221,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
             persistScore = FindObjectOfType<PersistScore>();
         }
 
+
+        //DEPRECATED
         if (!LOADED)
         {
             LOADED = true;
@@ -230,6 +234,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
             else
             {
                 //Specify game build verison
+
                 PhotonNetwork.ConnectUsingSettings(gameVersion);
             }
         }
@@ -292,7 +297,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         //Send disconnect message
         if (PhotonNetwork.isMasterClient)
         {
-            photonView.RPC("SetGameState", PhotonTargets.AllViaServer, (byte)globalState, (byte)EventType.playerDisconnect, currentID);
+            //photonView.RPC("SetGameState", PhotonTargets.AllViaServer, (byte)globalState, (byte)EventType.playerDisconnect, currentID);
         }
     }
 
@@ -322,9 +327,23 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         StartCoroutine(LoadMainMenu(5));
     }
 
+    //Called on all other clients when player diconnected
+    public virtual void OnPhotonPlayerDisconnected(PhotonPlayer player)
+    {
+        //Only want to run this through the master
+        if (PhotonNetwork.isMasterClient)
+        {
+            int disconnectID = player.ID;
+            Debug.LogWarning("Player " + disconnectID + " has left the game");
+            //Interface with disconnect method
+            photonView.RPC("SetGameState", PhotonTargets.AllViaServer, (byte)globalState, (byte)EventType.playerDisconnect, disconnectID);
+        }
+    }
+
     public IEnumerator LoadMainMenu(float timeToWait)
     {
         //Unlock the mouse
+        //Maybe doublr check that
         GameMenuController.MenuState = true;
         yield return new WaitForSeconds(timeToWait);
         SceneManager.LoadScene(0);
@@ -519,12 +538,14 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 if (debug)
                     Debug.Log("Set Game State: Player Disconnect");
                 //player disconnect code
-                UpdateEventFeed(PhotonPlayer.Find(ID).NickName +" has left the game");
-
                 //Find player by ID
                 index = GetIndexUsingActorID(ID);
+
+                string name = players[index].name;
                 players.RemoveAt(index);
-                deadPlayers -= 1;
+                UpdateEventFeed(name + " has left the game");
+
+                //deadPlayers -= 1;
                 connectedPlayers -= 1;
                 UpdateGUI();
                 break;
@@ -537,11 +558,11 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     //For debugging list contents
     public void VerifySavedList()
     {
-        Debug.Log("Verify has " + players.Count + " elements");
+        Debug.Log("<color=purple>Verify has " + players.Count + " elements</color>");
         foreach (Players player in players)
         {
-            Debug.Log("Name " + player.name);
-            Debug.Log("ID " + player.actorID);
+            Debug.Log("<color=purple>Name " + player.name +"</color>");
+            Debug.Log("<color=purple>ID " + player.actorID +"</color>");
         }
     }
 
@@ -571,6 +592,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 }
                 GameObject player = PhotonView.Find(local.viewID).gameObject;
                 PhotonNetwork.Destroy(player);
+
                 //Disable weapons on actual round
                 AllWeapons = false;
                 if (PhotonNetwork.isMasterClient)
@@ -580,6 +602,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 SpawnPlayer();
 
                 //Reset the FX pool
+                //TODO - divert this to an external function
                 CFX_SpawnSystem.UnloadObjects(FX.GetComponent<CFX_PrefabPool>().muzzleFX);
                 FX.Start();
 
@@ -606,18 +629,22 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, gameState, eventType, currentID);
     }
 
-    //RPC Callback sepcifically for death events
+    //RPC Callback specifically for death events
     public void SendGameKill(byte gameState, byte eventType, int targetID, int senderID)
     {
         photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, gameState, eventType, targetID);
         //Do stuff to give players more feedback
+        //Inform Players of who killed
+        //Perhaps add a kill score
     }
 
+    //Spawns a flycam to replace the player
     private void SpawnFlyCam(int actorID)
     {
         if (currentID == actorID)
         {
-            Debug.Log("Spawning Flycam");
+            if(debug)
+                Debug.Log("Spawning Flycam");
             UpdateEventFeed("Spawning Spectator Cam");
             //connectText.text = "Spectator Mode";
             spectateText.text = "Spectator Mode";
