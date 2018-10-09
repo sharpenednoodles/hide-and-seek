@@ -3933,7 +3933,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b69d1602a6920441939304e0f48886d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 1
+  debug: 0
   propTimeToHold: 1
   healthTimeToHold: 2
   HealthPickup: 0

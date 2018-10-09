@@ -105,6 +105,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         public int score;
     }
     private List<Players> players;
+    private List<Players> fromScoreManager;
     private CFX_SpawnSystem FX;
 
     [Header("GUI Elements")]
@@ -188,14 +189,12 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     {
         if (!LOADED)
         {
-            
             Debug.Log("Loaded Scene into memory");
-
         }
         else
         {
             StartCoroutine(Respawn());
-            Debug.Log("Starting Respawn Coroutine");
+            Debug.LogWarning("Starting Respawn Coroutine");
         }
     }
     
@@ -206,6 +205,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         scoreManager = GameObject.Find("ScoreManager");
         spawnList = new List<Vector2>();
         players = new List<Players>();
+        fromScoreManager = new List<Players>();
         remainingZones = ZONE_COUNT;
         zoneController = GetComponent<ZoneController>();
         pickUpSpawner = GetComponent<PickUpSpawner>();
@@ -220,6 +220,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
             scoreManager.AddComponent<PersistScore>();
             persistScore = FindObjectOfType<PersistScore>();
         }
+
+        previouslyJoined = persistScore.previouslyJoined;
 
 
         //DEPRECATED
@@ -299,6 +301,9 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         {
             //photonView.RPC("SetGameState", PhotonTargets.AllViaServer, (byte)globalState, (byte)EventType.playerDisconnect, currentID);
         }
+        //Reset scene variable, destroy score reference object
+        LOADED = false;
+        persistScore.ResetScore();
     }
 
     //Called if client is unexpectedly disconnected from the server
@@ -531,7 +536,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 UpdateEventFeed(newPlayer.name+" has joined the game");
                 //add to list item
                 players.Add(newPlayer);
-                //VerifySavedList();
+                VerifySavedList();
                 break;
 
             case EventType.playerDisconnect:
@@ -563,6 +568,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         {
             Debug.Log("<color=purple>Name " + player.name +"</color>");
             Debug.Log("<color=purple>ID " + player.actorID +"</color>");
+            Debug.Log("<color=purple>Score " + player.score + "</color>");
         }
     }
 
@@ -668,14 +674,20 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
             {
                 //Check if we are the correct player
                 if (player.actorID == currentID)
+                {
                     DisplayCanvas(currentID, "victory");
+                }  
                 player.score += 1;
             } 
         }
+
         persistScore.SaveToList(players);
+        persistScore.previouslyJoined = true;
+        persistScore.roundNumber += 1;
         yield return new WaitForSeconds(5);
-        //PhotonNetwork.LoadLevel(SceneManager.GetActiveScene().name);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        PhotonNetwork.LoadLevel(SceneManager.GetActiveScene().name);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     //Local function to give player feedback
@@ -707,19 +719,44 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         Debug.Log("Respawn Pinged");
 
 
-        yield return new WaitForSeconds(3);
-        ClearSpawnLists();
+        yield return new WaitForSeconds(1);
+        //ClearSpawnLists();
         SpawnPlayer();
 
-
-
         //Restart game timers
-        warmUpTime = 0.1f;
-        photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, (byte)GameState.warmUp, (byte)EventType.playerJoin, currentID);
+        warmUpTime = 0.05f;
 
+        if (PhotonNetwork.isMasterClient)
+        {
+            StartCoroutine(EventTimer(warmUpTime, globalState));
+        }
+        //Send join notification
+        photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, (byte)GameState.warmUp, (byte)EventType.playerJoin, currentID);
+        //Send warmup notification
+        photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, (byte)GameState.warmUp, (byte)EventType.timer, currentID);
+
+
+        //Load old score data from cached list
+        fromScoreManager = persistScore.LoadFromList();
+
+        //get old score data and fill it with our new values
+        foreach (Players player in players)
+        {
+            player.score = ReturnScore(player);
+        }
         
-        players = persistScore.LoadFromList();
         persistScore.VerifySavedList();
+        persistScore.ClearList();
+    }
+
+    private int ReturnScore(Players player)
+    {
+        foreach (Players oldPlayer in fromScoreManager)
+        {
+            if (player.name == oldPlayer.name)
+                return oldPlayer.score;
+        }
+        return 0;
     }
 
     //Events timers
@@ -970,7 +1007,6 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
             //validate whether our generated spawn is unique
             if (ValidateSpawn(spawnZone, spawnArea))
             {
-                
                 photonView.RPC("PerformSpawn", PhotonTargets.All, spawnZone, spawnArea, remoteID);
             }
             else

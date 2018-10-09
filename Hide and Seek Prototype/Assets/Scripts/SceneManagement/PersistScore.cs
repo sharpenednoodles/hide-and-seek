@@ -12,6 +12,7 @@ using UnityEngine;
 public class PersistScore : MonoBehaviour {
 
     private static bool LOADED = false;
+    [System.Serializable]
     public class Players
     {
         public int actorID;
@@ -19,7 +20,10 @@ public class PersistScore : MonoBehaviour {
         public bool isAlive;
         public int score;
     }
-    private List<Players> savedPlayers;
+    public List<Players> savedPlayers;
+    //Default game stats
+    public bool previouslyJoined = false;
+    public int roundNumber = 1;
 
     //We want to keep this object between scene loads
     private void Awake()
@@ -43,7 +47,15 @@ public class PersistScore : MonoBehaviour {
     {
         savedPlayers = new List<Players>();
 	}
-	
+
+    //Use to reset score data
+    public void ResetScore()
+    {
+        roundNumber = 1;
+        previouslyJoined = false;
+        ClearList();
+    }
+
     public void SaveToList(List<PhotonNetworkManager.Players> list)
     {
         foreach (PhotonNetworkManager.Players player in list)
@@ -62,11 +74,12 @@ public class PersistScore : MonoBehaviour {
     //For debugging saved list contents
     public void VerifySavedList()
     {
-        Debug.Log("Verify has " + savedPlayers.Count + " elements");
+        Debug.Log("<color=yellow>Verify Saved list has " + savedPlayers.Count + " elements</color>");
         foreach (Players player in savedPlayers)
         {
-            Debug.Log("Name " + player.name);
-            Debug.Log("ID " + player.actorID);
+            Debug.Log("<color=yellow>Name " + player.name+"</color>");
+            Debug.Log("<color=yellow>ID " + player.actorID+"</color>");
+            Debug.Log("<color=yellow>Score " + player.score + "</color>");
         }
     }
 
