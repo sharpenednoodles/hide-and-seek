@@ -31,6 +31,7 @@ public class ZoneController : Photon.MonoBehaviour {
     private bool ShutDownTriggered;
     private const int TOTAL_ZONES = 5;
     private int zonesShut = 0;
+    private int timesShut = 0;
 
     //Should this even be public
     public enum Zone
@@ -119,6 +120,8 @@ public class ZoneController : Photon.MonoBehaviour {
             shutdownList = SelectOrder();
         }
 
+        
+
         //Array out of index error here after all zones have been shut
         if (zonesShut > shutdownList.Length - 1)
         {
@@ -157,6 +160,12 @@ public class ZoneController : Photon.MonoBehaviour {
         {
             Debug.Log("ToggleZoneController RPC called with " +(Zone)zone);
         }
+
+        //Dodgey hack - todo fix code calling this, and don't
+        //Don't Toggle Final zone and kill player
+        timesShut += 1;
+        if (timesShut > 4)
+            return;
         switch ((Zone)zone)
         {
             case Zone.residential:
@@ -245,5 +254,6 @@ public class ZoneController : Photon.MonoBehaviour {
                 break;
         }
         master.CallRemoteZoneDeath((Zone)zone);
+        master.PlayZoneShutFX();
     }
 }

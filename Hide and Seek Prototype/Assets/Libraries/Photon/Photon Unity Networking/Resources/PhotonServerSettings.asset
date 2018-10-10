@@ -68,4 +68,8 @@ MonoBehaviour:
   - DisableWeapon
   - ZoneDeath
   - DisableAmmo
+  - WeaponSFX
+  - PlayRemoteLandingSound
+  - PlayRemoteStepAudio
+  - StartGameOnConnection
   DisableAutoOpenWizard: 1

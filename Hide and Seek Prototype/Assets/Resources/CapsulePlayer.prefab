@@ -569,6 +569,7 @@ GameObject:
   - component: {fileID: 65880818828145114}
   - component: {fileID: 114704631686863882}
   - component: {fileID: 114346616239812606}
+  - component: {fileID: 82609834564679138}
   m_Layer: 9
   m_Name: Cube
   m_TagString: Untagged
@@ -3786,6 +3787,86 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+--- !u!82 &82609834564679138
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1336261146379442}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 0
+  MinDistance: 3
+  MaxDistance: 30
+  Pan2D: 0
+  rolloffMode: 1
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1.0320816
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!95 &95007692656327110
 Animator:
   serializedVersion: 3
@@ -4379,7 +4460,7 @@ MonoBehaviour:
     model: {fileID: 1965825449304838}
     fireOrigin: {fileID: 1500277326589812}
     fireRate: 0.5
-    fireRange: 20
+    fireRange: 25
     damage: 25
     impactForce: 500
     clipSize: 8
@@ -4405,7 +4486,7 @@ MonoBehaviour:
     model: {fileID: 1734299762059036}
     fireOrigin: {fileID: 1621157763706790}
     fireRate: 0.2
-    fireRange: 10
+    fireRange: 25
     damage: 20
     impactForce: 1000
     clipSize: 6
@@ -4428,7 +4509,7 @@ MonoBehaviour:
     model: {fileID: 1968096950733248}
     fireOrigin: {fileID: 1194330937070068}
     fireRate: 0.1
-    fireRange: 20
+    fireRange: 30
     damage: 5
     impactForce: 500
     clipSize: 50
@@ -4438,7 +4519,7 @@ MonoBehaviour:
     canFire: 1
     isEquipped: 0
     crosshair: 1
-    needWarmUp: 0
+    needWarmUp: 1
     melee: 0
     emptyFX:
     - {fileID: 8300000, guid: 4c6aef64f25bcca4fa99c1e641523f44, type: 3}
@@ -4448,7 +4529,8 @@ MonoBehaviour:
     - {fileID: 8300000, guid: f8046c8a557f5e84d8e83e4edeb22bf3, type: 3}
     damageDecals: Default Bullethole
     warmUpTime: 2
-    warmUpFX: []
+    warmUpFX:
+    - {fileID: 8300000, guid: 2f9cad53c2faae546b96e55d961165e2, type: 3}
     coolDownFX:
     - {fileID: 8300000, guid: a06f8be12ed109443b152a6fbd6cdb45, type: 3}
   laserRifle:

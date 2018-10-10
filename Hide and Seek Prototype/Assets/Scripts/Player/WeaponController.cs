@@ -39,6 +39,8 @@ namespace HideSeek.WeaponController
         private float cooldown = 0;
         private bool fireHeld = false;
         private bool soundPlay = false;
+        private bool warmedUp = false;
+        private float timeHeld;
 
         [Header("DEBUG")]
         [SerializeField] private Weapon.ID currentID = Weapon.ID.unarmed;
@@ -186,6 +188,7 @@ namespace HideSeek.WeaponController
                         if (currWeapon.needWarmUp)
                         {
                             WarmUp();
+                            timeHeld += Time.deltaTime;
                         }
                         else
                             Shoot();
@@ -200,9 +203,12 @@ namespace HideSeek.WeaponController
                     weaponAnim.SetBool("attack", true);
                     playerAnim.SetBool("attack", false);
                     fireHeld = false;
+                    soundPlay = false;
                     if (currWeapon.needWarmUp)
                     {
-
+                        timeHeld = 0;
+                        warmedUp = false;
+                        PlayCoolDownSound(minigun);
                     }
                 }
 
@@ -225,7 +231,19 @@ namespace HideSeek.WeaponController
 
         void WarmUp()
         {
+            if(fireHeld && !warmedUp)
+            {
+                //if (!soundPlay)
+                //currently unworking
+                PlayWarmUpSound(minigun);
+            }
 
+            if (timeHeld > minigun.warmUpTime)
+            {
+                warmedUp = true;
+                Shoot();
+            }
+     
         }
 
         //Handles Player Shooting
@@ -351,6 +369,7 @@ namespace HideSeek.WeaponController
                 }
                 //photonView.RPC("SyncShotRayCast", PhotonTargets.Others, rayOrigin, rayDirection, currWeapon.fireRange, currWeapon.damageDecals);
                 photonView.RPC("WeaponSparks", PhotonTargets.All, hit.point, rotation);
+                photonView.RPC("WeaponSFX", PhotonTargets.Others, hit.point, (byte)currentID);
             }
         }
 
@@ -359,6 +378,19 @@ namespace HideSeek.WeaponController
         {
             GameObject target = PhotonView.Find(targetID).gameObject;
             target.GetComponent<Rigidbody>().AddForce(direction * impactForce);
+        }
+
+        [PunRPC]
+        void WeaponSFX (Vector3 soundOrigin, byte ID)
+        {
+            Weapon c = WeaponIDtoWeapon((Weapon.ID)ID);
+            if (c.fireFX.Length != 0)
+            {
+                int n = Random.Range(0, c.fireFX.Length);
+                gunSound.clip = c.fireFX[n];
+            }
+            else gunSound.clip = null;
+            AudioSource.PlayClipAtPoint(gunSound.clip, soundOrigin, 10);
         }
 
         [PunRPC]
@@ -431,6 +463,33 @@ namespace HideSeek.WeaponController
             }
             else gunSound.clip = null;
             gunSound.Play();
+        }
+
+        //currently only works for minigun override
+        private void PlayWarmUpSound(Minigun c)
+        {
+            soundPlay = true;
+            if (c.warmUpFX.Length != 0)
+            {
+                int n = Random.Range(0, c.warmUpFX.Length);
+                gunSound.clip = c.warmUpFX[n];
+            }
+            else gunSound.clip = null;
+            gunSound.Play();
+            soundPlay = false;
+        }
+
+        private void PlayCoolDownSound(Minigun c)
+        {
+            soundPlay = true;
+            if (c.coolDownFX.Length != 0)
+            {
+                int n = Random.Range(0, c.coolDownFX.Length);
+                gunSound.clip = c.coolDownFX[n];
+            }
+            else gunSound.clip = null;
+            gunSound.Play();
+            soundPlay = false;
         }
 
         private IEnumerator PlayEmptySound(Weapon c)
@@ -610,6 +669,30 @@ namespace HideSeek.WeaponController
                     remoteLaserRifle.SetActive(true);
                     break;
             }
+        }
+
+        private Weapon WeaponIDtoWeapon(Weapon.ID ID)
+        {
+            Weapon w = new Weapon();
+            switch (ID)
+            {
+                case Weapon.ID.unarmed:
+                    w = unarmed;
+                    break;
+                case Weapon.ID.pistol:
+                    w = pistol;
+                    break;
+                case Weapon.ID.minigun:
+                    w = minigun;
+                    break;
+                case Weapon.ID.lightningGun:
+                    w = lightningGun;
+                    break;
+                case Weapon.ID.laserRifle:
+                    w = laserRifle;
+                    break;
+            }
+            return w;
         }
 
         //Used for switching player into prop

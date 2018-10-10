@@ -85,6 +85,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     [SerializeField] private bool eventToDebug = true;
     public bool offlineMode = false;
     private bool previouslyJoined = false;
+    private bool hasStarted = false;
     private string roomName;
     private Transform deathLocation;
    
@@ -122,6 +123,12 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     [SerializeField] private float warmUpTime;
     [SerializeField] private float roundTime;
 
+    [Header("SFX Clips")]
+    [SerializeField] private AudioClip roundStart;
+    [SerializeField] private AudioClip playerDeath;
+    [SerializeField] private AudioClip zoneShut;
+    private AudioSource scoreAudio;
+    private AudioSource zoneShutSource;
     //ZoneController
     private ZoneController zoneController;
 
@@ -150,9 +157,13 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         /// Current score displayed, temporary state until the next round begins
         /// Will trigger a timer across clients to reload the world
         /// </summary>
-        matchEnd
+        matchEnd,
         /// <summary>
         /// Final scoreboard, game ends after this state - players booted back to main menu
+        /// </summary>
+        waitingForConnections,
+        /// <summary>
+        /// Waiting for more than one player to connect to the game
         /// </summary>
     }
 
@@ -180,7 +191,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     #endregion
 
     //Default state - will update as the game progresses
-    public GameState globalState = GameState.warmUp;
+    public GameState globalState = GameState.waitingForConnections;
 
     //Keep scoreData struct available between scene loads
 
@@ -220,7 +231,9 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
             scoreManager.AddComponent<PersistScore>();
             persistScore = FindObjectOfType<PersistScore>();
         }
-
+        //Get Audio source on score manager for event FX
+        scoreAudio = scoreManager.GetComponent<AudioSource>();
+        zoneShutSource = scoreManager.GetComponentInChildren<AudioSource>();
         previouslyJoined = persistScore.previouslyJoined;
 
 
@@ -281,7 +294,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         GetGameState();
     
         //THIS WILL NOT WORK AS WE DO NOT KNOW ANYTHING ABOUT THE SERVER YET
-        if (globalState == GameState.warmUp)
+        if (globalState == GameState.warmUp || globalState == GameState.waitingForConnections)
             SpawnPlayer();
         else
         {
@@ -293,7 +306,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         }
     }
 
-    //Call disconnect stuff
+    //Called on client that disconnects from the server
     public virtual void OnDisconnect()
     {
         //Send disconnect message
@@ -339,7 +352,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         if (PhotonNetwork.isMasterClient)
         {
             int disconnectID = player.ID;
-            Debug.LogWarning("Player " + disconnectID + " has left the game");
+            //Debug.LogWarning("Player " + disconnectID + " has left the game");
             //Interface with disconnect method
             photonView.RPC("SetGameState", PhotonTargets.AllViaServer, (byte)globalState, (byte)EventType.playerDisconnect, disconnectID);
         }
@@ -416,7 +429,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
        // connectedPlayersList = (string)PhotonNetwork.playerList;
         if (PhotonNetwork.isMasterClient)
         {
-            StartCoroutine(EventTimer(warmUpTime, globalState));
+            //StartCoroutine(EventTimer(warmUpTime, globalState));
             //debugFeed.color = Color.red;
             if (debug)
                 Debug.Log("Sending current gamestate as " + globalState);
@@ -432,6 +445,11 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         }
     }
 
+    //Called when less than 2 players to start the match
+    private void DelayedStart()
+    {
+
+    }
     //Sets the game state when recieved from master
     [PunRPC]
     private void SetGameState(byte gameState, byte eventType, int ID)
@@ -450,7 +468,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                     Debug.Log("Set Game State: Player Death");
 
                 //If warmup, we don't care
-                if (globalState == GameState.warmUp)
+                if (globalState == GameState.warmUp || globalState == GameState.waitingForConnections)
                 {
                     Debug.Log("Player " + ID +" killed during warmup");
                     UpdateEventFeed(PhotonPlayer.Find(ID).NickName + " died during warmup");
@@ -465,7 +483,9 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
             
                 UpdateEventFeed(PhotonPlayer.Find(ID).NickName +" has been Eliminated");
                 int index = GetIndexUsingActorID(ID);
-                
+
+                scoreAudio.clip = playerDeath;
+                scoreAudio.Play();
                 //Set player to dead in score
                 players[index].isAlive = false;
                 alivePlayers -= 1;
@@ -494,24 +514,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                         Debug.Log("Recived player death but not directly contributing");
                     }
                 }
-                
-                //Logic for ending the game
-                if (PhotonNetwork.isMasterClient)
-                {
-                    if (globalState != GameState.warmUp)
-                    {
-                        if (debug)
-                            Debug.Log("<color=red>Scanning to see if < 1 player remaining</color>");
-                        if (alivePlayers <= 1)
-                        {
-                            if (debug)
-                                Debug.Log("<color=red>Preparing to end the game</color>");
-                            //StartCoroutine(EndGame());
-                            photonView.RPC("SetGameState", PhotonTargets.AllBuffered, (byte)GameState.matchEnd, (byte)EventType.timer, currentID);
-                        }
-                    }
-                    
-                }
+                CheckIfGameOver();
                 break;
 
             case EventType.playerJoin:
@@ -550,14 +553,37 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 players.RemoveAt(index);
                 UpdateEventFeed(name + " has left the game");
 
-                //deadPlayers -= 1;
+                alivePlayers -= 1;
                 connectedPlayers -= 1;
                 UpdateGUI();
+                CheckIfGameOver();
                 break;
         }
 
         Debug.Log("Recieving Gamestate from master as " + (GameState)gameState);
         //thing to call appropriate function for game states
+    }
+
+    //Run this to see if the game can no longer operate/function and end the game
+    private void CheckIfGameOver()
+    {
+        //Logic for ending the game
+        if (PhotonNetwork.isMasterClient)
+        {
+            if (!(globalState == GameState.warmUp || globalState == GameState.waitingForConnections))
+            {
+                if (debug)
+                    Debug.Log("<color=red>Scanning to see if < 1 player remaining</color>");
+                if (alivePlayers <= 1)
+                {
+                    if (debug)
+                        Debug.Log("<color=red>Preparing to end the game</color>");
+                    //StartCoroutine(EndGame());
+                    photonView.RPC("SetGameState", PhotonTargets.AllBuffered, (byte)GameState.matchEnd, (byte)EventType.timer, currentID);
+                }
+            }
+
+        }
     }
 
     //For debugging list contents
@@ -583,11 +609,23 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         {
             case GameState.zoneShutoff:
                 //Maybe remove this once zone handling is complete
+                //NOW UNUSED/NEVERCALLED
                 UpdateEventFeed("Zone has been shutoff");
                 break;
             case GameState.warmUp:
                 UpdateEventFeed("Now Warming Up");
                 connectText.text = "Warm Up Round";
+                break;
+            case GameState.waitingForConnections:
+                connectText.text = "Waiting For Players";
+                Debug.Log("Waiting for connections");
+                Debug.LogWarning("Waiting for connections! Connected Players =" + PhotonNetwork.playerList.Length);
+                //TODO, extend ability to add minumum amount of players
+                if (PhotonNetwork.playerList.Length > 1)
+                {
+                    Debug.Log("<color=red>Starting Game Timer Call<>/color");
+                    photonView.RPC("StartGameOnConnection", PhotonTargets.All);
+                }
                 break;
             case GameState.roundStart:
                 //Find and destroy player
@@ -612,7 +650,9 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 CFX_SpawnSystem.UnloadObjects(FX.GetComponent<CFX_PrefabPool>().muzzleFX);
                 FX.Start();
 
-                UpdateEventFeed("The Game has started");
+                UpdateEventFeed("Round " +persistScore.roundNumber + " has started");
+                scoreAudio.clip = roundStart;
+                scoreAudio.Play();
                 connectText.text = "";
 
                 break;
@@ -626,6 +666,19 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 connectText.text = "Survive.";
                 break;
         }
+    }
+
+    [PunRPC]
+    private void StartGameOnConnection()
+    {
+        if (debug)
+            Debug.Log("Start Game On Connection()");
+        if (PhotonNetwork.isMasterClient)
+        {
+            Debug.LogWarning("Master Player Starting Game");
+            StartCoroutine(EventTimer(warmUpTime, GameState.warmUp));
+        }
+        photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, (byte)GameState.warmUp, (byte)EventType.timer, currentID);
     }
 
     //RPC Callback for remote scripts attached to master
@@ -728,13 +781,23 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
 
         if (PhotonNetwork.isMasterClient)
         {
-            StartCoroutine(EventTimer(warmUpTime, globalState));
+            StartCoroutine(EventTimer(warmUpTime, GameState.warmUp));
+            photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, (byte)GameState.warmUp, (byte)EventType.timer, currentID);
         }
         //Send join notification
         photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, (byte)GameState.warmUp, (byte)EventType.playerJoin, currentID);
         //Send warmup notification
-        photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, (byte)GameState.warmUp, (byte)EventType.timer, currentID);
+        
 
+        StartCoroutine(Repopulate());
+    }
+
+    //Delayed Repopulate
+    private IEnumerator Repopulate()
+    {
+        if (debug)
+            Debug.Log("Repopulate called");
+        yield return new WaitForSeconds(2);
 
         //Load old score data from cached list
         fromScoreManager = persistScore.LoadFromList();
@@ -744,7 +807,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         {
             player.score = ReturnScore(player);
         }
-        
+
         persistScore.VerifySavedList();
         persistScore.ClearList();
     }
@@ -764,7 +827,8 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     {
         //convert to seconds
         time *= 60;
-
+        if (debug)
+            Debug.Log("Starting Game Timer");
         yield return new WaitForSeconds(time);
         //call helper function with parameters
         switch (game)
@@ -793,9 +857,9 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                     
                 remainingZones -= 1;
                 
-                if (remainingZones < 0)
+                if (remainingZones < 1)
                 {
-                    Debug.Log("Remaining Zones < 0 call");
+                    Debug.Log("Remaining Zones < 1 call");
                     photonView.RPC("SetGameState", PhotonTargets.All, (byte)GameState.waitForPlayer, (byte)EventType.timer, currentID);
                     if (debug)
                         Debug.Log("All zones shut off, waiting for players");
@@ -982,7 +1046,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
         if (PhotonNetwork.isMasterClient)
         {
             //Disable Spawn if the server isn't in warmup, and the peer is new
-            if (globalState != GameState.warmUp && !remoteSpawnState)
+            if (!(globalState == GameState.warmUp || globalState == GameState.waitingForConnections) && !remoteSpawnState)
             {
                 if (debug)
                     Debug.Log("The Server is no longer warming up");
@@ -1071,7 +1135,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
             {
                 Debug.Log("Welcome Message");
                 previouslyJoined = true;
-                photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, (byte)GameState.warmUp, (byte)EventType.playerJoin, currentID);
+                photonView.RPC("SetGameState", PhotonTargets.AllBufferedViaServer, (byte)globalState, (byte)EventType.playerJoin, currentID);
 
                 UpdateEventFeed("Welcome to " + roomName + " " + PhotonNetwork.player.NickName);
                 //UpdateEventFeed("Welcome to " + roomName);
@@ -1108,6 +1172,13 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     public List<Players> GetPlayerList()
     {
         return players;
+    }
+
+    //Last minute addition, needs relocating
+    public void PlayZoneShutFX()
+    {
+        zoneShutSource.clip = zoneShut;
+        zoneShutSource.Play();
     }
 
     //Gives us full reference of the player Class based on photonViewID

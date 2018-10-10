@@ -10,7 +10,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 {
     [RequireComponent(typeof (CharacterController))]
     [RequireComponent(typeof (AudioSource))]
-    public class FirstPersonController : MonoBehaviour
+    public class FirstPersonController : Photon.MonoBehaviour
     {
         [SerializeField] private bool m_IsWalking;
         [SerializeField] private float m_WalkSpeed;
@@ -108,8 +108,16 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private void PlayLandingSound()
         {
             m_AudioSource.clip = m_LandSound;
+            photonView.RPC("PlayRemoteLandingSound", PhotonTargets.Others, gameObject.transform.position);
             m_AudioSource.Play();
             m_NextStep = m_StepCycle + .5f;
+        }
+
+        //network sync
+        [PunRPC]
+        private void PlayRemoteLandingSound(Vector3 position)
+        {
+            AudioSource.PlayClipAtPoint(m_LandSound, position);
         }
 
 
@@ -195,9 +203,18 @@ namespace UnityStandardAssets.Characters.FirstPerson
             int n = Random.Range(1, m_FootstepSounds.Length);
             m_AudioSource.clip = m_FootstepSounds[n];
             m_AudioSource.PlayOneShot(m_AudioSource.clip);
+            photonView.RPC("PlayRemoteStepAudio", PhotonTargets.Others, gameObject.transform.position, n);
             // move picked sound to index 0 so it's not picked next time
             m_FootstepSounds[n] = m_FootstepSounds[0];
             m_FootstepSounds[0] = m_AudioSource.clip;
+        }
+
+        //network sync
+        [PunRPC]
+        private void PlayRemoteStepAudio(Vector3 position, int n)
+        {
+            m_AudioSource.clip = m_FootstepSounds[n];
+            AudioSource.PlayClipAtPoint(m_AudioSource.clip, position);
         }
 
 

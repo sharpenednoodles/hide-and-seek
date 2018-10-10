@@ -87,8 +87,8 @@ public class PickUpSpawner : Photon.MonoBehaviour {
     //Tweak spawn properties here
     private void CalculateQuantities(int playerCount)
     {
-        numberOfWeapons = Random.Range(2, playerCount * (3/2));
-        numberOfAmmo = Random.Range(2, playerCount * 2);
+        numberOfWeapons = (Random.Range(2, playerCount * (3/2))) * 2;
+        numberOfAmmo = (Random.Range(2, playerCount * 2)) * 2;
         numberOfHealth = Random.Range(2, playerCount * 3);
 
         if (debug)
