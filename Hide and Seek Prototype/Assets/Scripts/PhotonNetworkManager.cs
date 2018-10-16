@@ -494,6 +494,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
 
                 //Destroy Player
                 //Only perform on the dead player
+                Debug.LogWarning("DEATH TO " + ID + "!!! Current ID verification " + currentID);
                 if (currentID == ID)
                 {
                     if (debug)
@@ -651,6 +652,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
                 FX.Start();
 
                 UpdateEventFeed("Round " +persistScore.roundNumber + " has started");
+                connectText.text = "";
                 scoreAudio.clip = roundStart;
                 scoreAudio.Play();
                 connectText.text = "";
@@ -974,6 +976,7 @@ public class PhotonNetworkManager : Photon.MonoBehaviour
     {
         aliveDisplay.SetText("{0}", alivePlayers);
         deadDisplay.SetText("{0}", deadPlayers);
+        UpdateStatusBoard();
     }
 
     public void UpdateStatusBoard()
